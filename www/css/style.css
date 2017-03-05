@@ -1,0 +1,85 @@
+h1 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+ion-slides{
+  height: 260px;
+}
+
+.theme {
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.theme-body {
+  text-align: center;
+}
+
+.theme-icon {
+  margin-top: 10px;
+  width: 100px !important;
+}
+
+.theme-body-button {
+  margin-top: 10px;
+}
+
+.word, .achievement-popup {
+	text-align: center;
+}
+
+.word .scroll {
+  position: absolute;
+  width: 640px;
+  height: 260px;
+  top: 50%;
+  left: 50%;
+  margin-left: -320px;
+  margin-top: -120px;
+}
+
+#playSoundIcon {
+  font-size: x-large;
+}
+
+.word-icon {
+	height: 80px;
+}
+
+.composed-letter-button, .letter-button {
+	width: 49px;
+  height: 49px;
+  margin-right: 4px;
+  font-size: xx-large;
+}
+
+.composed-letter-button {
+	background: transparent;
+  border: 1px dotted black;
+}
+
+.theme .scroll, .word-header, .word-body, .composed-letter-buttons-block, .letter-buttons-block {
+ 	display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.theme .scroll, .word-header, .word-body {
+  justify-content: space-between;
+}
+
+.composed-letter-buttons-block, .letter-buttons-block {
+  padding-top: 4px;
+  padding-right: 0px;
+  padding-left: 4px;
+  padding-bottom: 4px;
+}
+
+.word-header p {
+  width: 100px;
+}
+
+.clear-button, .next-button {
+  font-size: xx-large;
+}

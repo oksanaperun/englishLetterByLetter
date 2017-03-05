@@ -1,0 +1,25 @@
+<ion-view view-title="{{gameModes[modeId - 1].name.toUpperCase()}}">
+  <ion-content class="theme">
+    <button ng-click="setPreviousTheme()">
+      <i class="icon ion-chevron-left"></i>
+    </button>
+
+    <ion-slides  options="data.sliderOptions" slider="data.sliderDelegate">
+      <ion-slide-page ng-repeat="theme in themes">
+        <div class="theme-body">
+          <img class="theme-icon" ng-src="img/themes/{{theme.id}}.jpg">
+          <h1>{{theme.name}}</h1>
+          <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme">
+            <button class="theme-body-button" ng-click="setThemeName()">
+              Обрати
+            </button>
+          </a>
+        </div>
+      </ion-slide-page>
+    </ion-slides>
+
+    <button ng-click="setNextTheme()">
+      <i class="icon ion-chevron-right"></i>
+    </button>
+  </ion-content>
+</ion-view>

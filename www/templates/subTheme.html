@@ -1,0 +1,25 @@
+<ion-view view-title="{{themeName.toUpperCase()}}">
+  <ion-content class="theme">
+    <button ng-click="setPreviousSubTheme()">
+      <i class="icon ion-chevron-left"></i>
+    </button>
+
+    <ion-slides  options="data.sliderOptions" slider="data.sliderDelegate">
+      <ion-slide-page ng-repeat="subTheme in subThemes">
+        <div class="theme-body">
+          <img class="theme-icon" ng-src="img/sub_themes/{{subTheme.id}}.jpg">
+          <h1>{{subTheme.name}}</h1>
+          <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme/{{subTheme.id}}/word">
+            <button class="theme-body-button">
+              Грати
+            </button>
+          </a>
+        </div>
+      </ion-slide-page>
+    </ion-slides>
+
+    <button ng-click="setNextSubTheme()">
+      <i class="icon ion-chevron-right"></i>
+    </button>
+  </ion-content>
+</ion-view>
