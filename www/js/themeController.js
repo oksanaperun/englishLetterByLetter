@@ -1,18 +1,50 @@
 angular.module('englishLetterByLetter')
 
-  .controller('ThemeCtrl', function($scope, $rootScope, $stateParams, Utils) {
-    var themes = [
-        {id: 1, name: 'Їжа та напої'}, 
-        {id: 2, name: 'Дім'},
-        {id: 3, name: 'Людина'}
-      ];
+  .controller('ThemeCtrl', function($scope, $rootScope, $stateParams, $ionicPlatform, Utils, WordsDB) {
+    if (window.cordova) {
+      document.addEventListener('deviceready', function () {
+        getThemes();
+      });
+    } else {
+      $ionicPlatform.ready(function () {
+        getThemes();
+      });
+    }
 
     $scope.modeId = $stateParams.modeId;
-    $scope.themes = themes;
     $scope.data = {};
     $scope.data.currentPage = 0;
+    $scope.data.sliderDelegate = null;
 
-    setupSlider();
+    function getThemes() {
+      $scope.themes = [];
+
+      WordsDB.selectThemes().then(function (res) {
+        for (var i = 0; i < res.rows.length; i++)
+          $scope.themes.push(res.rows.item(i));
+
+        setupSliderOptions();
+      }, function (err) {
+        console.error(err);
+      });
+    }
+
+    function setupSliderOptions() {
+      $scope.data.sliderOptions = {
+        loop: true,
+        initialSlide: 0,
+        direction: 'horizontal',
+        speed: 300 
+      };
+    };
+
+    $scope.$watch('data.sliderDelegate', function(newVal, oldVal) {
+      if (newVal != null) {
+        $scope.data.sliderDelegate.on('slideChangeEnd', function() {
+          $scope.data.currentPage = $scope.data.sliderDelegate.activeIndex;
+        });
+      }
+    });
 
     $scope.setNextTheme = function() {
       $scope.data.sliderDelegate.slideNext();
@@ -22,29 +54,7 @@ angular.module('englishLetterByLetter')
       $scope.data.sliderDelegate.slidePrev();
     };
 
-    $scope.setThemeName = function() {
-      $rootScope.themeName = $scope.theme.name;
-    };
-
-    function setupSlider() {
-      //some options to pass to our slider
-      $scope.data.sliderOptions = {
-        loop: true,
-        initialSlide: 0,
-        direction: 'horizontal', //or vertical
-        speed: 300 //0.3s transition
-      };
-
-      //create delegate reference to link with slider
-      $scope.data.sliderDelegate = null;
-
-      //watch our sliderDelegate reference, and use it when it becomes available
-      $scope.$watch('data.sliderDelegate', function(newVal, oldVal) {
-        if (newVal != null) {
-          $scope.data.sliderDelegate.on('slideChangeEnd', function() {
-            $scope.data.currentPage = $scope.data.sliderDelegate.activeIndex;
-          });
-        }
-      });
+    $scope.setThemeName = function(themeName) {
+      $rootScope.themeName = themeName;
     };
   });

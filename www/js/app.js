@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByLetter.controllers', 'englishLetterByLetter.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, WordsDB) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -13,6 +13,8 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    WordsDB.initDatabase();
   }); 
 })
 

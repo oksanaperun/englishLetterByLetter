@@ -1,32 +1,19 @@
 angular.module('englishLetterByLetter')
 
-  .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils) {
-    var allWords = [
-      {id: 1, name: 'apple', translation: 'яблуко', themeId: 1},
-      {id: 2, name: 'apricot', translation: 'абрикос', themeId: 1},
-      {id: 3, name: 'avocado', translation: 'авокадо', themeId: 1},
-      {id: 4, name: 'banana', translation: 'банан', themeId: 1},
-      {id: 5, name: 'cherry', translation: 'вишня', themeId: 1},
-      {id: 6, name: 'date', translation: 'фінік', themeId: 1},
-      {id: 7, name: 'fig', translation: 'інжир', themeId: 1},
-      {id: 8, name: 'grape', translation: 'виноград', themeId: 1},
-      {id: 9, name: 'kiwi_fruit', translation: 'ківі', themeId: 1},
-      {id: 10, name: 'lemon', translation: 'лимон', themeId: 1},
-      {id: 11, name: 'lime', translation: 'лайм', themeId: 1},
-      {id: 12, name: 'mango', translation: 'манго', themeId: 1},
-      {id: 13, name: 'melon', translation: 'диня', themeId: 1},
-      {id: 14, name: 'peach', translation: 'персик', themeId: 1},
-      {id: 15, name: 'pear', translation: 'груша', themeId: 1},
-      {id: 16, name: 'blackberry', translation: 'ожина', themeId: 1},
-      {id: 17, name: 'blueberry', translation: 'чорниця', themeId: 1},
-      {id: 18, name: 'lemonade', translation: 'лимонад', themeId: 2},
-      {id: 19, name: 'cocoa', translation: 'какао', themeId: 2},
-      {id: 20, name: 'coffee', translation: 'кава', themeId: 2},
-      {id: 21, name: 'sweet potato', translation: 'батат', themeId: 3},
-      {id: 22, name: 'potato', translation: 'картопля', themeId: 3},
-      {id: 23, name: 'onion', translation: 'цибуля', themeId: 3},
-      {id: 24, name: 'peas', translation: 'горох', themeId: 3}
-    ]; // load words from selected theme and remove setThemeWords() function
+  .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, WordsDB) {
+    if (window.cordova) {
+      document.addEventListener('deviceready', function () {
+        manageGameMode();
+
+        var soundFileLocation = 'sounds/' + $scope.word.subThemeId + '/' + $scope.word.name + '.mp3';
+
+        $cordovaNativeAudio.preloadSimple($scope.word.name, soundFileLocation);
+      });
+    } else {
+      $ionicPlatform.ready(function () {
+        manageGameMode();
+      });
+    }
 
     var speedModeMaxNameLength = 6,
       timeModeTimeout = 61,
@@ -35,65 +22,41 @@ angular.module('englishLetterByLetter')
     $scope.modeId = $stateParams.modeId;
     $scope.speedModeTimeout = 10;
     $scope.score = 0;
-    manageGameMode();
-
-    if ($scope.words) {
-      $scope.word = getRandomWord();
-      $scope.shuffledName = getShuffledName();
-      $scope.composedNameLetters = getInitialComposedName();
-
-      if (window.cordova) {
-        document.addEventListener('deviceready', function () {
-          var soundFileLocation = 'sounds/' + $scope.word.themeId + '/' + $scope.word.name + '.mp3';
-
-          $cordovaNativeAudio.preloadSimple($scope.word.name, soundFileLocation);
-        });
-      }
-    }
 
     function manageGameMode() {
       if ($stateParams.modeId == 1) {
         $scope.nextButtonOpacity = 1;
-        setThemeWords();
+        getWords();
       }
 
       if ($stateParams.modeId == 2) {
         $scope.nextButtonOpacity = 1;
-        setThemeWords();
         $scope.counter = timeModeTimeout;
+        getWords();
         setTimer();
       }
 
       if ($stateParams.modeId == 3) {
         $scope.nextButtonOpacity = 0;
-        setThemeWordsForSpeedMode();
         $scope.counter = $scope.speedModeTimeout;
+        getWords();
         setTimer();
       }
     }
 
-    function setThemeWords() {
-      if ($stateParams.subThemeId == 0) {
-        $scope.words = allWords.slice();
-      } else {
-          $scope.words = [];
-
-          for (var i = 0; i < allWords.length; i++) {
-            if (allWords[i].themeId == $stateParams.subThemeId) {
-              $scope.words.push(allWords[i]);
-            }
-          }
-        }
-   }
-
-    function setThemeWordsForSpeedMode() {
+    function getWords() {
       $scope.words = [];
 
-      for (var i = 0; i < allWords.length; i++) {
-        if (allWords[i].themeId == $stateParams.themeId && allWords[i].name.length <= speedModeMaxNameLength) {
-          $scope.words.push(allWords[i]);
-        }
-      }
+      WordsDB.selectWordsBySubThemeId($stateParams.subThemeId).then(function (res) {
+        for (var i = 0; i < res.rows.length; i++)
+          $scope.words.push(res.rows.item(i));
+
+        $scope.word = getRandomWord();
+        $scope.shuffledName = getShuffledName();
+        $scope.composedNameLetters = getInitialComposedName();
+      }, function (err) {
+        console.error(err);
+      });
     }
 
     function getRandomWord() {
@@ -308,7 +271,10 @@ angular.module('englishLetterByLetter')
         });
 
       achievementPopup.then(function (res) {
-        $state.go('tab.themes', {modeId: $scope.modeId}); // TODO: Redirect to tab.modes has Back button in header
+        // TODO: Redirect to tab.subTheme has Back button in header and no data in slider
+        //$state.go('tab.subTheme', {modeId: $stateParams.modeId, themeId: $stateParams.themeId});
+        // TODO: Redirect to tab.modes has Back button in header
+        $state.go('tab.modes');
       });
     }
 

@@ -8,6 +8,14 @@ angular.module('englishLetterByLetter.controllers', [])
   ];
 })
 
-.controller('StatsCtrl', function($scope) {})
+.controller('StatsCtrl', function($scope, $rootScope, WordsDB) {
+	$scope.updateData = function() {
+		WordsDB.updateData().then(function (res) {
+        console.log('Data updated');
+      }, function (err) {
+        console.error(err);
+    });
+	}
+})
 
 .controller('HelpCtrl', function($scope) {});
