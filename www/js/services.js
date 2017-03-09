@@ -17,7 +17,9 @@ angular.module('englishLetterByLetter.services', [])
       	}
       },
       playSound: function (sound) {
-        $cordovaNativeAudio.play(sound);
+        if (window.cordova) {
+          $cordovaNativeAudio.play(sound);
+        }
       }
   	}
  })
@@ -46,9 +48,16 @@ angular.module('englishLetterByLetter.services', [])
         console.log('select sub themes');
         return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
       },
+      selectWordsByThemeId: function (themeId) {
+        var query = "SELECT W.id, W.name, W.translation, W.subThemeId " +
+          "FROM words AS W LEFT JOIN sub_themes AS ST ON W.subThemeId = ST.id " +
+          "WHERE ST.themeId = ?";
+        console.log('select words theme id');
+        return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
+      },
       selectWordsBySubThemeId: function (subThemeId) {
         var query = "SELECT id, name, translation, subThemeId FROM words WHERE subThemeId = ?";
-        console.log('select words');
+        console.log('select words by sub theme id');
         return $cordovaSQLite.execute($rootScope.db, query, [subThemeId]);
       },
       updateData: function () {
@@ -61,8 +70,9 @@ angular.module('englishLetterByLetter.services', [])
         //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('apple','яблуко',1),('apricot','абрикос',1),('avocado','авокадо',1),('banana','банан',1),('cherry','вишня',1)";
         //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('date','фінік',1),('fig','інжир',1),('grape','виноград',1),('kiwi_fruit','ківі',1),('lemon','лимон',1)";
         //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('lime','лайм',1),('mango','манго',1),('melon','диня',1),('peach','персик',1),('pear','груша',1)";
-        //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('onion','цибуля',2),('pea','горох',2),('potato','картопля',2),('sweet potato','батат',2)";
+        //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('onion','цибуля',2),('pea','горох',2),('potato','картопля',2),('sweet_potato','батат',2)";
         //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('cocoa','какао',3),('coffee','кава',3),('lemonade','лимонад',3)";
+        //var query = "UPDATE words SET name = 'sweet_potato' WHERE id = 19";
 
         return $cordovaSQLite.execute($rootScope.db, query);
       }
