@@ -9,14 +9,9 @@
         <div class="theme-body">
           <img class="theme-icon" ng-src="img/themes/{{theme.id}}.jpg">
           <h1>{{theme.name}}</h1>
-          <a ng-if="modeId!=3" href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme">
+          <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme">
             <button class="theme-body-button" ng-click="setThemeName(theme.name)">
               Обрати
-            </button>
-          </a>
-          <a ng-if="modeId==3" href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme/0/word">
-            <button class="theme-body-button">
-              Грати
             </button>
           </a>
         </div>

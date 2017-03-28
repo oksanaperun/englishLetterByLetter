@@ -2,14 +2,18 @@
   <ion-content class="word">
     <div class="word-header">
       <p>Рахунок: {{score}}</p>
-      <h1>{{word.translation}}</h1>
-      <p ng-if="modeId==1" 
-         ng-click="playSound()" 
-         id="playSoundIcon">
+      <div>
+        <h3 ng-if="modeId==3">{{word.description}}</h3>
+        <h1 ng-if="modeId==2">{{phrase.translation}}</h1>
+        <h1 ng-if="modeId!=2 && (modeId!=3 || isComposed)">{{word.translation}}</h1>
+      </div>
+      <p id="playSoundIcon"
+        style="opacity: {{playSoundIconOpacity}};"
+        ng-disabled="modeId==2" 
+        ng-click="playSound()"
+        >
         <i class="icon ion-volume-high"></i>
       </p>
-      <p ng-if="modeId==2"><i class="icon ion-ios-timer-outline"></i> {{counter}}</p>
-      <p ng-if="modeId==3"><i class="icon ion-ios-speedometer-outline"></i> {{speedModeTimeout - counter}}</p>
     </div>
 
     <div class="word-body">
@@ -17,10 +21,8 @@
               ng-click="clearComposedWord()">
         <i class="icon ion-trash-a"></i>
       </button>
-  	  <img class="word-icon" ng-src="img/{{word.subThemeId}}/{{word.name}}.jpg">
+  	  <img class="word-icon" ng-if="modeId!=2 && (modeId!=3 || isComposed)" ng-src="img/{{word.subThemeId}}/{{word.name}}.jpg">
       <button class="next-button" 
-              style="opacity: {{nextButtonOpacity}};" 
-              ng-disabled="gameMode=='speed'" 
               ng-click="setNextWord()">
         <i class="icon ion-arrow-right-c"></i>
       </button>
@@ -29,8 +31,10 @@
     <div class="row composed-letter-buttons-block">
       <div ng-repeat="item in composedNameLetters track by $index">
         <button class="composed-letter-button"
+                style="opacity: {{item.symbol=='_' ? 0 : 1}};"
                 ng-click="moveLetterBack($index)"
-                style="opacity: {{item.symbol==' ' ? 0 : 1}};">
+                ng-disabled="item.isDefault"
+                >
           {{item.symbol}}
         </button>
       </div>
@@ -39,6 +43,7 @@
   	<div class="row letter-buttons-block">
       <div ng-repeat="letter in shuffledName track by $index">
         <button class="letter-button"
+                ng-show="letter!='_'"
                 ng-click="moveLetter(letter, $index); checkComposedWord();">
           {{letter}}
         </button>

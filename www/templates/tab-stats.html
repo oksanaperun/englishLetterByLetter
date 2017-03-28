@@ -1,5 +1,21 @@
 <ion-view view-title="УСПІХИ">
   <ion-content class="padding">
   	<button ng-click="updateData()">Update data</button>
+  	<h4>Найкращі результати:</h4>
+  	<div class="row">
+  		<div class="col">Тема</div>
+  		<div class="col col-20">{{gameModes[0].name}}</div>
+  		<div class="col col-20">{{gameModes[1].name}}</div>
+  		<div class="col col-20">{{gameModes[2].name}}</div>
+	  </div>
+    <div ng-repeat="theme in themes">
+      {{theme.name}}
+      <div class="row" ng-repeat="subTheme in theme.subThemes">
+        <div class="col">{{subTheme.name}}</div>
+        <div class="col col-20">10</div>
+        <div class="col col-20">15</div>
+        <div class="col col-20">20</div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

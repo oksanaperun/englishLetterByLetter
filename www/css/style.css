@@ -59,13 +59,20 @@ ion-slides{
   border: 1px dotted black;
 }
 
-.theme .scroll, .word-header, .word-body, .composed-letter-buttons-block, .letter-buttons-block {
- 	display: flex;
+.game-modes .scroll, .theme .scroll, .word-header, .word-body, 
+.composed-letter-buttons-block, .letter-buttons-block {
+  display: flex;
+}
+.game-modes .scroll, .theme .scroll, .word-header, .word-body, .letter-buttons-block {
   flex-flow: row nowrap;
+}
+.composed-letter-buttons-block {
+  flex-flow: row wrap;
+}
+.composed-letter-buttons-block, .letter-buttons-block {
   justify-content: center;
 }
-
-.theme .scroll, .word-header, .word-body {
+.game-modes .scroll, .theme .scroll, .word-header, .word-body {
   justify-content: space-between;
 }
 

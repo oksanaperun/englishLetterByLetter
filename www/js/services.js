@@ -1,7 +1,14 @@
 angular.module('englishLetterByLetter.services', [])
 
-.factory('Utils', function ($cordovaNativeAudio) {
+.factory('Utils', function ($cordovaNativeAudio, $rootScope) {
     return {
+      setGameModes: function() {
+        $rootScope.gameModes = [
+          {id: 1, name: 'Слова', iconClass: 'ion-ios-book'},
+          {id: 2, name: 'Фрази', iconClass: 'ion-ios-chatboxes'},
+          {id: 3, name: 'Вікторина', iconClass: 'ion-ios-lightbulb'}
+        ];
+      },
       getNextIndex: function(currentIndex, length) {
       	if (currentIndex == length - 1) {
         	return 0;
@@ -38,32 +45,43 @@ angular.module('englishLetterByLetter.services', [])
           $rootScope.db = window.openDatabase('englishLetterByLetter.db', '1', 'words database', 256 * 256 * 100); // browser
         }
       },
-      selectThemes: function (themeId) {
+      selectThemes: function () {
         var query = "SELECT id, name FROM themes";
         console.log('select themes');
         return $cordovaSQLite.execute($rootScope.db, query);
       },
+      selectSubThemes: function () {
+        var query = "SELECT id, name, themeId FROM sub_themes";
+        console.log('select sub themes');
+        return $cordovaSQLite.execute($rootScope.db, query);
+      },
       selectSubThemesByThemeId: function (themeId) {
         var query = "SELECT id, name FROM sub_themes WHERE themeId = ?";
-        console.log('select sub themes');
+        console.log('select sub themes by theme id');
         return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
       },
       selectWordsByThemeId: function (themeId) {
-        var query = "SELECT W.id, W.name, W.translation, W.subThemeId " +
+        var query = "SELECT W.id, W.name, W.translation, W.description, W.subThemeId " +
           "FROM words AS W LEFT JOIN sub_themes AS ST ON W.subThemeId = ST.id " +
           "WHERE ST.themeId = ?";
         console.log('select words theme id');
         return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
       },
       selectWordsBySubThemeId: function (subThemeId) {
-        var query = "SELECT id, name, translation, subThemeId FROM words WHERE subThemeId = ?";
+        var query = "SELECT id, name, translation, description, subThemeId FROM words WHERE subThemeId = ?";
         console.log('select words by sub theme id');
+        return $cordovaSQLite.execute($rootScope.db, query, [subThemeId]);
+      },
+      selectPhrasesBySubThemeId: function (subThemeId) {
+        var query = "SELECT id, name, translation, subThemeId FROM phrases WHERE subThemeId = ?";
+        console.log('select phrases by sub theme id');
         return $cordovaSQLite.execute($rootScope.db, query, [subThemeId]);
       },
       updateData: function () {
         //var query = "CREATE TABLE 'themes' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL UNIQUE )";
         //var query = "CREATE TABLE 'sub_themes' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL UNIQUE, 'themeId' INTEGER NOT NULL, FOREIGN KEY('themeId') REFERENCES 'themes'('id') )";
         //var query = "CREATE TABLE 'words' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, 'subThemeId' INTEGER NOT NULL, FOREIGN KEY('subThemeId') REFERENCES 'sub_themes'('id') )";
+        //var query = "CREATE TABLE 'phrases' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, 'subThemeId' INTEGER NOT NULL, FOREIGN KEY('subThemeId') REFERENCES 'sub_themes'('id') )";
         //var query = "INSERT INTO themes (name) VALUES ('Їжа та напої'), ('Дім'), ('Людина')";
         //var query = "INSERT INTO sub_themes (name, themeId) VALUES ('Фрукти і ягоди', 1), ('Овочі, трави та спеції', 1), ('Прохолоджуючі та гарячі напої', 1)";
         //var query = "INSERT INTO sub_themes (name, themeId) VALUES ('Меблі', 2), ('Посуд', 2)";
@@ -73,7 +91,7 @@ angular.module('englishLetterByLetter.services', [])
         //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('onion','цибуля',2),('pea','горох',2),('potato','картопля',2),('sweet_potato','батат',2)";
         //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('cocoa','какао',3),('coffee','кава',3),('lemonade','лимонад',3)";
         //var query = "UPDATE words SET name = 'sweet_potato' WHERE id = 19";
-
+        //var query = "INSERT INTO phrases (name, translation, subThemeId) VALUES ('canned_fruit', 'консервовані фрукти', 1), ('luscious_fruit', 'солодкі фрукти', 1), ('seedless_grapes', 'виноград без кісточок', 1)";
         return $cordovaSQLite.execute($rootScope.db, query);
       }
     }
