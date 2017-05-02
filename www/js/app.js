@@ -35,12 +35,12 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
 
   // Each tab has its own nav history stack:
 
-  .state('tab.stats', {
-    url: '/stats',
+  .state('tab.achievements', {
+    url: '/achievements',
     views: {
-      'tab-stats': {
-        templateUrl: 'templates/tab-stats.html',
-        controller: 'StatsCtrl'
+      'tab-achievements': {
+        templateUrl: 'templates/tab-achievements.html',
+        controller: 'AchievementsCtrl'
       }
     }
   })

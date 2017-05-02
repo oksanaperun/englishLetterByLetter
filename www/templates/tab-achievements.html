@@ -1,0 +1,27 @@
+<ion-view view-title="УСПІХИ">
+  <ion-content class="padding">
+  	<button ng-click="updateData()">Update data</button>
+  	<h4>Ваш кращий рахунок за темою та режимом гри:</h4>
+    <div class="row">
+      <div class="col"></div>
+  		<div class="col col-20"><i class="icon {{gameModes[0].iconClass}}"></i></div>
+      <div class="col col-20"><i class="icon {{gameModes[1].iconClass}}"></i></div>
+      <div class="col col-20"><i class="icon {{gameModes[2].iconClass}}"></i></div>
+    </div>
+    <div class="row">
+      <div class="col">Тема</div>
+      <div class="col col-20">{{gameModes[0].name}}</div>
+      <div class="col col-20">{{gameModes[1].name}}</div>
+      <div class="col col-20">{{gameModes[2].name}}</div>
+    </div>
+    <div ng-repeat="theme in themes">
+      {{theme.name}}
+      <div class="row" ng-repeat="subTheme in theme.subThemes">
+        <div class="col">{{subTheme.name}}</div>
+        <div class="col col-20">{{subTheme.maxScores[1]}}</div>
+        <div class="col col-20">{{subTheme.maxScores[2]}}</div>
+        <div class="col col-20">{{subTheme.maxScores[3]}}</div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

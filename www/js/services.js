@@ -77,11 +77,27 @@ angular.module('englishLetterByLetter.services', [])
         console.log('select phrases by sub theme id');
         return $cordovaSQLite.execute($rootScope.db, query, [subThemeId]);
       },
+      selectAllMaxScores: function () {
+        var query = "SELECT subThemeId, gameModeId, maxScore FROM achievements";
+        console.log('select all max scores');
+        return $cordovaSQLite.execute($rootScope.db, query);
+      },
+      selectMaxScore: function (subThemeId, gameModeId) {
+        var query = "SELECT maxScore FROM achievements WHERE subThemeId = ? AND gameModeId = ?";
+        console.log('select max score by sub theme id and game mode id');
+        return $cordovaSQLite.execute($rootScope.db, query, [subThemeId, gameModeId]);
+      },
+      updateMaxScore: function (subThemeId, gameModeId, newMaxScore) {
+        var query = "UPDATE achievements SET maxScore = ? WHERE subThemeId = ? AND gameModeId = ?";
+        console.log('update max score by sub theme id and game mode id');
+        return $cordovaSQLite.execute($rootScope.db, query, [newMaxScore, subThemeId, gameModeId]);
+      },
       updateData: function () {
         //var query = "CREATE TABLE 'themes' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL UNIQUE )";
         //var query = "CREATE TABLE 'sub_themes' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL UNIQUE, 'themeId' INTEGER NOT NULL, FOREIGN KEY('themeId') REFERENCES 'themes'('id') )";
         //var query = "CREATE TABLE 'words' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, 'subThemeId' INTEGER NOT NULL, FOREIGN KEY('subThemeId') REFERENCES 'sub_themes'('id') )";
         //var query = "CREATE TABLE 'phrases' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, 'subThemeId' INTEGER NOT NULL, FOREIGN KEY('subThemeId') REFERENCES 'sub_themes'('id') )";
+        //var query = "CREATE TABLE 'achievements' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'subThemeId' INTEGER NOT NULL, 'gameModeId' INTEGER NOT NULL, 'maxScore' INTEGER NOT NULL DEFAULT 0, FOREIGN KEY('subThemeId') REFERENCES 'sub_themes'('id') )";
         //var query = "INSERT INTO themes (name) VALUES ('Їжа та напої'), ('Дім'), ('Людина')";
         //var query = "INSERT INTO sub_themes (name, themeId) VALUES ('Фрукти і ягоди', 1), ('Овочі, трави та спеції', 1), ('Прохолоджуючі та гарячі напої', 1)";
         //var query = "INSERT INTO sub_themes (name, themeId) VALUES ('Меблі', 2), ('Посуд', 2)";
@@ -92,6 +108,7 @@ angular.module('englishLetterByLetter.services', [])
         //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('cocoa','какао',3),('coffee','кава',3),('lemonade','лимонад',3)";
         //var query = "UPDATE words SET name = 'sweet_potato' WHERE id = 19";
         //var query = "INSERT INTO phrases (name, translation, subThemeId) VALUES ('canned_fruit', 'консервовані фрукти', 1), ('luscious_fruit', 'солодкі фрукти', 1), ('seedless_grapes', 'виноград без кісточок', 1)";
+        //var query = "INSERT INTO achievements (subThemeId, gameModeId) VALUES (1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (3, 3), (4, 1), (4, 2), (4, 3), (5, 1), (5, 2), (5, 3)"
         return $cordovaSQLite.execute($rootScope.db, query);
       }
     }

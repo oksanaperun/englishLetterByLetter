@@ -36,6 +36,8 @@ angular.module('englishLetterByLetter')
         $scope.playSoundIconOpacity = 0;
         getPhrasesBySubThemeId(); 
       }
+
+      getMaxScore();
     }
 
     function getWordsBySubThemeId() {
@@ -70,6 +72,21 @@ angular.module('englishLetterByLetter')
         $scope.shuffledName = getShuffledName($scope.phrase.name);
         $scope.composedNameLetters = getInitialComposedName($scope.phrase.name);
         openDefaultLettersInComposedName($scope.phrase.name);
+      }, function (err) {
+        console.error(err);
+      });
+    }
+
+    function getMaxScore() {
+      WordsDB.selectMaxScore($stateParams.subThemeId, $stateParams.modeId).then(function (res) {
+        $scope.maxScore = res.rows.item(0).maxScore;
+      }, function (err) {
+        console.error(err);
+      });
+    }
+
+    function updateMaxScore() {
+      WordsDB.updateMaxScore($stateParams.subThemeId, $stateParams.modeId, $scope.score).then(function (res) {
       }, function (err) {
         console.error(err);
       });
@@ -314,10 +331,11 @@ angular.module('englishLetterByLetter')
         });
 
       achievementPopup.then(function (res) {
-        // TODO: Redirect to tab.subTheme has Back button in header and no data in slider
-        //$state.go('tab.subTheme', {modeId: $stateParams.modeId, themeId: $stateParams.themeId});
-        // TODO: Redirect to tab.modes has Back button in header
-        $state.go('tab.modes');
+        $ionicHistory.goBack();
+
+        if ($scope.maxScore < $scope.score) {
+          updateMaxScore($stateParams.subThemeId, $stateParams.modeId, $scope.score);
+        }
       });
     }
 
