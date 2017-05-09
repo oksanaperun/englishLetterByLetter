@@ -1,53 +1,63 @@
 <ion-view view-title="СЛОВО">
-  <ion-content class="word">
-    <div class="word-header">
-      <p>Рахунок: {{score}}</p>
-      <div>
+  <ion-content class="word"
+              style="width: {{blockWidth}}px; height: {{viewHeight}}px; margin-left: {{blockMarginLeft}}px; margin-top: {{blockMarginTop}}px;">
+    <div class="row word-header">
+      <div class="col col-20">
+        <p>Рахунок: {{score}}</p>
+      </div>
+      <div class="col word-header-title">
         <h3 ng-if="modeId==3">{{word.description}}</h3>
         <h1 ng-if="modeId==2">{{phrase.translation}}</h1>
         <h1 ng-if="modeId!=2 && (modeId!=3 || isComposed)">{{word.translation}}</h1>
       </div>
-      <p id="playSoundIcon"
-        style="opacity: {{playSoundIconOpacity}};"
-        ng-disabled="modeId==2" 
-        ng-click="playSound()"
-        >
-        <i class="icon ion-volume-high"></i>
-      </p>
+      <div class="col col-20">
+        <p id="playSoundIcon"
+          style="opacity: {{playSoundIconOpacity}};"
+          ng-disabled="modeId==2" 
+          ng-click="playSound()">
+          <i class="icon ion-volume-high"></i>
+        </p>
+      </div>
     </div>
 
-    <div class="word-body">
-      <button class="clear-button" 
-              ng-click="clearComposedWord()">
-        <i class="icon ion-trash-a"></i>
-      </button>
-  	  <img class="word-icon" ng-if="modeId!=2 && (modeId!=3 || isComposed)" ng-src="img/{{word.subThemeId}}/{{word.name}}.jpg">
-      <button class="next-button" 
-              ng-click="setNextWord()">
-        <i class="icon ion-arrow-right-c"></i>
-      </button>
+    <div class="row word-body">
+      <div class="col col-20">
+        <button class="clear-button" 
+                ng-click="clearComposedWord()">
+          <i class="icon ion-trash-a"></i>
+        </button>
+      </div>
+      <div class="col">
+  	   <img class="word-icon" 
+            ng-if="modeId!=2 && (modeId!=3 || isComposed)" 
+            ng-src="img/{{word.subThemeId}}/{{word.name}}.jpg">
+      </div>
+      <div class="col col-20">
+        <button class="next-button" 
+                ng-click="setNextWord()">
+          <i class="icon ion-arrow-right-c"></i>
+        </button>
+      </div>
     </div>
 
     <div class="row composed-letter-buttons-block">
-      <div ng-repeat="item in composedNameLetters track by $index">
-        <button class="composed-letter-button"
-                style="opacity: {{item.symbol=='_' ? 0 : 1}};"
-                ng-click="moveLetterBack($index)"
-                ng-disabled="item.isDefault"
-                >
-          {{item.symbol}}
-        </button>
-      </div>
+      <button class="composed-letter-button"
+              style="opacity: {{item.symbol=='_' ? 0 : 1}}; width: {{letterWidth}}px; height: {{letterWidth}}px;"
+              ng-click="moveLetterBack($index)"
+              ng-disabled="item.isDefault"
+              ng-repeat="item in composedNameLetters track by $index">
+        {{item.symbol}}
+      </button>
     </div>
 
   	<div class="row letter-buttons-block">
-      <div ng-repeat="letter in shuffledName track by $index">
-        <button class="letter-button"
-                ng-show="letter!='_'"
-                ng-click="moveLetter(letter, $index); checkComposedWord();">
-          {{letter}}
-        </button>
-      </div>
+      <button class="letter-button"
+              style="width: {{letterWidth}}px; height: {{letterWidth}}px;"
+              ng-show="letter!='_'"
+              ng-click="moveLetter(letter, $index); checkComposedWord();"
+              ng-repeat="letter in shuffledName track by $index">
+        {{letter}}
+      </button>
     </div>
   </ion-content>
 </ion-view>

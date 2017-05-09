@@ -1,25 +1,39 @@
 <ion-view view-title="{{themeName.toUpperCase()}}">
   <ion-content class="theme">
-    <button ng-click="setPreviousSubTheme()">
-      <i class="icon ion-chevron-left"></i>
-    </button>
+    <div class="row">
+      <div class="col col-10">
+        <button style="height: {{viewHeight - 20}}px;"
+                ng-click="setPreviousSubTheme()">
+          <i class="icon ion-chevron-left"></i>
+        </button>
+      </div>
 
-    <ion-slides  options="data.sliderOptions" slider="data.sliderDelegate">
-      <ion-slide-page ng-repeat="subTheme in subThemes">
-        <div class="theme-body">
-          <img class="theme-icon" ng-src="img/sub_themes/{{subTheme.id}}.jpg">
-          <h1>{{subTheme.name}}</h1>
-          <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme/{{subTheme.id}}/word">
-            <button class="theme-body-button">
-              Грати
-            </button>
-          </a>
-        </div>
-      </ion-slide-page>
-    </ion-slides>
+      <div class="col">
+        <ion-slides options="data.sliderOptions" 
+                    slider="data.sliderDelegate"
+                    style="height: {{viewHeight}}px;">
+          <ion-slide-page ng-repeat="subTheme in subThemes">
+            <div class="slide-data"
+                style="width: {{viewWidth}}px;">
+              <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme/{{subTheme.id}}/word">
+                <img class="theme-icon" 
+                    ng-src="img/sub_themes/{{subTheme.id}}.jpg">
+                <h1>{{subTheme.name}}</h1>
+                <button class="theme-body-button">
+                  Грати
+                </button>
+              </a>
+            </div>
+          </ion-slide-page>
+        </ion-slides>
+      </div>
 
-    <button ng-click="setNextSubTheme()">
-      <i class="icon ion-chevron-right"></i>
-    </button>
+      <div class="col col-10">
+        <button style="height: {{viewHeight - 20}}px;"
+                ng-click="setNextSubTheme()">
+          <i class="icon ion-chevron-right"></i>
+        </button>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

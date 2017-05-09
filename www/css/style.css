@@ -3,90 +3,61 @@ h1 {
   margin-bottom: 0px;
 }
 
-ion-slides{
-  height: 260px;
+a {
+  text-decoration: none;
+}
+
+.game-modes, .slide-data {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  -webkit-transform: translate(-50%, -40%);
+}
+
+.game-modes, .word, .achievement-popup {
+  text-align: center;
 }
 
 .theme {
   padding-right: 10px;
   padding-bottom: 10px;
-}
-
-.theme-body {
   text-align: center;
 }
-
 .theme-icon {
   margin-top: 10px;
-  width: 100px !important;
+  width: 60px !important;
 }
-
 .theme-body-button {
-  margin-top: 10px;
-}
-
-.word, .achievement-popup {
-	text-align: center;
-}
-
-.word .scroll {
-  position: absolute;
-  width: 640px;
-  height: 260px;
-  top: 50%;
-  left: 50%;
-  margin-left: -320px;
-  margin-top: -120px;
+  margin-bottom: 5px;
 }
 
 #playSoundIcon {
+  font-size: 24px;
+}
+.slide-data h1, .word-header-title h1 {
+  font-size: 30px;
+}
+.word-icon {
+	height: 45px;
+}
+.clear-button, .next-button {
   font-size: x-large;
 }
-
-.word-icon {
-	height: 80px;
-}
-
 .composed-letter-button, .letter-button {
-	width: 49px;
-  height: 49px;
+  font-size: 24px;
   margin-right: 4px;
-  font-size: xx-large;
 }
-
-.composed-letter-button {
-	background: transparent;
-  border: 1px dotted black;
-}
-
-.game-modes .scroll, .theme .scroll, .word-header, .word-body, 
-.composed-letter-buttons-block, .letter-buttons-block {
-  display: flex;
-}
-.game-modes .scroll, .theme .scroll, .word-header, .word-body, .letter-buttons-block {
-  flex-flow: row nowrap;
-}
-.composed-letter-buttons-block {
-  flex-flow: row wrap;
-}
-.composed-letter-buttons-block, .letter-buttons-block {
-  justify-content: center;
-}
-.game-modes .scroll, .theme .scroll, .word-header, .word-body {
-  justify-content: space-between;
-}
-
 .composed-letter-buttons-block, .letter-buttons-block {
   padding-top: 4px;
   padding-right: 0px;
   padding-left: 4px;
   padding-bottom: 4px;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
 }
-
-.word-header p {
-  width: 100px;
-}
-
-.clear-button, .next-button {
-  font-size: xx-large;
+.composed-letter-button {
+	background: transparent;
+  border: 1px dotted black;
 }

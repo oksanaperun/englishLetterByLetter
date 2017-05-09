@@ -1,0 +1,89 @@
+@media (min-height: 295px) {
+  .theme-icon {
+    width: 80px !important;
+  }
+  .word-icon {
+    height: 55px;
+  }
+}
+
+@media (min-height: 320px) {
+  .theme-icon {
+    width: 100px !important;
+  }
+.slide-data h1, .word-header-title h1 {
+    font-size: 34px;
+  }
+  .word-icon {
+    height: 80px;
+  }
+}
+
+@media (min-height: 360px) {
+  .game-modes, .slide-data {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
+  .theme-icon {
+    width: 120px !important;
+  }
+  .word-icon {
+    height: 90px;
+  }
+}
+
+@media (min-height: 400px) {
+  .theme-icon {
+    width: 150px !important;
+  }
+  .slide-data h1, .word-header-title h1 {
+    font-size: 36px;
+  }
+  .word-icon {
+    height: 100px;
+  }
+}
+
+@media (min-height: 430px) {
+  .theme-icon {
+    width: 200px !important;
+  }
+  .slide-data h1, .word-header-title h1 {
+    font-size: 40px;
+  }
+  .word-icon {
+    height: 120px;
+  }
+}
+
+@media (min-height: 500px) {
+  .word {
+    top: 50%;
+  }
+}
+
+@media (min-width: 530px) {
+  .composed-letter-button, .letter-button {
+    font-size: 26px;
+  }
+}
+
+@media (min-width: 640px) {
+  .composed-letter-button, .letter-button {
+    font-size: 32px;
+  }
+}
+
+@media (min-width: 700px) {
+  .composed-letter-button, .letter-button {
+    font-size: 34px;
+  }
+}
+
+@media (min-width: 750px) {
+  .word {
+    position: absolute;
+    left: 50%;
+  }
+}

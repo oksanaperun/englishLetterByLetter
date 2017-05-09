@@ -1,8 +1,17 @@
 angular.module('englishLetterByLetter')
 
-.controller('AchievementsCtrl', function($scope, $rootScope, Utils, WordsDB) {
-	getThemes();
-  Utils.setGameModes();
+.controller('AchievementsCtrl', function($ionicPlatform, $scope, $rootScope, Utils, WordsDB) {
+   if (window.cordova) {
+      document.addEventListener('deviceready', function () {
+        getThemes();
+        Utils.setGameModes();
+      });
+    } else {
+      $ionicPlatform.ready(function () {
+        getThemes();
+        Utils.setGameModes();
+      });
+    }
 
   function getThemes() {
     $scope.themes = [];
@@ -22,13 +31,10 @@ angular.module('englishLetterByLetter')
 
     WordsDB.selectSubThemes().then(function (res) {
       for (var i = 0; i < res.rows.length; i++) {
-        var subTheme = res.rows.item(i);
-
-        subTheme.maxScores = {};
-        subThemes.push(subTheme);
+        subThemes.push(res.rows.item(i));
       }
 
-      getMaxScores(subThemes);
+      getAchievements(subThemes);
 
       for (var i = 0; i < $scope.themes.length; i++) {
 			   $scope.themes[i].subThemes = [];
@@ -44,12 +50,12 @@ angular.module('englishLetterByLetter')
     });
   }
 
-  function getMaxScores(subThemes) {
-    WordsDB.selectAllMaxScores().then(function (res) {
+  function getAchievements(subThemes) {
+    WordsDB.selectAllAchievements().then(function (res) {
       for (var i = 0; i < res.rows.length; i++) {
         for (var j = 0; j < subThemes.length; j++) {
           if (res.rows.item(i).subThemeId === subThemes[j].id) {
-            subThemes[j].maxScores[res.rows.item(i).gameModeId] = res.rows.item(i).maxScore;
+            subThemes[j].achievements = res.rows.item(i);
           }
         }
       }

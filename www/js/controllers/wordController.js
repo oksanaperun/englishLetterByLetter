@@ -1,11 +1,13 @@
 angular.module('englishLetterByLetter')
 
   .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, WordsDB) {
+    setSize();
+
     if (window.cordova) {
       document.addEventListener('deviceready', function () {
         manageGameMode();
 
-        if ($stateParams.modeId == 1 || $stateParams.modeId == 3) {
+        if ($scope.word && ($stateParams.modeId == 1 || $stateParams.modeId == 3)) {
           var soundFileLocation = 'sounds/' + $scope.word.subThemeId + '/' + $scope.word.name + '.mp3';
 
           $cordovaNativeAudio.preloadSimple($scope.word.name, soundFileLocation);
@@ -17,10 +19,13 @@ angular.module('englishLetterByLetter')
       });
     }
 
-    var maxScore = 20;
+    var maxWordsNumberInAGame = 20,
+      currentTimeout = null;
 
     $scope.modeId = $stateParams.modeId;
     $scope.score = 0;
+    $scope.composedWordsCount = 0;
+    $scope.counter = 0;
     $scope.currentIndex = 0;
     $scope.isComposed = false;
     $scope.words = [];
@@ -37,7 +42,8 @@ angular.module('englishLetterByLetter')
         getPhrasesBySubThemeId(); 
       }
 
-      getMaxScore();
+      getAchievements();
+      setTimer();
     }
 
     function getWordsBySubThemeId() {
@@ -49,7 +55,7 @@ angular.module('englishLetterByLetter')
 
         sortWordsRandomly(allSubThemeWords, false);
 
-        $scope.words = allSubThemeWords.slice(0, maxScore);
+        $scope.words = allSubThemeWords.slice(0, maxWordsNumberInAGame);
         $scope.word = $scope.words[$scope.currentIndex];
         $scope.shuffledName = getShuffledName($scope.word.name);
         $scope.composedNameLetters = getInitialComposedName($scope.word.name);    
@@ -67,7 +73,7 @@ angular.module('englishLetterByLetter')
 
         sortWordsRandomly(allSubThemePhrases, false);
 
-        $scope.phrases = allSubThemePhrases.slice(0, maxScore);
+        $scope.phrases = allSubThemePhrases.slice(0, maxWordsNumberInAGame);
         $scope.phrase = $scope.phrases[$scope.currentIndex];
         $scope.shuffledName = getShuffledName($scope.phrase.name);
         $scope.composedNameLetters = getInitialComposedName($scope.phrase.name);
@@ -77,16 +83,16 @@ angular.module('englishLetterByLetter')
       });
     }
 
-    function getMaxScore() {
-      WordsDB.selectMaxScore($stateParams.subThemeId, $stateParams.modeId).then(function (res) {
-        $scope.maxScore = res.rows.item(0).maxScore;
+    function getAchievements() {
+      WordsDB.selectAchievementsBySubThemeId($stateParams.subThemeId).then(function (res) {
+        $scope.achievements = res.rows.item(0);
       }, function (err) {
         console.error(err);
       });
     }
 
-    function updateMaxScore() {
-      WordsDB.updateMaxScore($stateParams.subThemeId, $stateParams.modeId, $scope.score).then(function (res) {
+    function updateAchievement(achievement, newValue) {
+      WordsDB.updateAchievement($stateParams.subThemeId, achievement, newValue).then(function (res) {
       }, function (err) {
         console.error(err);
       });
@@ -232,13 +238,30 @@ angular.module('englishLetterByLetter')
           $scope.composedName += $scope.composedNameLetters[i].symbol;
 
       if ($scope.composedName === nameToCompare) {
-        $scope.score++;
-        manageCorrectComposedWord();
-        $scope.isComposed = true;
+        handleCorrectComposedWord();
       }
     };
 
-    function manageCorrectComposedWord() {
+    function handleCorrectComposedWord() {
+      if ($scope.modeId == 1 || $scope.modeId == 3) {
+        $scope.score += getScore($scope.word.name.length);
+      } else $scope.score++;
+
+      $scope.composedWordsCount++;
+      $scope.isComposed = true;
+      setCorrectComposedWordStyle();
+    }
+
+    function getScore(wordsLength) {
+        if (wordsLength <= 6)
+          return 1;
+        if (wordsLength > 6 && wordsLength <= 9)
+          return 2;
+        if (wordsLength > 9)
+          return 3;
+    };
+
+    function setCorrectComposedWordStyle() {
       var buttons = getComposedLetterButtons();
 
       for (var i = 0; i < buttons.length; i++) {
@@ -274,7 +297,8 @@ angular.module('englishLetterByLetter')
       $scope.currentIndex++;
 
       if ($scope.currentIndex == $scope.words.length || $scope.currentIndex == $scope.phrases.length) {
-        showPopup();
+        stopTimer();
+        showEndGamePopup();
       } else {
         if ($scope.modeId == 1 || $scope.modeId == 3) {
           $scope.word = $scope.words[$scope.currentIndex];
@@ -320,26 +344,108 @@ angular.module('englishLetterByLetter')
       clearButton.removeAttribute('disabled');
     }
 
-    function showPopup() {
+    function showEndGamePopup() {
       var popupBody = '<div class="achievement-popup">' +
-          '<p>Ваш рахунок:</p>' +
-          '<h5>' + $scope.score + '</h5>' +
+          '<p>Цього разу Ви закінчили гру</p>' +
+          '<p>з рахунком ' + $scope.score + ' очок</p>' +
+          '<p>за ' + $scope.gameTime + ' секунд</p>' +
           '</div>',
         achievementPopup = $ionicPopup.alert({
-          title: 'ГРУ ЗАВЕРШЕНО',
+          title: 'КІНЕЦЬ ГРИ',
+          template: popupBody
+        });
+
+      achievementPopup.then(function (res) {
+        var maxScoreAchievement = 'maxScore' + $stateParams.modeId,
+          minTimeAchievement = 'minTime' + $stateParams.modeId,
+          scoreAchievement = $scope.achievements[maxScoreAchievement] < $scope.score,
+          timeAchievement = ($scope.composedWordsCount == $scope.words.length || $scope.composedWordsCount == $scope.phrases.length) && 
+            ($scope.achievements[minTimeAchievement] > $scope.gameTime);
+
+        if (scoreAchievement || timeAchievement) {
+          if (scoreAchievement) {
+             updateAchievement(maxScoreAchievement, $scope.score);
+          }
+          if (timeAchievement) {
+             updateAchievement(minTimeAchievement, $scope.gameTime);
+          }
+          showNewRecordPopup(scoreAchievement, timeAchievement);
+        } else $ionicHistory.goBack();
+      });
+    }
+
+    function showNewRecordPopup(scoreAchievement, timeAchievement) {
+      var beginHTML = '<div class="achievement-popup">' +
+          '<p>Ви встановили новий рекорд:</p>',
+        scoreAchievementHTML = scoreAchievement ? '<h5><i class="icon ion-ios-star-outline"></i> ' + $scope.score + ' очок</h5>' : '',
+        timeAchievementHTML = timeAchievement ? '<h5><i class="icon ion-ios-timer-outline"></i> ' + $scope.gameTime + ' секунд</h5>' : '',
+        endHTML = '</div>',
+        popupBody = beginHTML + scoreAchievementHTML + timeAchievementHTML + endHTML,
+        achievementPopup = $ionicPopup.alert({
+          title: 'ВІТАЄМО!',
           template: popupBody
         });
 
       achievementPopup.then(function (res) {
         $ionicHistory.goBack();
-
-        if ($scope.maxScore < $scope.score) {
-          updateMaxScore($stateParams.subThemeId, $stateParams.modeId, $scope.score);
-        }
       });
     }
 
+    function setTimer() {
+      $scope.counter++;
+      console.log('$scope.counter=' + $scope.counter);
+      currentTimeout = $timeout(setTimer, 1000);
+    };
+ 
+    function stopTimer() {
+      $scope.$broadcast('timer-stopped', $scope.counter);
+      $scope.gameTime = $scope.counter;
+      $scope.counter = 0;
+      $timeout.cancel(currentTimeout);
+    };
+
+    $rootScope.$ionicGoBack = function() {
+      stopTimer();
+      $ionicHistory.goBack();
+    };
+
+   /* var go = false;
+
+    $rootScope.$on('$stateChangeStart', function(evt, toState, toParams, fromState, fromParams) {
+      if(!go) {
+      evt.preventDefault();
+
+      var popupBody = '<div class="leave-popup">' +
+          '<p>Якщо залишити гру зараз,</p>' +
+          '<p>то Ваші поточні результати будуть втрачені.</p>' +
+          '<p>Ви дійсно бажаєте завершити гру?</p>' +
+          '</div>';
+
+        $ionicPopup.confirm({
+          title: '',
+          template: popupBody,
+          cancelText:'Ні',
+          okText:'Так'
+        }).then(function(result) {
+          if(result) {
+            go = true;
+            stopTimer();
+            $state.go(toState, toParams);
+          }
+        });
+      }
+    });*/
+
     $scope.playSound = function() {
       Utils.playSound($scope.word.name);
+    }
+
+    function setSize() {
+      var marginRight = 4;
+
+      $scope.blockWidth = 750 > $rootScope.viewWidth ? $rootScope.viewWidth : 750;
+      $scope.blockMarginLeft = $scope.blockWidth == 750 ? -Math.floor($scope.blockWidth / 2) : 0;
+      $scope.blockMarginTop =  $rootScope.viewHeight >= 500 ? -Math.floor($rootScope.viewHeight / 3) : 0;
+      $scope.letterWidth = Math.floor($scope.blockWidth / 12) - marginRight;
     }
   });
