@@ -1,19 +1,27 @@
-<ion-view view-title="СЛОВО">
+<ion-view view-title="{{modeId == 1 ? 'СЛОВО' : (modeId == 2 ? 'ФРАЗА' : 'ПИТАННЯ')}}">
   <ion-content class="word"
-              style="width: {{blockWidth}}px; height: {{viewHeight}}px; margin-left: {{blockMarginLeft}}px; margin-top: {{blockMarginTop}}px;">
-    <div class="row word-header">
-      <div class="col col-20">
-        <p>Рахунок: {{score}}</p>
+              style="width: {{blockWidth}}px; height: {{viewHeight - topPanelHeigth}}px; margin-left: {{blockMarginLeft}}px; margin-top: {{blockMarginTop}}px;">
+    <div class="row word-header"
+         style="height: {{wordHeaderBlockHeight}}px;">
+      <div class="col col-20 score-counter">
+        <p>
+          <i class="icon ion-ios-star-outline"></i> 
+          {{score}}
+        </p>
+        <p>
+          <i class="icon ion-ios-timer-outline"></i> 
+          {{counterInMinutes != 0 ? ' ' + counterInMinutes + 'хв' : ''}} {{counter % 60}}с
+        </p>
       </div>
       <div class="col word-header-title">
-        <h3 ng-if="modeId==3">{{word.description}}</h3>
+        <h1 ng-if="modeId==1">{{word.translation}}</h1>
         <h1 ng-if="modeId==2">{{phrase.translation}}</h1>
-        <h1 ng-if="modeId!=2 && (modeId!=3 || isComposed)">{{word.translation}}</h1>
+        <h3 ng-if="modeId==3">{{word.description}}</h3>
       </div>
-      <div class="col col-20">
+      <div class="col col-20 play-sound">
         <p id="playSoundIcon"
-          style="opacity: {{playSoundIconOpacity}};"
-          ng-disabled="modeId==2" 
+          style="opacity: {{hasSound}};"
+          ng-disabled="hasSound" 
           ng-click="playSound()">
           <i class="icon ion-volume-high"></i>
         </p>
@@ -28,9 +36,10 @@
         </button>
       </div>
       <div class="col">
-  	   <img class="word-icon" 
-            ng-if="modeId!=2 && (modeId!=3 || isComposed)" 
-            ng-src="img/{{word.subThemeId}}/{{word.name}}.jpg">
+  	    <img class="word-icon"
+            ng-src="img/{{word.themeId}}/{{word.name}}.jpg"
+            ng-if="modeId==1">
+        <h1 ng-if="modeId==3 && isComposed">{{word.translation}}</h1>
       </div>
       <div class="col col-20">
         <button class="next-button" 
@@ -46,7 +55,7 @@
               ng-click="moveLetterBack($index)"
               ng-disabled="item.isDefault"
               ng-repeat="item in composedNameLetters track by $index">
-        {{item.symbol}}
+        {{item.symbol.toUpperCase()}}
       </button>
     </div>
 
@@ -56,8 +65,13 @@
               ng-show="letter!='_'"
               ng-click="moveLetter(letter, $index); checkComposedWord();"
               ng-repeat="letter in shuffledName track by $index">
-        {{letter}}
+        {{letter.toUpperCase()}}
       </button>
+    </div>
+
+    <div class="row correct-logo-block"
+        style="display: none;">
+       <img class="correct-logo" ng-src="img/correct_logo.jpg">
     </div>
   </ion-content>
 </ion-view>

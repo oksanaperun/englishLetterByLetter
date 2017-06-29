@@ -15,6 +15,7 @@ angular.module('englishLetterByLetter')
     $scope.data = {};
     $scope.data.currentPage = 0;
     $scope.data.sliderDelegate = null;
+    $scope.themeIndex = 0;
 
     function getThemes() {
       $scope.themes = [];
@@ -48,10 +49,12 @@ angular.module('englishLetterByLetter')
 
     $scope.setNextTheme = function() {
       $scope.data.sliderDelegate.slideNext();
+      $scope.themeIndex = $scope.data.currentPage + 1;
     };
 
     $scope.setPreviousTheme = function() {
       $scope.data.sliderDelegate.slidePrev();
+      $scope.themeIndex = $scope.data.currentPage - 1;
     };
 
     $scope.setThemeName = function(themeName) {

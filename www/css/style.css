@@ -1,3 +1,38 @@
+@font-face {
+  font-family: 'Alice';
+  src: url('../fonts/Alice.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'CormorantInfantB';
+  src: url('../fonts/CormorantInfant-Bold.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Handlee';
+  src: url('../fonts/Handlee-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+.main-font, .title, .previous-title, .tab-title, 
+.game-modes h4, .slide-data h1, .word-header-title h1, .word-header-title h3,
+.word-body h1  {
+  font-family: Alice;
+}
+.secondary-font, .game-modes button, .theme button, .word p {
+  font-family: CormorantInfantB;
+}
+.composed-letter-button, .letter-button {
+  font-family: Handlee;
+  font-weight: bold;
+ }
+
+.back-button > .back-text > .default-title, .back-button > .back-text > .previous-title {
+  display: none;
+}
+
 h1 {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -5,6 +40,10 @@ h1 {
 
 a {
   text-decoration: none;
+}
+
+.tab-title {
+  font-size: 12px;
 }
 
 .game-modes, .slide-data {
@@ -25,18 +64,32 @@ a {
   text-align: center;
 }
 .theme-icon {
-  margin-top: 10px;
-  width: 60px !important;
+  width: 140px !important;
 }
 .theme-body-button {
   margin-bottom: 5px;
 }
 
+.word-header-title {
+  padding: 0px;
+}
+.word-header-title h1, .slide-data h1 {
+  font-size: 28px;
+}
+.word-header-title h3 {
+  font-size: 18px;
+}
+.score-counter {
+  text-align: left;
+}
+.play-sound {
+  text-align: right;
+}
 #playSoundIcon {
   font-size: 24px;
 }
-.slide-data h1, .word-header-title h1 {
-  font-size: 30px;
+.word-body {
+  min-height: 55px;
 }
 .word-icon {
 	height: 45px;
@@ -46,13 +99,12 @@ a {
 }
 .composed-letter-button, .letter-button {
   font-size: 24px;
-  margin-right: 4px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 .composed-letter-buttons-block, .letter-buttons-block {
-  padding-top: 4px;
+  padding-left: 0px;
   padding-right: 0px;
-  padding-left: 4px;
-  padding-bottom: 4px;
   display: block;
   margin: 0 auto;
   text-align: center;
@@ -60,4 +112,17 @@ a {
 .composed-letter-button {
 	background: transparent;
   border: 1px dotted black;
+  margin-bottom: 5px;
+}
+.correct-logo {
+  height: 50px;
+  margin-top: 5px;
+}
+
+.top-line {
+  border-top: 1px dotted;
+}
+
+.bottom-line {
+  border-bottom: 1px dotted;
 }

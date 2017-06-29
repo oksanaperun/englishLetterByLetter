@@ -1,20 +1,21 @@
-<ion-view view-title="{{gameModes[modeId - 1].name.toUpperCase()}}">
+<ion-view view-title="{{gameModes[modeId - 1].name.toUpperCase()}}: ТЕМА">
   <ion-content class="theme">
     <div class="row">
       <div class="col col-10">
-        <button style="height: {{viewHeight - 20}}px;"
-                ng-click="setPreviousTheme()">
+        <button style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight - 20}}px;"
+                ng-click="setPreviousTheme()"
+                ng-if="themeIndex != 0">
           <i class="icon ion-chevron-left"></i>
         </button>
       </div>
       <div class="col">
         <ion-slides options="data.sliderOptions" 
                     slider="data.sliderDelegate"
-                    style="height: {{viewHeight}}px;">
+                    style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight}}px;">
           <ion-slide-page ng-repeat="theme in themes">
             <div class="slide-data"
                 style="width: {{viewWidth}}px;">
-              <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/subTheme">
+              <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/word">
                 <img class="theme-icon" 
                     ng-src="img/themes/{{theme.id}}.jpg" 
                     ng-click="setThemeName(theme.name)">
@@ -30,8 +31,9 @@
       </div>
 
       <div class="col col-10">
-        <button style="height: {{viewHeight - 20}}px;"
-                ng-click="setNextTheme()">
+        <button style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight - 20}}px;"
+                ng-click="setNextTheme()"
+                ng-if="themeIndex != themes.length - 1">
           <i class="icon ion-chevron-right"></i>
         </button>
       </div>

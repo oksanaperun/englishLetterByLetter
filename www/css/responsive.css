@@ -1,6 +1,6 @@
 @media (min-height: 295px) {
   .theme-icon {
-    width: 80px !important;
+    width: 160px !important;
   }
   .word-icon {
     height: 55px;
@@ -9,10 +9,7 @@
 
 @media (min-height: 320px) {
   .theme-icon {
-    width: 100px !important;
-  }
-.slide-data h1, .word-header-title h1 {
-    font-size: 34px;
+    width: 180px !important;
   }
   .word-icon {
     height: 80px;
@@ -26,7 +23,10 @@
     -webkit-transform: translate(-50%, -50%);
   }
   .theme-icon {
-    width: 120px !important;
+    width: 200px !important;
+  }
+  .slide-data h1, .word-header-title h1 {
+    font-size: 34px;
   }
   .word-icon {
     height: 90px;
@@ -35,7 +35,7 @@
 
 @media (min-height: 400px) {
   .theme-icon {
-    width: 150px !important;
+    width: 230px !important;
   }
   .slide-data h1, .word-header-title h1 {
     font-size: 36px;
@@ -47,7 +47,7 @@
 
 @media (min-height: 430px) {
   .theme-icon {
-    width: 200px !important;
+    width: 280px !important;
   }
   .slide-data h1, .word-header-title h1 {
     font-size: 40px;

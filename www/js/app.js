@@ -63,24 +63,15 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
         }
       }
     })
-      .state('tab.subTheme', {
-        url: '/modes/:modeId/theme/:themeId/subTheme',
+      .state('tab.word', {
+        url: '/modes/:modeId/theme/:themeId/word',
         views: {
           'tab-modes': {
-            templateUrl: 'templates/subTheme.html',
-            controller: 'SubThemeCtrl'
+            templateUrl: 'templates/word.html',
+            controller: 'WordCtrl'
           }
         }
       })
-        .state('tab.word', {
-          url: '/modes/:modeId/theme/:themeId/subTheme/:subThemeId/word',
-          views: {
-            'tab-modes': {
-              templateUrl: 'templates/word.html',
-              controller: 'WordCtrl'
-            }
-          }
-        })
 
   .state('tab.help', {
     url: '/help',

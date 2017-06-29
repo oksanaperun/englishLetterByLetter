@@ -1,61 +1,38 @@
 angular.module('englishLetterByLetter')
 
 .controller('AchievementsCtrl', function($ionicPlatform, $scope, $rootScope, Utils, WordsDB) {
-   if (window.cordova) {
-      document.addEventListener('deviceready', function () {
-        getThemes();
-        Utils.setGameModes();
-      });
-    } else {
-      $ionicPlatform.ready(function () {
-        getThemes();
-        Utils.setGameModes();
-      });
-    }
+  if (window.cordova) {
+    document.addEventListener('deviceready', function () {
+      getThemes();
+      Utils.setGameModes();
+    });
+  } else {
+    $ionicPlatform.ready(function () {
+      getThemes();
+      Utils.setGameModes();
+    });
+  }
 
   function getThemes() {
     $scope.themes = [];
 
     WordsDB.selectThemes().then(function (res) {
-      for (var i = 0; i < res.rows.length; i++)
-        $scope.themes.push(res.rows.item(i));
-
-      getSubThemes(); 
-    }, function (err) {
-      console.error(err);
-    });
-  }
-
-  function getSubThemes() {
-    var subThemes = [];
-
-    WordsDB.selectSubThemes().then(function (res) {
       for (var i = 0; i < res.rows.length; i++) {
-        subThemes.push(res.rows.item(i));
+        $scope.themes.push(res.rows.item(i));
       }
 
-      getAchievements(subThemes);
-
-      for (var i = 0; i < $scope.themes.length; i++) {
-			   $scope.themes[i].subThemes = [];
-
-        for (var j = 0; j < subThemes.length; j++) {
-        	if (subThemes[j].themeId == $scope.themes[i].id) {
-        		$scope.themes[i].subThemes.push(subThemes[j]);
-        	}
-        }
-    	}
+      getAchievements();
     }, function (err) {
       console.error(err);
     });
   }
 
-  function getAchievements(subThemes) {
+  function getAchievements() {
     WordsDB.selectAllAchievements().then(function (res) {
       for (var i = 0; i < res.rows.length; i++) {
-        for (var j = 0; j < subThemes.length; j++) {
-          if (res.rows.item(i).subThemeId === subThemes[j].id) {
-            subThemes[j].achievements = res.rows.item(i);
+        for (var j = 0; j < $scope.themes.length; j++) {
+          if (res.rows.item(i).themeId === $scope.themes[j].id) {
+            $scope.themes[j].achievements = res.rows.item(i);
           }
         }
       }
@@ -65,7 +42,7 @@ angular.module('englishLetterByLetter')
   }
 
   $scope.$on('$ionicView.enter', function () {
-    getSubThemes();
+    getAchievements();
   });
 
 	$scope.updateData = function() {

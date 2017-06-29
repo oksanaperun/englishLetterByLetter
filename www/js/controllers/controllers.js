@@ -1,11 +1,10 @@
 angular.module('englishLetterByLetter.controllers', [])
 
 .controller('ModesCtrl', function($scope, $rootScope, $window, Utils) {
-	var topPanelHeigth = 44,
-		bottomPanelHeight = 49;
-
+	$rootScope.topPanelHeigth = 44;
+	$rootScope.bottomPanelHeight = 49;
 	$rootScope.viewWidth = $window.innerWidth;
-	$rootScope.viewHeight = $window.innerHeight - topPanelHeigth - bottomPanelHeight;
+	$rootScope.viewHeight = $window.innerHeight;
 
 	Utils.setGameModes();
 })

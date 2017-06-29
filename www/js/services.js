@@ -50,65 +50,45 @@ angular.module('englishLetterByLetter.services', [])
         console.log('select themes');
         return $cordovaSQLite.execute($rootScope.db, query);
       },
-      selectSubThemes: function () {
-        var query = "SELECT id, name, themeId FROM sub_themes";
-        console.log('select sub themes');
-        return $cordovaSQLite.execute($rootScope.db, query);
-      },
-      selectSubThemesByThemeId: function (themeId) {
-        var query = "SELECT id, name FROM sub_themes WHERE themeId = ?";
-        console.log('select sub themes by theme id');
-        return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
-      },
       selectWordsByThemeId: function (themeId) {
-        var query = "SELECT W.id, W.name, W.translation, W.description, W.subThemeId " +
-          "FROM words AS W LEFT JOIN sub_themes AS ST ON W.subThemeId = ST.id " +
-          "WHERE ST.themeId = ?";
-        console.log('select words theme id');
+        var query = "SELECT id, name, translation, description, themeId, hasSound FROM words WHERE themeId = ?";
+        console.log('select words by theme id');
         return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
       },
-      selectWordsBySubThemeId: function (subThemeId) {
-        var query = "SELECT id, name, translation, description, subThemeId FROM words WHERE subThemeId = ?";
-        console.log('select words by sub theme id');
-        return $cordovaSQLite.execute($rootScope.db, query, [subThemeId]);
-      },
-      selectPhrasesBySubThemeId: function (subThemeId) {
-        var query = "SELECT id, name, translation, subThemeId FROM phrases WHERE subThemeId = ?";
-        console.log('select phrases by sub theme id');
-        return $cordovaSQLite.execute($rootScope.db, query, [subThemeId]);
+      selectPhrasesByThemeId: function (themeId) {
+        var query = "SELECT id, name, translation, themeId FROM phrases WHERE themeId = ?";
+        console.log('select phrases by theme id');
+        return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
       },
       selectAllAchievements: function () {
         var query = "SELECT * FROM achievements";
         console.log('select all achievements');
         return $cordovaSQLite.execute($rootScope.db, query);
       },
-      selectAchievementsBySubThemeId: function (subThemeId) {
-        var query = "SELECT * FROM achievements WHERE subThemeId = ?";
-        console.log('select achievements by sub theme id');
-        return $cordovaSQLite.execute($rootScope.db, query, [subThemeId]);
+      selectAchievementsByThemeId: function (themeId) {
+        var query = "SELECT * FROM achievements WHERE themeId = ?";
+        console.log('select achievements by theme id');
+        return $cordovaSQLite.execute($rootScope.db, query, [themeId]);
       },
-      updateAchievement: function (subThemeId, achievement, newValue) {
-        var query = "UPDATE achievements SET " + achievement + " = ? WHERE subThemeId = ?";
+      updateAchievement: function (themeId, achievement, newValue) {
+        var query = "UPDATE achievements SET " + achievement + " = ? WHERE themeId = ?";
         console.log('update achievement');
-        return $cordovaSQLite.execute($rootScope.db, query, [newValue, subThemeId]);
+        return $cordovaSQLite.execute($rootScope.db, query, [newValue, themeId]);
       },
       updateData: function () {
         //var query = "CREATE TABLE 'themes' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL UNIQUE )";
-        //var query = "CREATE TABLE 'sub_themes' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL UNIQUE, 'themeId' INTEGER NOT NULL, FOREIGN KEY('themeId') REFERENCES 'themes'('id') )";
-        //var query = "CREATE TABLE 'words' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, 'subThemeId' INTEGER NOT NULL, FOREIGN KEY('subThemeId') REFERENCES 'sub_themes'('id') )";
-        //var query = "CREATE TABLE 'phrases' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, 'subThemeId' INTEGER NOT NULL, FOREIGN KEY('subThemeId') REFERENCES 'sub_themes'('id') )";
-        //var query = "CREATE TABLE achievements ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'subThemeId' INTEGER NOT NULL DEFAULT 0 UNIQUE, 'minTime1' INTEGER NOT NULL DEFAULT 1000000, 'maxScore1' INTEGER NOT NULL DEFAULT 0, 'minTime2' INTEGER NOT NULL DEFAULT 1000000, 'maxScore2' INTEGER NOT NULL DEFAULT 0, 'minTime3' INTEGER NOT NULL DEFAULT 1000000, 'maxScore3' INTEGER NOT NULL DEFAULT 0 )";
-        //var query = "INSERT INTO themes (name) VALUES ('Їжа та напої'), ('Дім'), ('Людина')";
-        //var query = "INSERT INTO sub_themes (name, themeId) VALUES ('Фрукти і ягоди', 1), ('Овочі, трави та спеції', 1), ('Прохолоджуючі та гарячі напої', 1)";
-        //var query = "INSERT INTO sub_themes (name, themeId) VALUES ('Меблі', 2), ('Посуд', 2)";
-        //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('apple','яблуко',1),('apricot','абрикос',1),('avocado','авокадо',1),('banana','банан',1),('cherry','вишня',1)";
-        //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('date','фінік',1),('fig','інжир',1),('grape','виноград',1),('kiwi_fruit','ківі',1),('lemon','лимон',1)";
-        //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('lime','лайм',1),('mango','манго',1),('melon','диня',1),('peach','персик',1),('pear','груша',1)";
-        //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('onion','цибуля',2),('pea','горох',2),('potato','картопля',2),('sweet_potato','батат',2)";
-        //var query = "INSERT INTO words (name, translation, subThemeId) VALUES ('cocoa','какао',3),('coffee','кава',3),('lemonade','лимонад',3)";
+        //var query = "CREATE TABLE 'words' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, description TEXT, 'themeId' INTEGER NOT NULL, FOREIGN KEY('themeId') REFERENCES 'themes'('id') )";
+        //var query = "CREATE TABLE 'phrases' ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'name' TEXT NOT NULL, 'translation' TEXT NOT NULL, 'themeId' INTEGER NOT NULL, FOREIGN KEY('themeId') REFERENCES 'themes'('id') )";
+        //var query = "CREATE TABLE achievements ( 'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 'themeId' INTEGER NOT NULL DEFAULT 0 UNIQUE, 'minTime1' INTEGER NOT NULL DEFAULT 1000000, 'maxScore1' INTEGER NOT NULL DEFAULT 0, 'minTime2' INTEGER NOT NULL DEFAULT 1000000, 'maxScore2' INTEGER NOT NULL DEFAULT 0, 'minTime3' INTEGER NOT NULL DEFAULT 1000000, 'maxScore3' INTEGER NOT NULL DEFAULT 0 )";
+        //var query = "INSERT INTO themes (name) VALUES ('Фрукти, ягоди та горіхи'), ('Овочі, трави та прянощі'), ('Молоко, борошно та крупи'), ('Страви та солодощі')";
+        //var query = "INSERT INTO words (name, translation, themeId) VALUES ('apple','яблуко',1),('apricot','абрикос',1),('avocado','авокадо',1),('banana','банан',1),('cherry','вишня',1)";
+        //var query = "INSERT INTO words (name, translation, themeId) VALUES ('date','фінік',1),('fig','інжир',1),('grape','виноград',1),('kiwi_fruit','ківі',1),('lemon','лимон',1)";
+        //var query = "INSERT INTO words (name, translation, themeId) VALUES ('lime','лайм',1),('mango','манго',1),('melon','диня',1),('peach','персик',1),('pear','груша',1)";
+        //var query = "INSERT INTO words (name, translation, themeId) VALUES ('onion','цибуля',2),('pea','горох',2),('potato','картопля',2),('sweet_potato','батат',2)";
         //var query = "UPDATE words SET name = 'sweet_potato' WHERE id = 19";
-        //var query = "INSERT INTO phrases (name, translation, subThemeId) VALUES ('canned_fruit', 'консервовані фрукти', 1), ('luscious_fruit', 'солодкі фрукти', 1), ('seedless_grapes', 'виноград без кісточок', 1)";
-        //var query = "INSERT INTO achievements (subThemeId) VALUES (1), (2), (3), (4), (5)"
+        //var query = "INSERT INTO phrases (name, translation, themeId) VALUES ('canned_fruit', 'консервовані фрукти', 1), ('citrus_fruit', 'цитрусові фрукти', 1), ('bunch_of_grapes', 'гроно винограду', 1)";
+        //var query = "INSERT INTO achievements (themeId) VALUES (1), (2), (3), (4)"
+        //var query = "UPDATE words SET description = 'Солодка картопля' WHERE id = 19";
         return $cordovaSQLite.execute($rootScope.db, query);
       }
     }
