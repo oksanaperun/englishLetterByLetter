@@ -1,24 +1,9 @@
 angular.module('englishLetterByLetter')
 
   .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, WordsDB) {
-    if (window.cordova) {
-      document.addEventListener('deviceready', function () {
-        setSize();
-        manageGameMode();
-        $scope.counter = 0;
-        $scope.counterInMinutes = 0;
-      });
-    } else {
-      $ionicPlatform.ready(function () {
-        setSize();
-        manageGameMode();
-        $scope.counter = 0;
-        $scope.counterInMinutes = 0;
-      });
-    }
-
     var maxWordsNumberInAGame = 15,
-      currentTimeout = null;
+      currentTimeout = null,
+      tabs = getTabsElement();
 
     $scope.modeId = $stateParams.modeId;
     $scope.score = 0;
@@ -27,18 +12,135 @@ angular.module('englishLetterByLetter')
     $scope.isComposed = false;
     $scope.words = [];
     $scope.phrases = [];
+    tabs.style.display = 'none';
 
-    var tabs = document.getElementsByClassName('tabs')[0];
+    if (window.cordova) {
+      document.addEventListener('deviceready', function () {
+        setSize();
+        manageGameMode();
+      });
+    } else {
+      $ionicPlatform.ready(function () {
+        setSize();
+        manageGameMode();
+      });
+    } 
 
-    tabs = angular.element(tabs);
-    tabs.css('display', 'none');
-  
+    $rootScope.$ionicGoBack = function() {
+      if ($ionicHistory.backView().stateName === 'tab.theme') {
+        Utils.showConfirmLeaveGamePopup();
+      } else {
+        $ionicHistory.goBack();
+      }
+    };
+
     $scope.$on('$destroy', function() {
       stopTimer();
-      tabs.css('display', '');
+      tabs.style.display = '';
     });
 
+    $scope.playSound = function() {
+      Utils.playSound($scope.word.name);
+    }
+
+    $scope.moveLetter = function(letter, letterIndex) {
+      var letterButtons = getLetterButtons(),
+        firstSpaceIndex = getFirstFreeLetterInComposedName();
+
+      if (firstSpaceIndex > -1) {
+        letterButtons[letterIndex].setAttribute('disabled', 'disabled');
+        letterButtons[letterIndex].style.opacity = 0;
+        $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
+        $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
+      }
+    };
+
+    $scope.moveLetterBack = function(letterIndex) {
+      var letterButtons = getLetterButtons(),
+        originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
+
+      if (originalLetterIndex > -1) {
+        letterButtons[originalLetterIndex].removeAttribute('disabled');
+        letterButtons[originalLetterIndex].style.opacity = 1;
+        $scope.composedNameLetters[letterIndex].symbol = '?';
+        $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
+      }
+    };
+
+    $scope.checkComposedWord = function() {
+      $scope.composedName = '';
+      var nameToCompare = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name;
+
+      for (var i = 0; i < $scope.composedNameLetters.length; i++)
+        if ($scope.composedNameLetters[i].symbol != '?')
+          $scope.composedName += $scope.composedNameLetters[i].symbol;
+
+      if ($scope.composedName === nameToCompare) {
+        handleCorrectComposedWord();
+      }
+    };
+
+    $scope.clearComposedWord = function() {
+      var letterButtons = getLetterButtons(),
+        i;
+
+      for (i = 0; i < letterButtons.length; i++) {
+        var letterButton = letterButtons[i];
+
+        letterButton.removeAttribute('disabled');
+        letterButton.style.opacity = 1;
+      }
+      for (i = 0; i < $scope.composedNameLetters.length; i++) {
+        if (!$scope.composedNameLetters[i].isDefault && $scope.composedNameLetters[i].symbol != '_') {
+          $scope.composedNameLetters[i].symbol = '?';
+        }  
+      }
+    }
+
+    $scope.setNextWord = function() {
+      $scope.currentIndex++;
+
+      if ($scope.currentIndex == $scope.words.length || $scope.currentIndex == $scope.phrases.length) {
+        stopTimer();
+        showEndGamePopup();
+      } else {
+        if ($scope.modeId == 1 || $scope.modeId == 3) {
+          $scope.word = $scope.words[$scope.currentIndex];
+          $scope.shuffledName = getShuffledName($scope.word.name);
+          $scope.composedNameLetters = getInitialComposedName($scope.word.name);
+          $scope.hasSound = $stateParams.modeId == 1 ? $scope.word.hasSound : 0;
+
+          if (window.cordova && $scope.hasSound) {
+            var soundFileLocation = 'sounds/' + $scope.word.themeId + '/' + $scope.word.name + '.mp3';
+
+            $cordovaNativeAudio.preloadSimple($scope.word.name, soundFileLocation);
+          }
+        } else {
+          $scope.phrase = $scope.phrases[$scope.currentIndex];
+          $scope.shuffledName = $scope.phrase.name;
+          $scope.composedNameLetters = getInitialComposedName($scope.phrase.name);
+          openDefaultLettersInComposedName($scope.phrase.name);
+        }
+
+        $scope.isComposed = false;
+        setInitialState();
+      }
+    }
+
+    function setSize() {
+      var marginRight = 4;
+
+      $scope.blockWidth = 750 > $rootScope.viewWidth ? $rootScope.viewWidth : 750;
+      $scope.blockMarginLeft = $scope.blockWidth == 750 ? -Math.floor($scope.blockWidth / 2) : 0;
+      $scope.blockMarginTop =  $rootScope.viewHeight >= 500 ? -Math.floor($rootScope.viewHeight / 3) : 0;
+      $scope.wordHeaderBlockHeight = $stateParams.modeId == 3 ? 115 : 70;
+      $scope.letterWidth = Math.floor($scope.blockWidth / 12) - marginRight;
+    }
+
     function manageGameMode() {
+      $scope.counter = 0;
+      $scope.counterInMinutes = 0;
+
       if ($stateParams.modeId == 1) {
         getWordsByThemeId();
       }
@@ -189,38 +291,6 @@ angular.module('englishLetterByLetter')
       else return index;
     }
 
-    function getLetterButtonsBlock() {
-      return document.getElementsByClassName('letter-buttons-block')[0];
-    }
-
-    function getLetterButtons() {
-      return document.getElementsByClassName('letter-button');
-    }
-
-    function getComposedLetterButtons() {
-      return document.getElementsByClassName('composed-letter-button');
-    }
-
-    function getClearButton() {
-      return document.getElementsByClassName('clear-button')[0];
-    }
-
-    function getCorrectLogoBlock() {
-      return document.getElementsByClassName('correct-logo-block')[0];
-    }
-
-    $scope.moveLetter = function(letter, letterIndex) {
-      var letterButtons = getLetterButtons(),
-        firstSpaceIndex = getFirstFreeLetterInComposedName();
-
-      if (firstSpaceIndex > -1) {
-        letterButtons[letterIndex].setAttribute('disabled', 'disabled');
-        letterButtons[letterIndex].style.opacity = 0;
-        $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
-        $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
-      }
-    };
-
     function getFirstFreeLetterInComposedName() {
       for (var i = 0; i < $scope.composedNameLetters.length; i++) {
         if ($scope.composedNameLetters[i].symbol == '?')
@@ -229,31 +299,6 @@ angular.module('englishLetterByLetter')
  
       return -1;
     }
-
-    $scope.moveLetterBack = function(letterIndex) {
-      var letterButtons = getLetterButtons(),
-        originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
-
-      if (originalLetterIndex > -1) {
-        letterButtons[originalLetterIndex].removeAttribute('disabled');
-        letterButtons[originalLetterIndex].style.opacity = 1;
-        $scope.composedNameLetters[letterIndex].symbol = '?';
-        $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
-      }
-    };
-
-    $scope.checkComposedWord = function() {
-      $scope.composedName = '';
-      var nameToCompare = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name;
-
-      for (var i = 0; i < $scope.composedNameLetters.length; i++)
-        if ($scope.composedNameLetters[i].symbol != '?')
-          $scope.composedName += $scope.composedNameLetters[i].symbol;
-
-      if ($scope.composedName === nameToCompare) {
-        handleCorrectComposedWord();
-      }
-    };
 
     function handleCorrectComposedWord() {
       if ($scope.modeId == 1 || $scope.modeId == 3) {
@@ -292,53 +337,6 @@ angular.module('englishLetterByLetter')
       correctLogoBlock.style.display = 'block';
     }
 
-    $scope.clearComposedWord = function() {
-      var letterButtons = getLetterButtons(),
-        i;
-
-      for (i = 0; i < letterButtons.length; i++) {
-        var letterButton = letterButtons[i];
-
-        letterButton.removeAttribute('disabled');
-        letterButton.style.opacity = 1;
-      }
-      for (i = 0; i < $scope.composedNameLetters.length; i++) {
-        if (!$scope.composedNameLetters[i].isDefault && $scope.composedNameLetters[i].symbol != '_') {
-          $scope.composedNameLetters[i].symbol = '?';
-        }  
-      }
-    }
-
-    $scope.setNextWord = function() {
-      $scope.currentIndex++;
-
-      if ($scope.currentIndex == $scope.words.length || $scope.currentIndex == $scope.phrases.length) {
-        stopTimer();
-        showEndGamePopup();
-      } else {
-        if ($scope.modeId == 1 || $scope.modeId == 3) {
-          $scope.word = $scope.words[$scope.currentIndex];
-          $scope.shuffledName = getShuffledName($scope.word.name);
-          $scope.composedNameLetters = getInitialComposedName($scope.word.name);
-          $scope.hasSound = $stateParams.modeId == 1 ? $scope.word.hasSound : 0;
-
-          if (window.cordova && $scope.hasSound) {
-            var soundFileLocation = 'sounds/' + $scope.word.themeId + '/' + $scope.word.name + '.mp3';
-
-            $cordovaNativeAudio.preloadSimple($scope.word.name, soundFileLocation);
-          }
-        } else {
-          $scope.phrase = $scope.phrases[$scope.currentIndex];
-          $scope.shuffledName = $scope.phrase.name;
-          $scope.composedNameLetters = getInitialComposedName($scope.phrase.name);
-          openDefaultLettersInComposedName($scope.phrase.name);
-        }
-
-        $scope.isComposed = false;
-        setInitialState();
-      }
-    }
-
     function setInitialState() {
       var letterButtons = getLetterButtons(),
         composedLetterButtons = getComposedLetterButtons(),
@@ -369,7 +367,6 @@ angular.module('englishLetterByLetter')
       var popupBody = '<div class="achievement-popup">' +
           '<p>Цього разу Ви закінчили гру</p>' +
           '<p>з рахунком ' + $scope.score + ' очок</p>' +
-          '<p>за ' + $scope.gameTime + ' секунд</p>' +
           '</div>',
         achievementPopup = $ionicPopup.alert({
           title: 'КІНЕЦЬ ГРИ',
@@ -426,48 +423,27 @@ angular.module('englishLetterByLetter')
       $timeout.cancel(currentTimeout);
     };
 
-    $rootScope.$ionicGoBack = function() {
-      if ($ionicHistory.backView().stateName === 'tab.theme') {
-        showConfirmLeavePopup();
-      } else {
-        $ionicHistory.goBack();
-      }
-    };
-
-    function showConfirmLeavePopup() {
-      var popupBody = '<div class="confirm-popup">' +
-          '<p>Ви дійсно бажаєте залишити гру? Поточні результати буде втрачено.</p>' +
-          '</div>',
-        сonfirmLeavePopup = $ionicPopup.confirm({
-          title: 'УВАГА!',
-          template: popupBody,
-          buttons: [
-            {text: 'Ні'},
-            {
-              text: 'Так',
-              type: 'button-positive',
-              onTap: function (e) {
-                $ionicHistory.goBack();
-              }
-            }
-          ]
-        });
-
-      сonfirmLeavePopup.then(function (res) {
-      });
+    function getTabsElement() {
+      return document.getElementsByClassName('tabs')[0];
     }
 
-    $scope.playSound = function() {
-      Utils.playSound($scope.word.name);
+    function getLetterButtonsBlock() {
+      return document.getElementsByClassName('letter-buttons-block')[0];
     }
 
-    function setSize() {
-      var marginRight = 4;
+    function getLetterButtons() {
+      return document.getElementsByClassName('letter-button');
+    }
 
-      $scope.blockWidth = 750 > $rootScope.viewWidth ? $rootScope.viewWidth : 750;
-      $scope.blockMarginLeft = $scope.blockWidth == 750 ? -Math.floor($scope.blockWidth / 2) : 0;
-      $scope.blockMarginTop =  $rootScope.viewHeight >= 500 ? -Math.floor($rootScope.viewHeight / 3) : 0;
-      $scope.wordHeaderBlockHeight = $stateParams.modeId == 3 ? 115 : 70;
-      $scope.letterWidth = Math.floor($scope.blockWidth / 12) - marginRight;
+    function getComposedLetterButtons() {
+      return document.getElementsByClassName('composed-letter-button');
+    }
+
+    function getClearButton() {
+      return document.getElementsByClassName('clear-button')[0];
+    }
+
+    function getCorrectLogoBlock() {
+      return document.getElementsByClassName('correct-logo-block')[0];
     }
   });

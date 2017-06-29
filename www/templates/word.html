@@ -8,7 +8,7 @@
           <i class="icon ion-ios-star-outline"></i> 
           {{score}}
         </p>
-        <p>
+        <p ng-if="modeId==3">
           <i class="icon ion-ios-timer-outline"></i> 
           {{counterInMinutes != 0 ? ' ' + counterInMinutes + 'хв' : ''}} {{counter % 60}}с
         </p>

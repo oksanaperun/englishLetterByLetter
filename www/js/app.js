@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByLetter.controllers', 'englishLetterByLetter.services'])
 
-.run(function($ionicPlatform, WordsDB) {
+.run(function($ionicPlatform, $ionicHistory, WordsDB, Utils) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -15,7 +15,16 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
     }
 
     WordsDB.initDatabase();
-  }); 
+  });
+
+  $ionicPlatform.registerBackButtonAction(function(e) {
+    if ($ionicHistory.backView().stateName === 'tab.theme') {
+      e.preventDefault();
+      Utils.showConfirmLeaveGamePopup();
+    } else {
+      $ionicHistory.goBack();
+    }
+  }, 1000); 
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {

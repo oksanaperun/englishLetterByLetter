@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter.services', [])
 
-.factory('Utils', function ($cordovaNativeAudio, $rootScope) {
+.factory('Utils', function ($cordovaNativeAudio, $rootScope, $ionicPopup, $ionicHistory) {
     return {
       setGameModes: function() {
         $rootScope.gameModes = [
@@ -27,6 +27,28 @@ angular.module('englishLetterByLetter.services', [])
         if (window.cordova) {
           $cordovaNativeAudio.play(sound);
         }
+      },
+      showConfirmLeaveGamePopup: function () {
+        var popupBody = '<div class="confirm-popup">' +
+            '<p>Ви дійсно бажаєте залишити поточну гру? Отримані результати буде втрачено.</p>' +
+            '</div>',
+          сonfirmLeaveGamePopup = $ionicPopup.confirm({
+            title: 'УВАГА!',
+            template: popupBody,
+            buttons: [
+              {text: 'Ні'},
+              {
+                text: 'Так',
+                type: 'button-positive',
+                onTap: function (e) {
+                  $ionicHistory.goBack();
+                }
+              }
+            ]
+          });
+
+        сonfirmLeaveGamePopup.then(function (res) {
+        });
       }
   	}
  })

@@ -1,6 +1,12 @@
 angular.module('englishLetterByLetter')
 
   .controller('ThemeCtrl', function($scope, $rootScope, $stateParams, $ionicPlatform, Utils, WordsDB) {
+    $scope.modeId = $stateParams.modeId;
+    $scope.data = {};
+    $scope.data.currentPage = 0;
+    $scope.data.sliderDelegate = null;
+    $scope.themeIndex = 0;
+
     if (window.cordova) {
       document.addEventListener('deviceready', function () {
         getThemes();
@@ -10,12 +16,6 @@ angular.module('englishLetterByLetter')
         getThemes();
       });
     }
-
-    $scope.modeId = $stateParams.modeId;
-    $scope.data = {};
-    $scope.data.currentPage = 0;
-    $scope.data.sliderDelegate = null;
-    $scope.themeIndex = 0;
 
     function getThemes() {
       $scope.themes = [];
