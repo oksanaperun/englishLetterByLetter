@@ -3,19 +3,16 @@ Create tabs with an icon and label, using the tabs-positive style.
 Each tab's child <ion-nav-view> directive will have its own
 navigation history that also transitions its views in and out.
 -->
-<ion-tabs class="tabs-icon-top tabs-color-active-positive">
-
-  <ion-tab title="Гра" icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" href="#/tab/modes">
+<ion-tabs class="tabs-icon-only">
+  <ion-tab title="Гра" icon="play-icon" href="#/tab/modes">
     <ion-nav-view name="tab-modes"></ion-nav-view>
   </ion-tab>
 
-  <ion-tab title="Успіхи" icon-off="ion-ios-heart-outline" icon-on="ion-ios-heart" href="#/tab/achievements">
+  <ion-tab title="Успіхи" icon="achievements-icon" href="#/tab/achievements">
     <ion-nav-view name="tab-achievements"></ion-nav-view>
   </ion-tab>
 
-  <ion-tab title="Довідка" icon-off="ion-ios-information-outline" icon-on="ion-ios-information" href="#/tab/help">
+  <ion-tab title="Довідка" icon="info-icon" href="#/tab/help">
     <ion-nav-view name="tab-help"></ion-nav-view>
   </ion-tab>
-
-
 </ion-tabs>

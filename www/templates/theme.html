@@ -2,10 +2,10 @@
   <ion-content class="theme">
     <div class="row">
       <div class="col col-10">
-        <button style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight - 20}}px;"
+        <button class="previous-slide-button"
+                style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight - 20}}px;"
                 ng-click="setPreviousTheme()"
                 ng-if="themeIndex != 0">
-          <i class="icon ion-chevron-left"></i>
         </button>
       </div>
       <div class="col">
@@ -16,14 +16,20 @@
             <div class="slide-data"
                 style="width: {{viewWidth}}px;">
               <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/word">
-                <img class="theme-icon" 
+                <div class="theme-icon-block">
+                  <img class="theme-icon" 
                     ng-src="img/themes/{{theme.id}}.jpg" 
                     ng-click="setThemeName(theme.name)">
+                </div>
                 <h1 ng-click="setThemeName(theme.name)">{{theme.name}}</h1>
-                <button class="theme-body-button" 
-                        ng-click="setThemeName(theme.name)">
-                  Обрати
-                </button>
+                <div class="theme-stars-block">
+                  <img class="theme-empty-star" ng-src="img/icons/star_frame.png">
+                  <img id="themeFirstStar" ng-show="displayFirstStar" ng-src="img/icons/star_colored.png">
+                  <img class="theme-empty-star" ng-src="img/icons/star_frame.png">
+                  <img id="themeSecondStar" ng-show="displaySecondStar" ng-src="img/icons/star_colored.png">
+                  <img class="theme-empty-star" ng-src="img/icons/star_frame.png">
+                  <img id="themeThirdStar" ng-show="displayThirdStar" ng-src="img/icons/star_colored.png">
+                </div>
               </a>
             </div>
           </ion-slide-page>
@@ -31,10 +37,10 @@
       </div>
 
       <div class="col col-10">
-        <button style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight - 20}}px;"
+        <button class="next-slide-button"
+                style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight - 20}}px;"
                 ng-click="setNextTheme()"
                 ng-if="themeIndex != themes.length - 1">
-          <i class="icon ion-chevron-right"></i>
         </button>
       </div>
     </div>

@@ -1,15 +1,14 @@
 <ion-view view-title="РЕЖИМ ГРИ">
   <ion-content class="game-modes" 
-              style="width: {{viewWidth}}px;">
+              style="width: {{viewWidth}}px; margin-top: {{modesMarginTop}}px;">
     <div class="row">
       <div class="col col-33"
           ng-repeat="mode in gameModes">
         <a href="#/tab/modes/{{mode.id}}/theme">
-          <h2><i class="icon {{mode.iconClass}}"></i></h2>
-          <h4>{{mode.name}}</h4>
-          <button>
-            Почати гру
-          </button>
+          <div>
+            <img class="game-mode-icon" ng-src="img/modes/{{mode.id}}.png">
+          </div>
+          <h1>{{mode.name.toUpperCase()}}</h1>
         </a>
       </div>
     </div>

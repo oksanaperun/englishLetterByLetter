@@ -1,16 +1,14 @@
-<ion-view view-title="{{modeId == 1 ? 'СЛОВО' : (modeId == 2 ? 'ФРАЗА' : 'ПИТАННЯ')}}">
+<ion-view view-title="">
+<!-- <ion-view view-title="{{modeId == 1 ? 'СЛОВО' : (modeId == 2 ? 'ФРАЗА' : 'ПИТАННЯ')}}"> -->
   <ion-content class="word"
               style="width: {{blockWidth}}px; height: {{viewHeight - topPanelHeigth}}px; margin-left: {{blockMarginLeft}}px; margin-top: {{blockMarginTop}}px;">
     <div class="row word-header"
          style="height: {{wordHeaderBlockHeight}}px;">
-      <div class="col col-20 score-counter">
+      <div class="col col-20 score">
         <p>
-          <i class="icon ion-ios-star-outline"></i> 
+          <img class="score-icon"
+               ng-src="img/icons/star.png">
           {{score}}
-        </p>
-        <p ng-if="modeId==3">
-          <i class="icon ion-ios-timer-outline"></i> 
-          {{counterInMinutes != 0 ? ' ' + counterInMinutes + 'хв' : ''}} {{counter % 60}}с
         </p>
       </div>
       <div class="col word-header-title">
@@ -18,40 +16,45 @@
         <h1 ng-if="modeId==2">{{phrase.translation}}</h1>
         <h3 ng-if="modeId==3">{{word.description}}</h3>
       </div>
-      <div class="col col-20 play-sound">
-        <p id="playSoundIcon"
-          style="opacity: {{hasSound}};"
-          ng-disabled="hasSound" 
-          ng-click="playSound()">
-          <i class="icon ion-volume-high"></i>
+      <div class="col col-20 play-sound-counter">
+        <img class="play-sound-icon"
+             ng-if="hasSound"
+             ng-disabled="hasSound" 
+             ng-click="playSound()"
+             ng-src="img/icons/sound.png">
+        <p style="opacity: {{modeId==3 ? 1 : 0}};">
+          {{counterInMinutes != 0 ? ' ' + counterInMinutes + 'хв' : ''}} {{counter % 60}}с
+          <img class="counter-icon"
+               ng-src="img/icons/clock.png">
         </p>
       </div>
     </div>
 
     <div class="row word-body">
       <div class="col col-20">
-        <button class="clear-button" 
+        <button class="clear-button"
+                style="margin-top: {{wordBodyButtonMarginTop}};"
                 ng-click="clearComposedWord()">
-          <i class="icon ion-trash-a"></i>
         </button>
       </div>
       <div class="col">
-  	    <img class="word-icon"
-            ng-src="img/{{word.themeId}}/{{word.name}}.jpg"
-            ng-if="modeId==1">
+        <div class="word-icon-block" ng-if="modeId==1">
+  	      <img class="word-icon"
+            ng-src="img/themes/{{word.themeId}}/{{word.name}}.jpg">
+        </div>
         <h1 ng-if="modeId==3 && isComposed">{{word.translation}}</h1>
       </div>
       <div class="col col-20">
-        <button class="next-button" 
+        <button class="next-button"
+                style="margin-top: {{wordBodyButtonMarginTop}};"
                 ng-click="setNextWord()">
-          <i class="icon ion-arrow-right-c"></i>
         </button>
       </div>
     </div>
 
     <div class="row composed-letter-buttons-block">
       <button class="composed-letter-button"
-              style="opacity: {{item.symbol=='_' ? 0 : 1}}; width: {{letterWidth}}px; height: {{letterWidth}}px;"
+              style="opacity: {{item.symbol=='_' ? 0 : 1}}; width: {{letterWidth}}px; height: {{letterHeight}}px; color: {{item.symbol!='?' ? '#69250a' : '#ffdc89'}};"
               ng-click="moveLetterBack($index)"
               ng-disabled="item.isDefault"
               ng-repeat="item in composedNameLetters track by $index">
@@ -60,8 +63,8 @@
     </div>
 
   	<div class="row letter-buttons-block">
-      <button class="letter-button"
-              style="width: {{letterWidth}}px; height: {{letterWidth}}px;"
+      <button class="letter-button decorated-button"
+              style="width: {{letterWidth}}px; height: {{letterHeight}}px;"
               ng-show="letter!='_'"
               ng-click="moveLetter(letter, $index); checkComposedWord();"
               ng-repeat="letter in shuffledName track by $index">
@@ -69,9 +72,13 @@
       </button>
     </div>
 
-    <div class="row correct-logo-block"
-        style="display: none;">
-       <img class="correct-logo" ng-src="img/correct_logo.jpg">
+    <div class="row correct-text-block"
+         ng-if="displayCorrectLogo && modeId != 3">
+      <button class="correct-letter-button"
+              style="width: {{letterWidth}}px; height: {{letterWidth}}px;"
+              ng-repeat="letter in correctText track by $index">
+        {{letter.toUpperCase()}}
+      </button>
     </div>
   </ion-content>
 </ion-view>

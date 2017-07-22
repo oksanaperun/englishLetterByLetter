@@ -1,15 +1,24 @@
 @media (min-height: 295px) {
-  .theme-icon {
-    width: 160px !important;
+  .word-icon-block {
+    height: 90px;
   }
   .word-icon {
-    height: 55px;
+    height: 70px;
   }
 }
 
 @media (min-height: 320px) {
+  .theme-icon-block {
+    height: 126px;
+  }
   .theme-icon {
-    width: 180px !important;
+    height: 100px !important;
+  }
+  .slide-data h1 {
+    font-size: 28px;
+  }
+  .word-icon-block {
+    height: 101px;
   }
   .word-icon {
     height: 80px;
@@ -17,67 +26,128 @@
 }
 
 @media (min-height: 360px) {
-  .game-modes, .slide-data {
+  .game-mode-icon {
+    height: 120px;
+  }
+  .slide-data {
     top: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
   }
+  .theme-icon-block {
+    height: 148px;
+  }
   .theme-icon {
-    width: 200px !important;
+    height: 120px !important;
+  }
+  .theme-button {
+    height: 36px;
+    width: 170px;
+    font-size: 20px;
   }
   .slide-data h1, .word-header-title h1 {
     font-size: 34px;
   }
+  .previous-slide-button, .next-slide-button {
+    width: 45px;
+  }
+  .word-icon-block {
+     height: 115px;
+  }
   .word-icon {
     height: 90px;
+    margin-top: 12px;
   }
 }
 
 @media (min-height: 400px) {
+  .theme-icon-block {
+    height: 174px;
+  }
   .theme-icon {
-    width: 230px !important;
+    margin-top: 14px;
+    height: 140px !important;
   }
   .slide-data h1, .word-header-title h1 {
     font-size: 36px;
   }
+  .word-icon-block {
+     height: 130px;
+  }
   .word-icon {
     height: 100px;
+    margin-top: 14px;
   }
 }
 
 @media (min-height: 430px) {
+  .game-mode-icon {
+    height: 135px;
+  }
+  .theme-icon-block {
+    height: 200px;
+  }
   .theme-icon {
-    width: 280px !important;
+    margin-top: 16px;
+    height: 160px !important;
+  }
+  .theme-button {
+    height: 40px;
+    width: 186px;
+    font-size: 22px;
   }
   .slide-data h1, .word-header-title h1 {
     font-size: 40px;
   }
+  .previous-slide-button, .next-slide-button {
+    width: 50px;
+  }
+  .word-icon-block {
+    height: 154px;
+  }
   .word-icon {
     height: 120px;
+    margin-top: 16px;
+  }
+}
+
+@media (min-height: 600px) {
+  .game-mode-icon {
+    height: 160px;
+  }
+  .game-modes h1 {
+    font-size: 28px;
+  }
+  .theme-icon-block {
+    height: 240px;
+  }
+  .theme-icon {
+    margin-top: 20px;
+    height: 190px !important;
+  }
+  .theme-button {
+    height: 55px;
+    width: 240px;
+    font-size: 26px;
+  }
+  .slide-data h1, .word-header-title h1 {
+    font-size: 44px;
+  }
+  .previous-slide-button, .next-slide-button {
+    width: 60px;
+  }
+  .word-icon-block {
+    height: 190px;
+  }
+  .word-icon {
+    height: 150px;
+    margin-top: 18px;
   }
 }
 
 @media (min-height: 500px) {
   .word {
     top: 50%;
-  }
-}
-
-@media (min-width: 530px) {
-  .composed-letter-button, .letter-button {
-    font-size: 26px;
-  }
-}
-
-@media (min-width: 640px) {
-  .composed-letter-button, .letter-button {
-    font-size: 32px;
-  }
-}
-
-@media (min-width: 700px) {
-  .composed-letter-button, .letter-button {
-    font-size: 34px;
   }
 }
 

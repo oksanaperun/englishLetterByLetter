@@ -1,35 +1,15 @@
 <ion-view view-title="УСПІХИ">
   <ion-content class="padding">
   	<button ng-click="updateData()">Update data</button>
-    <div class="row">
-      <div class="col"></div>
-  		<div class="col col-20"><i class="icon {{gameModes[0].iconClass}}"></i></div>
-      <div class="col col-20"><i class="icon {{gameModes[1].iconClass}}"></i></div>
-      <div class="col col-20"><i class="icon {{gameModes[2].iconClass}}"></i></div>
-    </div>
-    <div class="row main-font">
-      <div class="col"></div>
-      <div class="col col-20">{{gameModes[0].name}}</div>
-      <div class="col col-20">{{gameModes[1].name}}</div>
-      <div class="col col-20">{{gameModes[2].name}}</div>
-    </div>
-    <div class="row secondary-font">
-      <div class="col">Тема</div>
-      <div class="col col-10">Рахунок</div>
-      <div class="col col-10">Час</div>
-      <div class="col col-10">Рахунок</div>
-      <div class="col col-10">Час</div>
-      <div class="col col-10">Рахунок</div>
-      <div class="col col-10">Час</div>
-    </div>
-    <div class="row main-font top-line" ng-repeat="theme in themes">
-      <div class="col top-line">{{theme.name}}</div>
-      <div class="col col-10 top-line">{{theme.achievements.maxScore1 == 0 ? '-' : theme.achievements.maxScore1}}</div>
-      <div class="col col-10 top-line">{{theme.achievements.minTime1 == 1000000 ? '-' : theme.achievements.minTime1}}</div>
-      <div class="col col-10 top-line">{{theme.achievements.maxScore2 == 0 ? '-' : theme.achievements.maxScore2}}</div>
-      <div class="col col-10 top-line">{{theme.achievements.minTime2 == 1000000 ? '-' : theme.achievements.minTime2}}</div>
-      <div class="col col-10 top-line">{{theme.achievements.maxScore3 == 0 ? '-' : theme.achievements.maxScore3}}</div>
-      <div class="col col-10 top-line">{{theme.achievements.minTime3 == 1000000 ? '-' : theme.achievements.minTime3}}</div>
+    <div class="row achievements-block">
+      <div class="achievement"
+              ng-repeat="achievement in achievements">
+        <img class="achievement-icon"
+             ng-src="img/icons/awards/{{achievement.icon}}.jpg">
+        <div class="achievement-title">
+          {{achievement.title}}
+        </div>  
+      </div>
     </div>
   </ion-content>
 </ion-view>

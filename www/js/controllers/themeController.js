@@ -24,10 +24,19 @@ angular.module('englishLetterByLetter')
         for (var i = 0; i < res.rows.length; i++)
           $scope.themes.push(res.rows.item(i));
 
+        setupStars();
         setupSliderOptions();
       }, function (err) {
         console.error(err);
       });
+    }
+
+    function setupStars() {
+      var score = $scope.themes[$scope.themeIndex]['maxScore' + $scope.modeId];
+
+      $scope.displayFirstStar = Utils.shouldFirstStarBeDisplayed(score);
+      $scope.displaySecondStar = Utils.shouldSecondStarBeDisplayed($scope.modeId, score);
+      $scope.displayThirdStar = Utils.shouldThirdStarBeDisplayed($scope.modeId, score);
     }
 
     function setupSliderOptions() {
@@ -35,7 +44,7 @@ angular.module('englishLetterByLetter')
         loop: true,
         initialSlide: 0,
         direction: 'horizontal',
-        speed: 300 
+        speed: 300
       };
     };
 
@@ -43,21 +52,20 @@ angular.module('englishLetterByLetter')
       if (newVal != null) {
         $scope.data.sliderDelegate.on('slideChangeEnd', function() {
           $scope.data.currentPage = $scope.data.sliderDelegate.activeIndex;
+
+          $scope.$apply(function () {
+            $scope.themeIndex = $scope.data.sliderDelegate.activeIndex;
+            setupStars();
+          });
         });
       }
     });
 
     $scope.setNextTheme = function() {
       $scope.data.sliderDelegate.slideNext();
-      $scope.themeIndex = $scope.data.currentPage + 1;
     };
 
     $scope.setPreviousTheme = function() {
       $scope.data.sliderDelegate.slidePrev();
-      $scope.themeIndex = $scope.data.currentPage - 1;
-    };
-
-    $scope.setThemeName = function(themeName) {
-      $rootScope.themeName = themeName;
     };
   });
