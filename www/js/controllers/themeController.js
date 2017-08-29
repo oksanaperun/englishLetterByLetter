@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-  .controller('ThemeCtrl', function($scope, $rootScope, $stateParams, $ionicPlatform, Utils, WordsDB) {
+  .controller('ThemeCtrl', function($scope, $rootScope, $stateParams, $ionicPlatform, Utils, DB) {
     $scope.modeId = $stateParams.modeId;
     $scope.data = {};
     $scope.data.currentPage = 0;
@@ -20,7 +20,7 @@ angular.module('englishLetterByLetter')
     function getThemes() {
       $scope.themes = [];
 
-      WordsDB.selectThemes().then(function (res) {
+      DB.selectThemes().then(function (res) {
         for (var i = 0; i < res.rows.length; i++)
           $scope.themes.push(res.rows.item(i));
 
@@ -32,7 +32,8 @@ angular.module('englishLetterByLetter')
     }
 
     function setupStars() {
-      var score = $scope.themes[$scope.themeIndex]['maxScore' + $scope.modeId];
+      var keyWord = $rootScope.gameModes[$scope.modeId - 1].keyWord,
+        score = $scope.themes[$scope.themeIndex][keyWord + 'MaxScore'];
 
       $scope.displayFirstStar = Utils.shouldFirstStarBeDisplayed(score);
       $scope.displaySecondStar = Utils.shouldSecondStarBeDisplayed($scope.modeId, score);

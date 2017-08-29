@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByLetter.controllers', 'englishLetterByLetter.services'])
 
-.run(function($ionicPlatform, $ionicHistory, WordsDB, Utils) {
+.run(function($ionicPlatform, $ionicHistory, DB, Utils) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -14,7 +14,7 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
       StatusBar.styleDefault();
     }
 
-    WordsDB.initDatabase();
+    DB.initDatabase();
   });
 
   $ionicPlatform.registerBackButtonAction(function(e) {
@@ -44,12 +44,12 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
 
   // Each tab has its own nav history stack:
 
-  .state('tab.achievements', {
-    url: '/achievements',
+  .state('tab.tasks', {
+    url: '/tasks',
     views: {
-      'tab-achievements': {
-        templateUrl: 'templates/tab-achievements.html',
-        controller: 'AchievementsCtrl'
+      'tab-tasks': {
+        templateUrl: 'templates/tab-tasks.html',
+        controller: 'TasksCtrl'
       }
     }
   })

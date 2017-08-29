@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-.factory('Utils', function ($cordovaNativeAudio, $rootScope, $ionicPopup, $ionicHistory, $window) {
+.factory('Utils', function ($rootScope, $ionicPopup, $ionicHistory, $window) {
     return {
       setGameModes: function() {
         $rootScope.gameModes = [
@@ -29,31 +29,10 @@ angular.module('englishLetterByLetter')
         	return currentIndex - 1;
       	}
       },
-      sortWordsRandomly: function(arr, sortByLength) {
-        arr.sort(function(a, b) {
-          if (sortByLength)
-            return a.name.length - b.name.length || 0.5 - Math.random();
-          else return 0.5 - Math.random();
-        });
-      },
-      getRandomLetter: function() {
-        var alphabet = 'abcdefghijklmnopqrstuvwxyz',
-          randomIndex = Math.floor(Math.random() * alphabet.length);
-
-        return alphabet.charAt(randomIndex);
-      },
-      getShuffledArray: function(arr) {
-        return arr.sort(function() {return 0.5 - Math.random()});
-      },
-      playSound: function (sound) {
-        if (window.cordova) {
-          $cordovaNativeAudio.play(sound);
-        }
-      },
       showAlert: function (alertBody, callbackFunction) {
         var alertPopup = $ionicPopup.alert({
-             title: '',
-             template: alertBody
+              title: '',
+              template: alertBody
             });
 
         alertPopup.then(function (res) {

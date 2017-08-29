@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-.factory('WordsDB', function($cordovaSQLite, $rootScope) {
+.factory('DB', function($cordovaSQLite, $rootScope) {
     return {
       initDatabase: function () {
         console.log('Connecting to DB');

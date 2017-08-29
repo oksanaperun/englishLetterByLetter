@@ -1,21 +1,19 @@
 angular.module('englishLetterByLetter')
 
-  .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, WordsDB) {
+  .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, 
+    $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, DB, WordsTmpl, WordsUtils) {
     var maxWordsNumberInAGame = 15,
       maxLettersCountInARow = 13,
-      currentTimeout = null,
-      tabs = getTabsElement();
+      currentTimeout = null;
 
     $scope.modeId = $stateParams.modeId;
-    $scope.score = 0;
-    $scope.composedWordsCount = 0;
-    $scope.currentIndex = 0;
-    $scope.isComposed = false;
+    $scope.score = $scope.composedWordsCount = $scope.currentIndex = 0;
+    $scope.isComposed = $scope.displayCorrectLogo = false;
     $scope.words = [];
     $scope.phrases = [];
-    $scope.displayCorrectLogo = false;
     $scope.correctText = 'правильно';
-    tabs.style.display = 'none';
+
+    WordsTmpl.hideTabs();
 
     if (window.cordova) {
       document.addEventListener('deviceready', function () {
@@ -27,109 +25,6 @@ angular.module('englishLetterByLetter')
         setSize();
         manageGameMode();
       });
-    } 
-
-    $rootScope.$ionicGoBack = function() {
-      if ($ionicHistory.backView().stateName === 'tab.theme') {
-        Utils.showConfirmLeaveGamePopup();
-      } else {
-        $ionicHistory.goBack();
-      }
-    };
-
-    $scope.$on('$destroy', function() {
-      stopTimer();
-      tabs.style.display = '';
-    });
-
-    $scope.playSound = function() {
-      Utils.playSound($scope.word.name);
-    }
-
-    $scope.moveLetter = function(letter, letterIndex) {
-      var letterButtons = getLetterButtons(),
-        composedLetterButtons = getComposedLetterButtons(),
-        firstSpaceIndex = getFirstFreeLetterInComposedName();
-
-      if (firstSpaceIndex > -1) {
-        letterButtons[letterIndex].setAttribute('disabled', 'disabled');
-        letterButtons[letterIndex].style.opacity = 0;
-        $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
-        $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
-        composedLetterButtons[firstSpaceIndex].classList.add('decorated-button');
-      }
-    };
-
-    $scope.moveLetterBack = function(letterIndex) {
-      var letterButtons = getLetterButtons(),
-        composedLetterButtons = getComposedLetterButtons(),
-        originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
-
-      if (originalLetterIndex > -1) {
-        letterButtons[originalLetterIndex].removeAttribute('disabled');
-        letterButtons[originalLetterIndex].style.opacity = 1;
-        $scope.composedNameLetters[letterIndex].symbol = '?';
-        $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
-        composedLetterButtons[letterIndex].classList.remove('decorated-button');
-      }
-    };
-
-    $scope.checkComposedWord = function() {
-      $scope.composedName = '';
-      var nameToCompare = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name;
-
-      for (var i = 0; i < $scope.composedNameLetters.length; i++)
-        if ($scope.composedNameLetters[i].symbol != '?')
-          $scope.composedName += $scope.composedNameLetters[i].symbol;
-
-      if ($scope.composedName === nameToCompare) {
-        handleCorrectComposedWord();
-      }
-    };
-
-    $scope.clearComposedWord = function() {
-      var letterButtons = getLetterButtons(),
-        composedLetterButtons = getComposedLetterButtons(),
-        i;
-
-      for (i = 0; i < letterButtons.length; i++) {
-        var letterButton = letterButtons[i];
-
-        letterButton.removeAttribute('disabled');
-        letterButton.style.opacity = 1;
-      }
-      for (i = 0; i < $scope.composedNameLetters.length; i++) {
-        if (!$scope.composedNameLetters[i].isDefault && $scope.composedNameLetters[i].symbol != '_') {
-          $scope.composedNameLetters[i].symbol = '?';
-          composedLetterButtons[i].classList.remove('decorated-button');
-        }  
-      }
-    }
-
-    $scope.setNextWord = function() {
-      $scope.currentIndex++;
-
-      if ($scope.currentIndex == $scope.words.length || $scope.currentIndex == $scope.phrases.length) {
-        stopTimer();
-        showEndGamePopup();
-      } else {
-        if ($scope.modeId == 1 || $scope.modeId == 3) {
-          setWordData();
-        } else {
-          setPhraseData();
-        }
-
-        $scope.isComposed = false;
-        setInitialState();
-      }
-    }
-
-    function setNextWordAutomatically(composedWordIndex) {
-      $timeout(function () {
-        if ($scope.currentIndex == composedWordIndex) {
-          angular.element(getNextButton()).triggerHandler('click');
-        }
-      }, 1000);
     }
 
     function setSize() {
@@ -148,7 +43,7 @@ angular.module('englishLetterByLetter')
       $scope.counter = 0;
       $scope.counterInMinutes = 0;
 
-      if ($stateParams.modeId == 1) {
+      if ($stateParams.modeId == 1 || $stateParams.modeId == 3) {
         getWordsByThemeId();
       }
 
@@ -159,21 +54,112 @@ angular.module('englishLetterByLetter')
 
       if ($stateParams.modeId == 3) {
         $scope.hasSound = 0;
-        getWordsByThemeId();
         setTimer();
       }
 
       getAchievements();
     }
 
+    $rootScope.$ionicGoBack = function() {
+      if ($ionicHistory.backView().stateName === 'tab.theme') {
+        Utils.showConfirmLeaveGamePopup();
+      } else {
+        $ionicHistory.goBack();
+      }
+    };
+
+    $scope.$on('$destroy', function() {
+      stopTimer();
+      WordsTmpl.displayTabs();
+    });
+
+    $scope.playSound = function() {
+      WordsUtils.playSound($scope.word.name);
+    }
+
+    $scope.moveLetter = function(letter, letterIndex) {
+      var firstSpaceIndex = WordsUtils.getFirstUnknownLetter($scope.composedNameLetters);
+
+      if (firstSpaceIndex > -1) {
+        WordsTmpl.moveLetter(letterIndex, firstSpaceIndex);
+        $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
+        $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
+      }
+    };
+
+    $scope.moveLetterBack = function(letterIndex) {
+      var originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
+
+      if (originalLetterIndex > -1) {
+        WordsTmpl.moveLetterBack(letterIndex, originalLetterIndex);
+        $scope.composedNameLetters[letterIndex].symbol = '?';
+        $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
+      }
+    };
+
+    $scope.checkComposedWord = function() {
+      $scope.composedName = '';
+      var nameToCompare = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name;
+
+      for (var i = 0; i < $scope.composedNameLetters.length; i++)
+        if ($scope.composedNameLetters[i].symbol != '?')
+          $scope.composedName += $scope.composedNameLetters[i].symbol;
+
+      if ($scope.composedName === nameToCompare) {
+        handleCorrectComposedWord();
+      }
+    };
+
+    $scope.clearComposedWord = function() {
+      WordsTmpl.clearComposedWord();
+
+      for (var i = 0; i < $scope.composedNameLetters.length; i++) {
+        var isLetterUnknown = !$scope.composedNameLetters[i].isDefault && $scope.composedNameLetters[i].symbol != '_';
+
+        if (isLetterUnknown) {
+          $scope.composedNameLetters[i].symbol = '?';
+        }  
+      }
+    }
+
+    $scope.setNextWord = function() {
+      $scope.currentIndex++;
+
+      if ($scope.currentIndex == $scope.words.length || $scope.currentIndex == $scope.phrases.length) {
+        stopTimer();
+        showEndGamePopup();
+      } else {
+        handleNextWord();
+      }
+    }
+
+    function handleNextWord() {
+      if ($scope.modeId == 1 || $scope.modeId == 3) {
+        setWordData();
+      } else {
+        setPhraseData();
+      }
+
+      $scope.isComposed = false;
+      WordsTmpl.setInitialState();
+    }
+
+    function setNextWordAutomatically(composedWordIndex) {
+      $timeout(function () {
+        if ($scope.currentIndex == composedWordIndex) {
+          WordsTmpl.triggerClickOnNextButton();
+        }
+      }, 1000);
+    }
+
     function getWordsByThemeId() {
       var allThemeWords = [];
 
-      WordsDB.selectWordsByThemeId($stateParams.themeId).then(function (res) {
+      DB.selectWordsByThemeId($stateParams.themeId).then(function (res) {
         for (var i = 0; i < res.rows.length; i++)
           allThemeWords.push(res.rows.item(i));
 
-        Utils.sortWordsRandomly(allThemeWords, false);
+        WordsUtils.sortWordsRandomly(allThemeWords, false);
 
         $scope.words = allThemeWords.slice(0, maxWordsNumberInAGame);
         setWordData();
@@ -185,11 +171,11 @@ angular.module('englishLetterByLetter')
     function getPhrasesByThemeId() {
       var allThemePhrases = [];
 
-      WordsDB.selectPhrasesByThemeId($stateParams.themeId).then(function (res) {
+      DB.selectPhrasesByThemeId($stateParams.themeId).then(function (res) {
         for (var i = 0; i < res.rows.length; i++)
           allThemePhrases.push(res.rows.item(i));
 
-        Utils.sortWordsRandomly(allThemePhrases, false);
+        WordsUtils.sortWordsRandomly(allThemePhrases, false);
 
         $scope.phrases = allThemePhrases.slice(0, maxWordsNumberInAGame);
         setPhraseData();
@@ -199,15 +185,8 @@ angular.module('englishLetterByLetter')
     }
 
     function getAchievements() {
-      WordsDB.selectAchievementsByThemeId($stateParams.themeId).then(function (res) {
+      DB.selectAchievementsByThemeId($stateParams.themeId).then(function (res) {
         $scope.achievements = res.rows.item(0);
-      }, function (err) {
-        console.error(err);
-      });
-    }
-
-    function updateAchievement(achievement, newValue) {
-      WordsDB.updateAchievement($stateParams.themeId, achievement, newValue).then(function (res) {
       }, function (err) {
         console.error(err);
       });
@@ -215,8 +194,8 @@ angular.module('englishLetterByLetter')
 
     function setWordData() {
       $scope.word = $scope.words[$scope.currentIndex];
-      $scope.shuffledName = getShuffledName($scope.word.name);
-      $scope.composedNameLetters = getInitialComposedName($scope.word.name);
+      $scope.shuffledName = WordsUtils.getShuffledName($scope.modeId, maxLettersCountInARow, $scope.word.name);
+      $scope.composedNameLetters = WordsUtils.getInitialComposedName($scope.word.name);
 
       if ($stateParams.modeId == 1) {
         $scope.hasSound = $scope.word.hasSound;
@@ -231,76 +210,25 @@ angular.module('englishLetterByLetter')
 
     function setPhraseData() {
       $scope.phrase = $scope.phrases[$scope.currentIndex];
-      $scope.shuffledName = getShuffledName($scope.phrase.name);
-      $scope.composedNameLetters = getInitialComposedName($scope.phrase.name);
+      $scope.shuffledName = WordsUtils.getShuffledName($scope.modeId, maxLettersCountInARow, $scope.phrase.name);
+      $scope.composedNameLetters = WordsUtils.getInitialComposedName($scope.phrase.name);
       openDefaultLettersInComposedName($scope.phrase.name);
-    }
-
-    function getShuffledName(name) {
-      var nameWithoutUnderScore = name.replace('_', ''),
-        lettersCount = nameWithoutUnderScore.length,
-        shouldBeRandomLetter1 = $scope.modeId != 1 || lettersCount > maxLettersCountInARow - 2,
-        shouldBeRandomLetter2 = $scope.modeId != 1 || lettersCount > maxLettersCountInARow - 1,
-        randomLetter1 = shouldBeRandomLetter1 ? '' : Utils.getRandomLetter(),
-        randomLetter2 = shouldBeRandomLetter2 ? '' : Utils.getRandomLetter(),
-        nameWithRandomLetters = randomLetter1 + nameWithoutUnderScore + randomLetter2,
-        shuffledNameArray = Utils.getShuffledArray(nameWithRandomLetters.split('')),
-        shuffledName = shuffledNameArray.toString().replace(/,/g, '');
-
-      if (shuffledName.indexOf(nameWithoutUnderScore) > -1) {
-        return getShuffledName(name);
-      }
-
-      return shuffledName;
-    }
-
-    function getInitialComposedName(name) {
-      var composedName = [];
-
-      for (var i = 0; i < name.length; i++) {
-        var composedNameLetter = {
-          symbol: name[i] == '_' ? '_' : '?',
-          originalLetterIndex: -1,
-          isDefault: false
-        }
-        
-        composedName.push(composedNameLetter);
-      }
-
-      return composedName;
     }
 
     function openDefaultLettersInComposedName(name) {
       var letterCountToDisplay = Math.floor(name.replace('_', '').length / 2);
 
       for (var j = 0; j < letterCountToDisplay; j++) {
-        var randomIndex = getRandomIndexExcludingUnderscore(name);
+        var randomIndex = WordsUtils.getRandomIndexExcludingUnderscore(name);
 
         while ($scope.composedNameLetters[randomIndex].symbol != '?') {
-            randomIndex = getRandomIndexExcludingUnderscore(name);
+            randomIndex = WordsUtils.getRandomIndexExcludingUnderscore(name);
         }
 
         $scope.composedNameLetters[randomIndex].symbol = name[randomIndex];
         $scope.composedNameLetters[randomIndex].isDefault = true;
         $scope.shuffledName = $scope.shuffledName.replace(name[randomIndex], '');
       }
-    }
-
-    function getRandomIndexExcludingUnderscore(name) {
-      var index = Math.floor(Math.random() * name.length);
-
-      if (name[index] == '_')
-        return getRandomIndexExcludingUnderscore(name);
-      else return index;
-    }
-
-    function getFirstFreeLetterInComposedName() {
-      for (var i = 0; i < $scope.composedNameLetters.length; i++) {
-        if ($scope.composedNameLetters[i].symbol == '?')
-          return i;
-      }
- 
-      return -1;
     }
 
     function handleCorrectComposedWord() {
@@ -311,26 +239,9 @@ angular.module('englishLetterByLetter')
       }
 
       $scope.composedWordsCount++;
-      $scope.isComposed = true;
-      $scope.displayCorrectLogo = true;
-      setCorrectComposedWordStyle();
+      $scope.isComposed = $scope.displayCorrectLogo = true;
+      WordsTmpl.setCorrectComposedWordStyle();
       hideCorrectComposedWordLogo();
-    }
-
-    function setCorrectComposedWordStyle() {
-      var composedLetterButtons = getComposedLetterButtons(),
-        letterButtonsBlock = getLetterButtonsBlock(),
-        clearButton = getClearButton();
-
-      for (var i = 0; i < composedLetterButtons.length; i++) {
-        var button = composedLetterButtons[i];
-
-        button.setAttribute('disabled', 'disabled');
-      }
-
-      letterButtonsBlock.style.display = 'none';
-      clearButton.setAttribute('disabled', 'disabled');
-      clearButton.style.opacity = 0.7;
     }
 
     function hideCorrectComposedWordLogo() {
@@ -339,86 +250,21 @@ angular.module('englishLetterByLetter')
       }, 1000);
     }
 
-    function setInitialState() {
-      var letterButtons = getLetterButtons(),
-        composedLetterButtons = getComposedLetterButtons(),
-        letterButtonsBlock = getLetterButtonsBlock(),
-        clearButton = getClearButton();
-
-      for (var i = 0; i < letterButtons.length; i++) {
-        var letterButton = letterButtons[i];
-
-        letterButton.removeAttribute('disabled');
-        letterButton.style.opacity = 1;
-      }
-
-      for (var i = 0; i < composedLetterButtons.length; i++) {
-        var composedLetterButton = composedLetterButtons[i];
-
-        composedLetterButton.removeAttribute('disabled');
-        composedLetterButton.style.borderColor = 'black';
-        composedLetterButton.classList.remove('decorated-button');
-      }
-
-      letterButtonsBlock.style.display = 'block';
-      clearButton.removeAttribute('disabled');
-      clearButton.style.opacity = 1;
-    }
-
     function showEndGamePopup() {
-      var displayFirstStar = Utils.shouldFirstStarBeDisplayed($scope.score) ? 'block' : 'none',
-        displaySecondStar = Utils.shouldSecondStarBeDisplayed($stateParams.modeId, $scope.score) ? 'block' : 'none',
-        displayThirdStar = Utils.shouldThirdStarBeDisplayed($stateParams.modeId, $scope.score) ? 'block' : 'none',
-        popupBody = '<div class="achievement-popup">' +
-          '<div class="popup-stars-block">' +
-          '<img class="popup-empty-star" ng-src="img/icons/star_frame.png">' +
-          '<img id="popupFirstStar" style="display: ' + displayFirstStar + ';" ng-src="img/icons/star_colored.png">' +
-          '<img class="popup-empty-star" ng-src="img/icons/star_frame.png">' +
-          '<img id="popupSecondStar" style="display: ' + displaySecondStar + ';" ng-src="img/icons/star_colored.png">' +
-          '<img class="popup-empty-star" ng-src="img/icons/star_frame.png">' +
-          '<img id="popupThirdStar" style="display: ' + displayThirdStar + ';" ng-src="img/icons/star_colored.png">' +
-          '</div>' +
-          '<p>Рахунок: ' + $scope.score + '</p>' +
-          '<p>Кращий рахунок: ' + $scope.achievements['maxScore' + $stateParams.modeId] + '</p>' +
-          '</div>',
-        endGamePopup = $ionicPopup.alert({
-          title: 'КІНЕЦЬ ГРИ',
-          template: popupBody
-        });
-
-      endGamePopup.then(function (res) {
-        var maxScoreAchievement = 'maxScore' + $stateParams.modeId,
-          minTimeAchievement = 'minTime' + $stateParams.modeId,
+      var keyWord = $rootScope.gameModes[$scope.modeId - 1].keyWord,
+          maxScoreAchievement = keyWord + 'MaxScore',
+          minTimeAchievement = keyWord + 'MinTime',
           scoreAchievement = $scope.achievements[maxScoreAchievement] < $scope.score,
           timeAchievement = ($scope.composedWordsCount == $scope.words.length || $scope.composedWordsCount == $scope.phrases.length) && 
             ($scope.achievements[minTimeAchievement] > $scope.gameTime);
 
-        if (scoreAchievement || timeAchievement) {
-          if (scoreAchievement) {
-             updateAchievement(maxScoreAchievement, $scope.score);
-          }
-          if (timeAchievement) {
-             updateAchievement(minTimeAchievement, $scope.gameTime);
-          }
-          showNewRecordPopup(scoreAchievement, timeAchievement);
-        } else $ionicHistory.goBack();
-      });
-    }
-
-    function showNewRecordPopup(scoreAchievement, timeAchievement) {
-      var beginHTML = '<div class="achievement-popup">' +
-          '<p>Ви встановили новий рекорд:</p>',
-        scoreAchievementHTML = scoreAchievement ? '<h5><i class="icon ion-ios-star-outline"></i> ' + $scope.score + ' очок</h5>' : '',
-        timeAchievementHTML = timeAchievement ? '<h5><i class="icon ion-ios-timer-outline"></i> ' + $scope.gameTime + ' секунд</h5>' : '',
-        endHTML = '</div>',
-        popupBody = beginHTML + scoreAchievementHTML + timeAchievementHTML + endHTML,
-        achievementPopup = $ionicPopup.alert({
-          title: 'ВІТАЄМО!',
-          template: popupBody
-        });
-
-      achievementPopup.then(function (res) {
-        $ionicHistory.goBack();
+      WordsUtils.showEndGamePopup({
+          score: $scope.score,
+          bestScore: $scope.achievements[maxScoreAchievement],
+          scoreRecord: scoreAchievement ? $scope.score : false,
+          gameTimeRecord: timeAchievement ? $scope.gameTime : false,
+          themeId: $stateParams.themeId,
+          keyWord: keyWord
       });
     }
 
@@ -435,28 +281,4 @@ angular.module('englishLetterByLetter')
       $scope.counterInMinutes = 0;
       $timeout.cancel(currentTimeout);
     };
-
-    function getTabsElement() {
-      return document.getElementsByClassName('tabs')[0];
-    }
-
-    function getLetterButtonsBlock() {
-      return document.getElementsByClassName('letter-buttons-block')[0];
-    }
-
-    function getLetterButtons() {
-      return document.getElementsByClassName('letter-button');
-    }
-
-    function getComposedLetterButtons() {
-      return document.getElementsByClassName('composed-letter-button');
-    }
-
-    function getClearButton() {
-      return document.getElementsByClassName('clear-button')[0];
-    }
-
-    function getNextButton() {
-      return document.getElementsByClassName('next-button')[0];
-    }
   });
