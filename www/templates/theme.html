@@ -13,15 +13,14 @@
                     slider="data.sliderDelegate"
                     style="height: {{viewHeight - topPanelHeigth - bottomPanelHeight}}px;">
           <ion-slide-page ng-repeat="theme in themes">
-            <div class="slide-data"
+            <div class="theme-block"
                 style="width: {{viewWidth}}px;">
               <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/word">
                 <div class="theme-icon-block">
                   <img class="theme-icon" 
-                    ng-src="img/themes/{{theme.id}}.jpg" 
-                    ng-click="setThemeName(theme.name)">
+                    ng-src="img/themes/{{theme.id}}.jpg">
                 </div>
-                <h1 ng-click="setThemeName(theme.name)">{{theme.name}}</h1>
+                <h1>{{theme.name}}</h1>
                 <div class="theme-stars-block">
                   <img class="theme-empty-star" ng-src="img/icons/star_frame.png">
                   <img id="themeFirstStar" ng-show="displayFirstStar" ng-src="img/icons/star_colored.png">

@@ -2,6 +2,7 @@ angular.module('englishLetterByLetter')
 
   .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, WordsDB) {
     var maxWordsNumberInAGame = 15,
+      maxLettersCountInARow = 13,
       currentTimeout = null,
       tabs = getTabsElement();
 
@@ -139,7 +140,7 @@ angular.module('englishLetterByLetter')
       $scope.blockMarginTop =  $rootScope.viewHeight >= 500 ? -Math.floor($rootScope.viewHeight / 3) : 0;
       $scope.wordHeaderBlockHeight = $stateParams.modeId == 3 ? 75 : 60;
       $scope.wordBodyButtonMarginTop = $stateParams.modeId == 1 ? '55%' : ($stateParams.modeId == 3 ? '25%' : '0px');
-      $scope.letterWidth = Math.floor($scope.blockWidth / 12) - marginRight;
+      $scope.letterWidth = Math.floor($scope.blockWidth / maxLettersCountInARow) - marginRight;
       $scope.letterHeight = Math.floor($scope.letterWidth / 1.07);
     }
 
@@ -172,7 +173,7 @@ angular.module('englishLetterByLetter')
         for (var i = 0; i < res.rows.length; i++)
           allThemeWords.push(res.rows.item(i));
 
-        sortWordsRandomly(allThemeWords, false);
+        Utils.sortWordsRandomly(allThemeWords, false);
 
         $scope.words = allThemeWords.slice(0, maxWordsNumberInAGame);
         setWordData();
@@ -188,7 +189,7 @@ angular.module('englishLetterByLetter')
         for (var i = 0; i < res.rows.length; i++)
           allThemePhrases.push(res.rows.item(i));
 
-        sortWordsRandomly(allThemePhrases, false);
+        Utils.sortWordsRandomly(allThemePhrases, false);
 
         $scope.phrases = allThemePhrases.slice(0, maxWordsNumberInAGame);
         setPhraseData();
@@ -235,27 +236,15 @@ angular.module('englishLetterByLetter')
       openDefaultLettersInComposedName($scope.phrase.name);
     }
 
-    function sortWordsRandomly(arr, sortByLength) {
-      arr.sort(function(a, b) {
-        if (sortByLength)
-          return a.name.length - b.name.length || 0.5 - Math.random();
-        else return 0.5 - Math.random();
-      });
-    }
-
-    function getRandomLetter() {
-      var alphabet = 'abcdefghijklmnopqrstuvwxyz',
-        randomIndex = Math.floor(Math.random() * alphabet.length);
-
-      return alphabet.charAt(randomIndex);
-    }
-
     function getShuffledName(name) {
-      var nameWithoutUnderScore = name.replace('_', ''), 
-        randomLetter1 = $scope.modeId != 1 || nameWithoutUnderScore.length > 11 ? '' : getRandomLetter(),
-        randomLetter2 = $scope.modeId != 1 || nameWithoutUnderScore.length > 10 ? '' : getRandomLetter(),
+      var nameWithoutUnderScore = name.replace('_', ''),
+        lettersCount = nameWithoutUnderScore.length,
+        shouldBeRandomLetter1 = $scope.modeId != 1 || lettersCount > maxLettersCountInARow - 2,
+        shouldBeRandomLetter2 = $scope.modeId != 1 || lettersCount > maxLettersCountInARow - 1,
+        randomLetter1 = shouldBeRandomLetter1 ? '' : Utils.getRandomLetter(),
+        randomLetter2 = shouldBeRandomLetter2 ? '' : Utils.getRandomLetter(),
         nameWithRandomLetters = randomLetter1 + nameWithoutUnderScore + randomLetter2,
-        shuffledNameArray = getShuffledArray(nameWithRandomLetters.split('')),
+        shuffledNameArray = Utils.getShuffledArray(nameWithRandomLetters.split('')),
         shuffledName = shuffledNameArray.toString().replace(/,/g, '');
 
       if (shuffledName.indexOf(nameWithoutUnderScore) > -1) {
@@ -263,10 +252,6 @@ angular.module('englishLetterByLetter')
       }
 
       return shuffledName;
-    }
-
-    function getShuffledArray(arr) {
-      return arr.sort(function() {return 0.5 - Math.random()});
     }
 
     function getInitialComposedName(name) {
@@ -319,9 +304,7 @@ angular.module('englishLetterByLetter')
     }
 
     function handleCorrectComposedWord() {
-      if ($scope.modeId == 1) {
-        $scope.score += getScore($scope.word.name.length);
-      } else $scope.score++;
+      $scope.score++;
 
       if ($scope.modeId == 3) {
         setNextWordAutomatically($scope.currentIndex);
@@ -333,15 +316,6 @@ angular.module('englishLetterByLetter')
       setCorrectComposedWordStyle();
       hideCorrectComposedWordLogo();
     }
-
-    function getScore(wordsLength) {
-        if (wordsLength <= 6)
-          return 1;
-        if (wordsLength > 6 && wordsLength <= 9)
-          return 2;
-        if (wordsLength > 9)
-          return 3;
-    };
 
     function setCorrectComposedWordStyle() {
       var composedLetterButtons = getComposedLetterButtons(),
