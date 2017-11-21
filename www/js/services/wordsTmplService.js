@@ -160,20 +160,36 @@ angular.module('englishLetterByLetter')
         '<img class="popup-empty-star" ng-src="img/icons/star_frame.png">' +
         '<img id="popupThirdStar" style="display: ' + displayThirdStar + ';" ng-src="img/icons/star_colored.png">' +
         '</div>' +
-        '<p>Рахунок: ' + score + '</p>' +
-        '<p>Кращий рахунок: ' + bestScore + '</p>' +
+        '<h4 class="achievement-popup-score">Поточний рахунок: ' + score + '</h4>' +
+        '<h4 class="achievement-popup-best-score">Кращий рахунок: ' + bestScore + '</h4>' +
         '</div>';
     }
 
     function getNewRecordPopupBody(params) {
-      var beginHTML = '<div class="achievement-popup">' +
-          '<p>Ви встановили новий рекорд:</p>',
-        scoreAchievementHTML = params.scoreRecord ? '<h5><i class="icon ion-ios-star-outline"></i> ' +
-          params.scoreRecord + ' очок</h5>' : '',
-        timeAchievementHTML = params.gameTimeRecord ? '<h5><i class="icon ion-ios-timer-outline"></i> ' +
-          params.gameTimeRecord + ' секунд</h5>' : '',
+      var beginHTML = '<div class="record-popup">' +
+          '<p>Новий рекорд:</p>',
+        scoreAchievementHTML = params.scoreRecord ? '<h5><img class="star-icon" ng-src="img/icons/star.png"> ' +
+          params.scoreRecord + ' ' + getEndTextForScoreRecord(params.scoreRecord) + '</h5>' : '',
+        timeAchievementHTML = params.timeRecord ? '<h5><img class="clock-icon" ng-src="img/icons/clock.png"> ' +
+          params.timeRecord + ' секунд</h5>' : '',
         endHTML = '</div>';
 
       return beginHTML + scoreAchievementHTML + timeAchievementHTML + endHTML;
+    }
+
+    function getEndTextForScoreRecord(score) {
+      if (score >= 5 && score <= 20) {
+        return 'очок';
+      }
+      else switch (score % 10) {
+        case 1:
+          return 'очко';
+        case 2:
+        case 3:
+        case 4:
+          return 'очка';
+        default:
+          return 'очок';
+      }
     }
 })

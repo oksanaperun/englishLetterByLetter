@@ -1,0 +1,112 @@
+.tasks h3, .tasks h4, .tasks p, .award {
+  font-family: Alice;
+}
+
+.award {
+  font-weight: bold;
+  font-size: 18px;
+  color: #bd1884;
+}
+
+.award-icon {
+  height: 25px;
+  vertical-align: middle;
+}
+
+.tasks {
+  padding-top: 0px;
+}
+
+.tasks .row, .tasks .col {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.tasks-block {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  -webkit-transform: translate(-50%, -30%);
+}
+
+.task {
+  width: 310px;
+  height: 63px;
+  margin: 10px;
+  padding: 10px;
+  background-image: url('../img/frames/task.png');
+  background-size: 100% auto;
+  background-color: transparent;
+  background-repeat: no-repeat;
+}
+
+img.task-complexity-icon {
+  padding-top: 13px;
+}
+
+img.task-help-icon {
+  width: 37px;
+  padding-top: 12px;
+}
+
+.task h4 {
+  margin: 0px;
+  padding-top: 7px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #7b2f15;
+  text-align: center;
+}
+
+.progress-bar-block {
+  position: relative;
+  margin-top: 5px;
+  margin-left: 14px;
+}
+
+img.progress-bar, img.progress-bar-line {
+  width: 140px;
+}
+
+.progress-bar-line-block {
+  height: 14px;
+  top: 3px;
+  position: absolute;
+  background-image: url('../img/icons/progress_bar_line.png');
+  background-size: auto 100%;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+
+.task-popup h4 {
+  color: #bd1984;
+  font-size: 19px;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.task-popup h3 {
+  color: #ffd9aa;
+  font-size: 22px;
+  font-weight: 500;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.task-popup p {
+  height: 60px;
+  width: 280px;
+  display: table-cell;
+  vertical-align: middle;
+  color: #440523;
+  font-size: 17px;
+}
+
+.task-popup-icon {
+  height: 30px;
+  box-shadow: 0px 0px 10px 5px rgb(192, 98, 70);
+  border-radius: 5px;
+}

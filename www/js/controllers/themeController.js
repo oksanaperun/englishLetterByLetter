@@ -1,11 +1,12 @@
 angular.module('englishLetterByLetter')
 
-  .controller('ThemeCtrl', function($scope, $rootScope, $stateParams, $ionicPlatform, Utils, DB) {
+  .controller('ThemeCtrl', function ($scope, $rootScope, $stateParams, $ionicPlatform, Utils, DB) {
     $scope.modeId = $stateParams.modeId;
     $scope.data = {};
     $scope.data.currentPage = 0;
     $scope.data.sliderDelegate = null;
     $scope.themeIndex = 0;
+    $scope.keyWord = $rootScope.gameModes[$scope.modeId - 1].keyWord;
 
     if (window.cordova) {
       document.addEventListener('deviceready', function () {
@@ -21,23 +22,21 @@ angular.module('englishLetterByLetter')
       $scope.themes = [];
 
       DB.selectThemes().then(function (res) {
-        for (var i = 0; i < res.rows.length; i++)
-          $scope.themes.push(res.rows.item(i));
+        for (var i = 0; i < res.rows.length; i++) {
+          var theme = res.rows.item(i),
+            score = theme[$scope.keyWord + 'MaxScore'];
 
-        setupStars();
+          theme.displayFirstStar = Utils.shouldFirstStarBeDisplayed(score);
+          theme.displaySecondStar = Utils.shouldSecondStarBeDisplayed(score);
+          theme.displayThirdStar = Utils.shouldThirdStarBeDisplayed(score);
+
+          $scope.themes.push(theme);
+        }
+
         setupSliderOptions();
       }, function (err) {
         console.error(err);
       });
-    }
-
-    function setupStars() {
-      var keyWord = $rootScope.gameModes[$scope.modeId - 1].keyWord,
-        score = $scope.themes[$scope.themeIndex][keyWord + 'MaxScore'];
-
-      $scope.displayFirstStar = Utils.shouldFirstStarBeDisplayed(score);
-      $scope.displaySecondStar = Utils.shouldSecondStarBeDisplayed($scope.modeId, score);
-      $scope.displayThirdStar = Utils.shouldThirdStarBeDisplayed($scope.modeId, score);
     }
 
     function setupSliderOptions() {
@@ -49,24 +48,23 @@ angular.module('englishLetterByLetter')
       };
     };
 
-    $scope.$watch('data.sliderDelegate', function(newVal, oldVal) {
+    $scope.$watch('data.sliderDelegate', function (newVal, oldVal) {
       if (newVal != null) {
-        $scope.data.sliderDelegate.on('slideChangeEnd', function() {
+        $scope.data.sliderDelegate.on('slideChangeEnd', function () {
           $scope.data.currentPage = $scope.data.sliderDelegate.activeIndex;
 
           $scope.$apply(function () {
             $scope.themeIndex = $scope.data.sliderDelegate.activeIndex;
-            setupStars();
           });
         });
       }
     });
 
-    $scope.setNextTheme = function() {
+    $scope.setNextTheme = function () {
       $scope.data.sliderDelegate.slideNext();
     };
 
-    $scope.setPreviousTheme = function() {
+    $scope.setPreviousTheme = function () {
       $scope.data.sliderDelegate.slidePrev();
     };
   });

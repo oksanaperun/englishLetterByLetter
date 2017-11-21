@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-.factory('Utils', function ($rootScope, $ionicPopup, $ionicHistory, $window) {
+.factory('Utils', function ($rootScope, $ionicPopup, $ionicHistory, $window, $cordovaNativeAudio) {
     return {
       setGameModes: function() {
         $rootScope.gameModes = [
@@ -29,19 +29,30 @@ angular.module('englishLetterByLetter')
         	return currentIndex - 1;
       	}
       },
-      showAlert: function (alertBody, callbackFunction) {
+      showAlert: function (alertBody, params, callbackFunction) {
         var alertPopup = $ionicPopup.alert({
               title: '',
-              template: alertBody
+              template: alertBody,
+              buttons: [
+              {
+                text: 'Ок',
+                type: 'button-positive',
+                onTap: function (e) {
+                  console.log('Ok is tapped');
+                  if (callbackFunction) callbackFunction(params);
+                }
+              }
+            ]
             });
 
         alertPopup.then(function (res) {
-          if (callbackFunction) callbackFunction();
         });
       },
       showConfirmLeaveGamePopup: function () {
         var popupBody = '<div class="confirm-popup">' +
-            '<p>Ви дійсно бажаєте залишити поточну гру? Отримані результати буде втрачено.</p>' +
+            '<h3>Увага!</h3>' +
+            '<h4>Ви дійсно бажаєте залишити поточну гру?</h4>' +
+            '<h4>Отримані результати буде втрачено.</h4>' +
             '</div>',
           сonfirmLeaveGamePopup = $ionicPopup.confirm({
             title: 'УВАГА!',
@@ -69,6 +80,11 @@ angular.module('englishLetterByLetter')
       },
       shouldThirdStarBeDisplayed: function (score) {
         return score >= 15;
+      },
+      playSound: function(sound) {
+        if (window.cordova) {
+          $cordovaNativeAudio.play(sound);
+        }
       }
   	}
  })

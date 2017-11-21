@@ -29,6 +29,11 @@
   .game-mode-icon {
     height: 120px;
   }
+  .game-modes h1 {
+    font-size: 19px;
+    height: 45px;
+    padding-top: 6px;
+  }
   .slide-data {
     top: 50%;
     transform: translate(-50%, -50%);
@@ -61,6 +66,11 @@
 }
 
 @media (min-height: 400px) {
+  .game-modes h1 {
+    font-size: 20px;
+    height: 50px;
+    padding-top: 7px;
+  }
   .theme-icon-block {
     height: 174px;
   }
@@ -83,6 +93,11 @@
 @media (min-height: 430px) {
   .game-mode-icon {
     height: 135px;
+  }
+  .game-modes h1 {
+    font-size: 23px;
+    height: 55px;
+    padding-top: 8px;
   }
   .theme-icon-block {
     height: 200px;
@@ -117,6 +132,7 @@
   }
   .game-modes h1 {
     font-size: 28px;
+    height: 70px;
   }
   .theme-icon-block {
     height: 240px;
@@ -142,6 +158,14 @@
   .word-icon {
     height: 150px;
     margin-top: 18px;
+  }
+}
+
+@media (min-height: 800px) {
+  .game-modes h1 {
+    font-size: 30px;
+    height: 90px;
+    padding-top: 15px;
   }
 }
 

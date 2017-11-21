@@ -1,11 +1,11 @@
 .correct-text-block {
   -webkit-animation: moveDown linear 0.5;
-  -webkit-animation-duration: 3s;
+  -webkit-animation-duration: 1s;
   animation: moveDown linear 0.5;
-  animation-duration: 3s;
+  animation-duration: 1s;
 }
 
-@-webkit-keyframes moveDown {
+@keyframes moveDown {
   0% {
     -webkit-transform: translateY(10%);
     opacity: 1;

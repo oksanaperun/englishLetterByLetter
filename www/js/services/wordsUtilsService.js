@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-.factory('WordsUtils', function ($rootScope, $cordovaNativeAudio, $ionicHistory, Utils, DB, WordsTmpl) {
+.factory('WordsUtils', function ($rootScope, $ionicHistory, Utils, DB, WordsTmpl, Tasks) {
     return {
       getInitialComposedName: function(name) {
         var composedName = [];
@@ -42,22 +42,35 @@ angular.module('englishLetterByLetter')
 
         return shuffledName;
       },
-      getRandomIndexExcludingUnderscore: function(name) {
-        var index = getRandomIndexExcludingUnderscore(name);
+      getRandomIndex: function(name) {
+        var index = Math.floor(Math.random() * name.length);
 
-        if (name[index] == '_')
-          return getRandomIndexExcludingUnderscore(name);
-        else return index;
+        return index;
       },
-      playSound: function(sound) {
-        if (window.cordova) {
-          $cordovaNativeAudio.play(sound);
-        }
+      getAlignedPhraseName: function(name, maxNumber) {
+        var charToCheck = name.charAt(maxNumber),
+            alignedName;
+
+        if (name.length > maxNumber && charToCheck != '_') {
+          var subName = name.substr(0, maxNumber),
+            lastSeparatorIndex = subName.lastIndexOf('_'),
+            numberToAlignLeft = numberToAlignRight = 0;
+
+          subName = subName.substr(0, lastSeparatorIndex),
+          numberToAlignLeft = Math.floor((maxNumber - subName.length) / 2);
+          numberToAlignRight = maxNumber - subName.length - numberToAlignLeft;
+          alignedName = Array(numberToAlignLeft + 1).join('_') + subName +  Array(numberToAlignRight + 1).join('_') + name.substr(lastSeparatorIndex + 1);
+        } else if (charToCheck == '_') 
+            alignedName = name.substr(0, maxNumber) + name.substr(maxNumber + 1);
+          else alignedName = name;
+
+        return alignedName;
       },
       showEndGamePopup: function(params) {
         var popupBody = WordsTmpl.getEndGamePopupBody(params.score, params.bestScore);
 
-        Utils.showAlert(popupBody, manageGameEnd(params));
+        Utils.showAlert(popupBody, params, showNewRecordPopup);
+        if (window.cordova) Utils.playSound('end');
       }
   	}
 
@@ -86,38 +99,17 @@ angular.module('englishLetterByLetter')
       return arr.sort(function() {return 0.5 - Math.random()});
     }
 
-    function getRandomIndexExcludingUnderscore(name) {
-      var index = Math.floor(Math.random() * name.length);
-
-      return index;
-    }
-
-    function manageGameEnd(params) {
-      if (params.scoreRecord || params.gameTimeRecord) {
-        manageAchievements(params);
-        showNewRecordPopup(params);
-      } else $ionicHistory.goBack();
-    }
-
-    function manageAchievements(params) {
-      if (params.score) {
-        updateAchievement(params.themeId, params.keyWord + 'MaxScore', params.scoreRecord);
-      }
-      if (params.gameTime) {
-        updateAchievement(params.themeId, params.keyWord + 'MinTime', params.gameTimeRecord);
-      }
-    }
-
-    function updateAchievement(themeId, achievement, newValue) {
-      DB.updateAchievement(themeId, achievement, newValue).then(function (res) {
-      }, function (err) {
-        console.error(err);
-      });
-    }
-
     function showNewRecordPopup(params) {
-      var popupBody = WordsTmpl.getNewRecordPopupBody(params);
+      if (params.scoreRecord || params.timeRecord) {
+        var popupBody = WordsTmpl.getNewRecordPopupBody(params);
 
-      Utils.showAlert(popupBody, $ionicHistory.goBack());
+        Utils.showAlert(popupBody, params, manageTasksAndGoBack);
+        if (window.cordova) Utils.playSound('record');
+      } else manageTasksAndGoBack(params);
+    }
+
+    function manageTasksAndGoBack(params) {
+      Tasks.manageTasks(params);
+      $ionicHistory.goBack();
     }
  })

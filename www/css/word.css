@@ -1,5 +1,5 @@
 .word-header-title h1, .word-header-title h3,
-.word-body h1, .correct-letter-button {
+.word-body h1, .correct-text-block h3, .record-popup h5 {
   font-family: Alice;
 }
 
@@ -13,7 +13,7 @@
  }
 
 .word-header-title {
-  margin-top: -17px;
+  margin-top: -13px;
 }
 
 .word-header-title h1, .word-body h1 {
@@ -22,8 +22,12 @@
   text-shadow: -1px 0 #763a30, 0 1px #763a30, 1px 0 #763a30, 0 -1px #763a30;
 }
 
+.word-header-title h1 {
+  line-height: 1em;
+}
+
 .word-header-title h3 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: #773b30;
   padding-top: 5px;
@@ -101,8 +105,8 @@
 
 .composed-letter-button, .letter-button {
   font-size: 24px;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 
 .composed-letter-buttons-block, .letter-buttons-block {
@@ -111,6 +115,10 @@
   display: block;
   margin: 0 auto;
   text-align: center;
+}
+
+.letter-buttons-block {
+  padding-top: 5px !important;
 }
 
 .composed-letter-button {
@@ -143,16 +151,79 @@
   opacity: 0;
 }
 
-.correct-letter-button {
-  font-size: 28px;
+.correct-text-block h3 {
+  color: #4f7404;
   font-weight: bold;
-  line-height: 0.5em;
-  margin-left: 1px;
-  margin-right: 1px;
-  color: #373b00;
-  background-image: url('../img/buttons/correct_letter.png'); 
-  background-size: 100% auto;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  border: none;
+}
+
+.record-popup {
+  height: 110px;
+}
+
+.record-popup h5 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #793c31;
+  text-shadow: -1px 0 #8baf18, 0 1px #8baf18, 1px 0 #8baf18, 0 -1px #8baf18;
+}
+
+.record-popup p {
+  font-size: 16px;
+  padding-top: 20px;
+}
+
+.record-popup .star-icon, .record-popup .clock-icon {
+  width: 30px;
+  vertical-align: middle;
+}
+
+.task-done-popup h4.task-done-popup-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -5px;
+}
+
+.task-done-popup p {
+  font-size: 16px;
+}
+
+h4.task-done-complexity {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.task-done-complexity-icon {
+  width: 40px;
+  vertical-align: middle;
+}
+
+h4.achievement-popup-score {
+  color: #ffd9aa;
+}
+
+.popup-stars-block {
+  position: relative;
+}
+
+.popup-empty-star {
+  width: 65px;
+}
+
+#popupFirstStar, #popupSecondStar, #popupThirdStar {
+  width: 40px;
+  top: 10px;
+  position: absolute;
+}
+
+#popupFirstStar {
+  left: 55px;  
+}
+
+#popupSecondStar {
+  left: 120px;
+}
+
+#popupThirdStar {
+  left: 185px;
 }

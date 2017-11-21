@@ -18,10 +18,12 @@
 
 .title, .previous-title, .tab-title, 
 .game-modes h1, .game-modes button,
-.popup-container .popup h3, .popup-container .popup p {
+.popup-container .popup h2, .popup-container .popup h3,
+.popup-container .popup h4, .popup-container .popup h5,
+.popup-container .popup p, .popup-container .button {
   font-family: Alice;
 }
-.secondary-font, .popup-container .button {
+.secondary-font {
   font-family: CormorantInfantB;
 }
 
@@ -44,8 +46,8 @@
 }
 
 .pane {
-/*  background-image: url('../img/background.jpg');
-  background-size: 100% auto;*/
+  background-image: url('../img/background.jpg');
+  background-size: 100% auto;
 }
 
 h1 {
@@ -58,10 +60,10 @@ a {
 }
 
 .bar.bar-stable .title {
-  font-size: 14px;
+  font-size: 28px;
   text-align: center !important;
   font-weight: bold;
-  color: #ef944c;
+  color: #5e7b2b;
 }
 
 .tabs-striped .tab-item.tab-item-active {
@@ -79,9 +81,9 @@ a {
 }
 
 .game-modes h1 {
-  width: 160px;
   height: 35px;
-  font-size: 20px;
+  padding-top: 3px;
+  font-size: 17px;
   font-weight: bold;
   color: #3d3e03;
   text-shadow: -1px 0 #90a700, 0 1px #c1e127, 1px 0 #c1e127, 0 -1px #c1e127;
@@ -94,7 +96,7 @@ a {
 .game-mode-icon {
   height: 100px;
 }
-.play-icon, .achievements-icon, .info-icon {
+.play-icon, .tasks-icon, .info-icon {
   background-position: center;
   background-size: auto 100%;
   background-repeat: no-repeat;
@@ -102,8 +104,8 @@ a {
 .play-icon {
   background-image: url('../img/buttons/play.png');
 }
-.achievements-icon {
-  background-image: url('../img/buttons/star.png');
+.tasks-icon {
+  background-image: url('../img/buttons/list.png');
 }
 .info-icon {
   background-image: url('../img/buttons/info.png');
@@ -128,6 +130,7 @@ a {
 }
 
 .popup-container .popup {
+  width: 300px;
   text-align: center;
   background-image: url('../img/frames/popup.png');
   background-size: 100% auto;
@@ -139,7 +142,17 @@ a {
   display: none;
 }
 .popup-body {
-  /*padding: 0px;*/
+  padding-bottom: 10px;
+  padding-bottom: 5px;
+}
+.popup-container h3 {
+  font-size: 24px;
+  color: #bd1a83;
+  font-weight: bold;
+}
+.popup-container h4 {
+  font-size: 18px;
+  color: #440523;
 }
 .popup-buttons {
   padding: 0px;
@@ -155,37 +168,7 @@ a {
   background-repeat: no-repeat;
   background-position: center;
   border: none;
-/*  bottom: -10px;
-  position: absolute;
-  width: 110px;
-  left: 30%;*/
 }
 .popup-buttons .button-positive.activated {
   background-color: transparent;
-}
-.popup-stars-block {
-  position: relative;
-}
-.popup-empty-star {
-  width: 65px;
-}
-#popupFirstStar, #popupSecondStar, #popupThirdStar {
-  width: 40px;
-  top: 10px;
-  position: absolute;
-}
-#popupFirstStar {
-  left: 30px;  
-}
-#popupSecondStar {
-  left: 95px;
-}
-#popupThirdStar {
-  left: 160px;
-}
-.popup-container .confirm-popup p {
-  height: 80px;
-  color: #2d0b05;
-  text-align: center;
-  margin-top: 15px;
 }
