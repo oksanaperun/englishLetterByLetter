@@ -1,7 +1,7 @@
 angular.module('englishLetterByLetter')
 
   .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, 
-    $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, DB, WordsTmpl, WordsUtils) {
+    $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, DB, WordsTmpl, WordsUtils, App) {
     var maxWordsNumberInAGame = 15,
       maxLettersCountInARow = 13,
       currentTimeout = null,
@@ -272,6 +272,7 @@ angular.module('englishLetterByLetter')
         minTime = isTimeRecord ? gameTime : $scope.achievements.questionsMinTime;
 
       stopTimer();
+      App.setNewScoreData($scope.modeId, $stateParams.themeId, $scope.score);
 
       updateAchievements(keyWord, {
         gameCount: $scope.achievements[keyWord + 'GameCount'] + 1,

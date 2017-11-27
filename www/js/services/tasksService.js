@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-	.factory('Tasks', function ($rootScope, $timeout, DB, Utils, Firework) {
+	.factory('Tasks', function ($rootScope, $timeout, App, DB, Utils, Firework) {
 		return {
 			manageTasks: function (params) {
 				getDataAndManageTasks(params);
@@ -42,7 +42,7 @@ angular.module('englishLetterByLetter')
 
 		function showTaskIsDonePopup(task) {
 			var popupBody = '<div class="task-done-popup">' +
-				'<h3>Молодець!</h3>' +
+				'<h3>' + App.getCheerfulWord() + '!</h3>' +
 				'<h4>Виконано завдання</h4>' +
 				'<h4 class="task-done-popup-title">“' + task.title + '”</h4>' +
 				'<h4 class="task-done-complexity"> +' + task.complexity +

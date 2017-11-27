@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-  .controller('ThemeCtrl', function ($scope, $rootScope, $stateParams, $ionicPlatform, Utils, DB) {
+  .controller('ThemeCtrl', function ($scope, $rootScope, $stateParams, $ionicPlatform, Utils, DB, App) {
     $scope.modeId = $stateParams.modeId;
     $scope.data = {};
     $scope.data.currentPage = 0;
@@ -67,4 +67,16 @@ angular.module('englishLetterByLetter')
     $scope.setPreviousTheme = function () {
       $scope.data.sliderDelegate.slidePrev();
     };
+
+    $scope.$on('$ionicView.enter', function () {
+      var currentTheme = $scope.themes[$scope.themeIndex],
+        newScoreData = App.getNewScoreData();
+
+      if (newScoreData.modeId == $scope.modeId && newScoreData.themeId == currentTheme.id &&
+        newScoreData.score > currentTheme[$scope.keyWord + 'MaxScore']) {
+        currentTheme.displayFirstStar = newScoreData.displayFirstStar;
+        currentTheme.displaySecondStar = newScoreData.displaySecondStar;
+        currentTheme.displayThirdStar = newScoreData.displayThirdStar;
+      }
+    });
   });

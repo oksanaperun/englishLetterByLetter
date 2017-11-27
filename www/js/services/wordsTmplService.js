@@ -1,152 +1,152 @@
 angular.module('englishLetterByLetter')
 
-.factory('WordsTmpl', function(Utils) {
-	return {
-    hideTabs: function() {
-      var tabs = getTabsElement();
+  .factory('WordsTmpl', function (App, Utils) {
+    return {
+      hideTabs: function () {
+        var tabs = getTabsElement();
 
-      tabs.style.display = 'none';
-    },
-    displayTabs: function() {
-      var tabs = getTabsElement();
+        tabs.style.display = 'none';
+      },
+      displayTabs: function () {
+        var tabs = getTabsElement();
 
-      tabs.style.display = '';
-    },
-		moveLetter: function(letterIndex, firstSpaceIndex) {
-			var letterButtons = getLetterButtons(),
-        	composedLetterButtons = getComposedLetterButtons();
-
-      letterButtons[letterIndex].setAttribute('disabled', 'disabled');
-      letterButtons[letterIndex].style.opacity = 0;
-      composedLetterButtons[firstSpaceIndex].classList.add('decorated-button');
-		},
-    moveLetterBack: function(letterIndex, originalLetterIndex) {
-      var letterButtons = getLetterButtons(),
+        tabs.style.display = '';
+      },
+      moveLetter: function (letterIndex, firstSpaceIndex) {
+        var letterButtons = getLetterButtons(),
           composedLetterButtons = getComposedLetterButtons();
 
-      letterButtons[originalLetterIndex].removeAttribute('disabled');
-      letterButtons[originalLetterIndex].style.opacity = 1;
-      composedLetterButtons[letterIndex].classList.remove('decorated-button');
-    },
-    clearComposedWord: function() {
-      removeComposedLetterButtonsDecoration();
-      enableLetterButtons();
-    },
-    setCorrectComposedWordStyle: function() {
-      disableComposedLetterButtons();
-      hideLetterButtonsBlock();
-      disableClearButton();
-    },
-    setInitialState: function() {
-      enableComposedLetterButtons();
-      removeComposedLetterButtonsDecoration();
-      enableLetterButtons();
-      displayLetterButtonsBlock();
-      enableClearButton();
-    },
-    triggerClickOnNextButton: function() {
-      angular.element(getNextButton()).triggerHandler('click');
-    },
-    getEndGamePopupBody: function(score, bestScore) {
-      return getEndGamePopupBody(score, bestScore);
-    },
-    getNewRecordPopupBody: function(params) {
-      return getNewRecordPopupBody(params);
+        letterButtons[letterIndex].setAttribute('disabled', 'disabled');
+        letterButtons[letterIndex].style.opacity = 0;
+        composedLetterButtons[firstSpaceIndex].classList.add('decorated-button');
+      },
+      moveLetterBack: function (letterIndex, originalLetterIndex) {
+        var letterButtons = getLetterButtons(),
+          composedLetterButtons = getComposedLetterButtons();
+
+        letterButtons[originalLetterIndex].removeAttribute('disabled');
+        letterButtons[originalLetterIndex].style.opacity = 1;
+        composedLetterButtons[letterIndex].classList.remove('decorated-button');
+      },
+      clearComposedWord: function () {
+        removeComposedLetterButtonsDecoration();
+        enableLetterButtons();
+      },
+      setCorrectComposedWordStyle: function () {
+        disableComposedLetterButtons();
+        hideLetterButtonsBlock();
+        disableClearButton();
+      },
+      setInitialState: function () {
+        enableComposedLetterButtons();
+        removeComposedLetterButtonsDecoration();
+        enableLetterButtons();
+        displayLetterButtonsBlock();
+        enableClearButton();
+      },
+      triggerClickOnNextButton: function () {
+        angular.element(getNextButton()).triggerHandler('click');
+      },
+      getEndGamePopupBody: function (score, bestScore) {
+        return getEndGamePopupBody(score, bestScore);
+      },
+      getNewRecordPopupBody: function (params) {
+        return getNewRecordPopupBody(params);
+      }
     }
-	}
 
-  function enableComposedLetterButtons() {
-    var composedLetterButtons = getComposedLetterButtons();
+    function enableComposedLetterButtons() {
+      var composedLetterButtons = getComposedLetterButtons();
 
-    for (var i = 0; i < composedLetterButtons.length; i++) {
-      var composedLetterButton = composedLetterButtons[i];
+      for (var i = 0; i < composedLetterButtons.length; i++) {
+        var composedLetterButton = composedLetterButtons[i];
 
-      composedLetterButton.removeAttribute('disabled');
+        composedLetterButton.removeAttribute('disabled');
+      }
     }
-  }
 
-  function disableComposedLetterButtons() {
-    var composedLetterButtons = getComposedLetterButtons();
+    function disableComposedLetterButtons() {
+      var composedLetterButtons = getComposedLetterButtons();
 
-    for (var i = 0; i < composedLetterButtons.length; i++) {
-      var composedLetterButton = composedLetterButtons[i];
+      for (var i = 0; i < composedLetterButtons.length; i++) {
+        var composedLetterButton = composedLetterButtons[i];
 
-      composedLetterButton.setAttribute('disabled', 'disabled');
+        composedLetterButton.setAttribute('disabled', 'disabled');
+      }
     }
-  }
 
-  function removeComposedLetterButtonsDecoration() {
-    var composedLetterButtons = getComposedLetterButtons();
+    function removeComposedLetterButtonsDecoration() {
+      var composedLetterButtons = getComposedLetterButtons();
 
-    for (var i = 0; i < composedLetterButtons.length; i++) {
-      var composedLetterButton = composedLetterButtons[i];
+      for (var i = 0; i < composedLetterButtons.length; i++) {
+        var composedLetterButton = composedLetterButtons[i];
 
-      composedLetterButton.classList.remove('decorated-button');
+        composedLetterButton.classList.remove('decorated-button');
+      }
     }
-  }
 
-  function enableLetterButtons() {
-    var letterButtons = getLetterButtons();
+    function enableLetterButtons() {
+      var letterButtons = getLetterButtons();
 
-    for (var i = 0; i < letterButtons.length; i++) {
-      var letterButton = letterButtons[i];
+      for (var i = 0; i < letterButtons.length; i++) {
+        var letterButton = letterButtons[i];
 
-      letterButton.removeAttribute('disabled');
-      letterButton.style.opacity = 1;
+        letterButton.removeAttribute('disabled');
+        letterButton.style.opacity = 1;
+      }
     }
-  }
 
-  function displayLetterButtonsBlock() {
-    var letterButtonsBlock = getLetterButtonsBlock();
+    function displayLetterButtonsBlock() {
+      var letterButtonsBlock = getLetterButtonsBlock();
 
-    letterButtonsBlock.style.display = 'block';
-  }
+      letterButtonsBlock.style.display = 'block';
+    }
 
-  function hideLetterButtonsBlock() {
-    var letterButtonsBlock = getLetterButtonsBlock();
+    function hideLetterButtonsBlock() {
+      var letterButtonsBlock = getLetterButtonsBlock();
 
-    letterButtonsBlock.style.display = 'none';
-  }
+      letterButtonsBlock.style.display = 'none';
+    }
 
-  function enableClearButton() {
-    var clearButton = getClearButton();
+    function enableClearButton() {
+      var clearButton = getClearButton();
 
-    clearButton.removeAttribute('disabled');
-    clearButton.style.opacity = 1;
-  }
+      clearButton.removeAttribute('disabled');
+      clearButton.style.opacity = 1;
+    }
 
-  function disableClearButton() {
-    var clearButton = getClearButton();
+    function disableClearButton() {
+      var clearButton = getClearButton();
 
-    clearButton.setAttribute('disabled', 'disabled');
-    clearButton.style.opacity = 0.7;
-  }
+      clearButton.setAttribute('disabled', 'disabled');
+      clearButton.style.opacity = 0.7;
+    }
 
-  function getTabsElement() {
-    return document.getElementsByClassName('tabs')[0];
-  }
+    function getTabsElement() {
+      return document.getElementsByClassName('tabs')[0];
+    }
 
-  function getLetterButtonsBlock() {
-    return document.getElementsByClassName('letter-buttons-block')[0];
-  }
+    function getLetterButtonsBlock() {
+      return document.getElementsByClassName('letter-buttons-block')[0];
+    }
 
-  function getLetterButtons() {
-    return document.getElementsByClassName('letter-button');
-  }
+    function getLetterButtons() {
+      return document.getElementsByClassName('letter-button');
+    }
 
-  function getComposedLetterButtons() {
-    return document.getElementsByClassName('composed-letter-button');
-  }
+    function getComposedLetterButtons() {
+      return document.getElementsByClassName('composed-letter-button');
+    }
 
-  function getClearButton() {
-    return document.getElementsByClassName('clear-button')[0];
-  }
+    function getClearButton() {
+      return document.getElementsByClassName('clear-button')[0];
+    }
 
-  function getNextButton() {
-    return document.getElementsByClassName('next-button')[0];
-  }
+    function getNextButton() {
+      return document.getElementsByClassName('next-button')[0];
+    }
 
-  function getEndGamePopupBody(score, bestScore) {
+    function getEndGamePopupBody(score, bestScore) {
       var displayFirstStar = Utils.shouldFirstStarBeDisplayed(score) ? 'block' : 'none',
         displaySecondStar = Utils.shouldSecondStarBeDisplayed(score) ? 'block' : 'none',
         displayThirdStar = Utils.shouldThirdStarBeDisplayed(score) ? 'block' : 'none';
@@ -167,12 +167,16 @@ angular.module('englishLetterByLetter')
 
     function getNewRecordPopupBody(params) {
       var beginHTML = '<div class="record-popup">' +
-          '<p>Новий рекорд:</p>',
-        scoreAchievementHTML = params.scoreRecord ? '<h5><img class="star-icon" ng-src="img/icons/star.png"> ' +
-          params.scoreRecord + ' ' + getEndTextForScoreRecord(params.scoreRecord) + '</h5>' : '',
-        timeAchievementHTML = params.timeRecord ? '<h5><img class="clock-icon" ng-src="img/icons/clock.png"> ' +
-          params.timeRecord + ' секунд</h5>' : '',
-        endHTML = '</div>';
+        '<h3>' + App.getCheerfulWord() + '!</h3>' +
+        '<h4>Ти встановив новий рекорд</h4><div class="record-block">',
+        scoreAchievementHTML = params.scoreRecord ?
+          '<h4 class="record"><img class="star-icon" ng-src="img/icons/star.png"><span>' +
+          params.scoreRecord + '</span> ' + getEndTextForScoreRecord(params.scoreRecord) + '</h4>' : '',
+        timeAchievementHTML = params.timeRecord ?
+          '<h4 class="record"><img class="clock-icon" ng-src="img/icons/clock.png">' +
+          '<span>' + Math.floor(params.timeRecord / 60) + '</span> хв' +
+          '<span>' + params.timeRecord % 60 + '</span> с</h4>' : '',
+        endHTML = '</div></div>';
 
       return beginHTML + scoreAchievementHTML + timeAchievementHTML + endHTML;
     }
@@ -192,4 +196,4 @@ angular.module('englishLetterByLetter')
           return 'очок';
       }
     }
-})
+  })
