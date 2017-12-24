@@ -14,14 +14,27 @@
   .theme-icon {
     height: 100px !important;
   }
-  .slide-data h1 {
+  .theme-block h1 {
     font-size: 28px;
+  }
+  .word-header-title h3 {
+    font-size: 20px;
   }
   .word-icon-block {
     height: 101px;
   }
   .word-icon {
     height: 80px;
+  }
+  .composed-letter-buttons-block {
+    padding: 5px;
+  }
+  .task {
+    width: 320px;
+    height: 72px;
+  }
+  .task h4 {
+    font-size: 14px;
   }
 }
 
@@ -34,11 +47,6 @@
     height: 45px;
     padding-top: 6px;
   }
-  .slide-data {
-    top: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-  }
   .theme-icon-block {
     height: 148px;
   }
@@ -50,11 +58,14 @@
     width: 170px;
     font-size: 20px;
   }
-  .slide-data h1, .word-header-title h1 {
-    font-size: 34px;
+  .theme-block h1 {
+    font-size: 33px;
   }
   .previous-slide-button, .next-slide-button {
     width: 45px;
+  }
+  .word-header-title h3 {
+    font-size: 22px;
   }
   .word-icon-block {
      height: 115px;
@@ -62,6 +73,31 @@
   .word-icon {
     height: 90px;
     margin-top: 12px;
+  }
+  .score-icon, .play-sound-icon, .counter-icon {
+    height: 40px;
+  }
+  .clear-button, .next-button {
+    height: 55px;
+    width: 55px;
+  }
+  .composed-letter-button, .letter-button {
+    font-size: 30px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  .correct-text-block h3 {
+    font-size: 30px;
+  }
+  .task {
+    width: 350px;
+    height: 80px;
+  }
+  .progress-bar-block {
+    margin-left: 25px;
+  }
+  .task h4 {
+    font-size: 16px;
   }
 }
 
@@ -77,9 +113,6 @@
   .theme-icon {
     margin-top: 14px;
     height: 140px !important;
-  }
-  .slide-data h1, .word-header-title h1 {
-    font-size: 36px;
   }
   .word-icon-block {
      height: 130px;
@@ -99,6 +132,9 @@
     height: 55px;
     padding-top: 8px;
   }
+  .theme-block h1 {
+    font-size: 35px;
+  }
   .theme-icon-block {
     height: 200px;
   }
@@ -106,16 +142,24 @@
     margin-top: 16px;
     height: 160px !important;
   }
-  .theme-button {
-    height: 40px;
-    width: 186px;
-    font-size: 22px;
-  }
-  .slide-data h1, .word-header-title h1 {
-    font-size: 40px;
-  }
   .previous-slide-button, .next-slide-button {
     width: 50px;
+  }
+  .word-header {
+    height: 80px;
+  }
+  .word-header-title h1, .word-body h1, .correct-text-block h3 {
+    font-size: 32px;
+  }
+  .word-header-title h3 {
+    font-size: 24px;
+  }
+  .score-icon, .play-sound-icon, .counter-icon {
+    height: 45px;
+  }
+  .clear-button, .next-button {
+    height: 60px;
+    width: 60px;
   }
   .word-icon-block {
     height: 154px;
@@ -127,12 +171,11 @@
 }
 
 @media (min-height: 600px) {
-  .game-mode-icon {
-    height: 160px;
-  }
   .game-modes h1 {
     font-size: 28px;
     height: 70px;
+    width: 310px;
+    display: table-cell;
   }
   .theme-icon-block {
     height: 240px;
@@ -141,31 +184,111 @@
     margin-top: 20px;
     height: 190px !important;
   }
-  .theme-button {
-    height: 55px;
-    width: 240px;
-    font-size: 26px;
-  }
-  .slide-data h1, .word-header-title h1 {
-    font-size: 44px;
+  .theme-block h1 {
+    font-size: 38px;
   }
   .previous-slide-button, .next-slide-button {
     width: 60px;
   }
+  .word-header-title h1, .word-body h1, .correct-text-block h3 {
+    font-size: 42px;
+  }
+  .score-icon, .play-sound-icon, .counter-icon {
+    height: 50px;
+  }
+  .clear-button, .next-button {
+    height: 65px;
+    width: 65px;
+  }
   .word-icon-block {
-    height: 190px;
+    height: 160px;
   }
   .word-icon {
-    height: 150px;
-    margin-top: 18px;
+    height: 125px;
   }
-}
-
-@media (min-height: 800px) {
-  .game-modes h1 {
-    font-size: 30px;
-    height: 90px;
-    padding-top: 15px;
+  .composed-letter-button, .letter-button {
+    font-size: 32px;
+  }
+  #popupFirstStar {
+    left: 105px;  
+  }
+  #popupSecondStar {
+    left: 170px;
+  }
+  #popupThirdStar {
+    left: 235px;
+  }
+  .popup-container .popup {
+    width: 400px;
+  }
+  .popup-container h3 {
+    font-size: 28px;
+  }
+  .popup-container h4 {
+    font-size: 22px;
+  }
+  .popup-buttons .button {
+    height: 55px;
+    font-size: 24px;
+  }
+  .confirm-popup {
+    margin-bottom: 68px;
+  }
+  .achievement-popup {
+    margin-bottom: 67px;
+  }
+  .record-popup {
+    margin-bottom: 62px;
+  }
+  .record-popup .record-block {
+    height: 95px;
+    width: 400px;
+  }
+  .record-popup span {
+    font-size: 28px;
+  }
+  .task {
+    width: 470px;
+    height: 110px;
+  }
+  .task h4 {
+    font-size: 22px;
+    line-height: 2em;
+  }
+  img.task-help-icon {
+    width: 60px;
+    padding-top: 17px;
+  }
+  .progress-bar-block {
+    margin-left: 45px;
+  }
+  img.progress-bar, img.progress-bar-line {
+    width: 170px;
+  }
+  .progress-bar-line-block {
+    height: 17px;
+  }
+  .task-done-popup h4.task-done-popup-title, h4.task-done-complexity {
+    font-size: 26px;
+  }
+  h4.task-done-complexity {
+    margin-bottom: 54px;
+  }
+  .task-popup h4 {
+    font-size: 28px;
+  }
+  .task-popup-icon {
+    height: 35px;
+  }
+  .task-popup p {
+    height: 85px;
+    width: 400px; 
+    font-size: 20px;
+    line-height: 1em;
+  }
+  .task-popup h3 {
+    font-size: 26px;
+    margin-bottom: 14px;
   }
 }
 

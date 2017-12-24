@@ -42,7 +42,6 @@ angular.module('englishLetterByLetter')
       $scope.blockWidth = 750 > $rootScope.viewWidth ? $rootScope.viewWidth : 750;
       $scope.blockMarginLeft = $scope.blockWidth == 750 ? -Math.floor($scope.blockWidth / 2) : 0;
       $scope.blockMarginTop =  $rootScope.viewHeight >= 500 ? -Math.floor($rootScope.viewHeight / 3) : 0;
-      $scope.wordHeaderBlockHeight = $stateParams.modeId == 3 ? 75 : 60;
       $scope.wordBodyButtonMarginTop = $stateParams.modeId == 1 ? '55%' : ($stateParams.modeId == 3 ? '25%' : '0px');
       $scope.letterWidth = Math.floor($scope.blockWidth / maxLettersCountInARow) - marginRight;
       $scope.letterHeight = Math.floor($scope.letterWidth / 1.07);
@@ -67,7 +66,7 @@ angular.module('englishLetterByLetter')
 
     $rootScope.$ionicGoBack = function() {
       if ($ionicHistory.backView().stateName === 'tab.theme') {
-        Utils.showConfirmLeaveGamePopup();
+        WordsUtils.showConfirmLeavePopup();
         if (window.cordova) Utils.playSound('warning');
       } else $ionicHistory.goBack();
     };

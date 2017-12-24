@@ -47,28 +47,23 @@ angular.module('englishLetterByLetter')
         alertPopup.then(function (res) {
         });
       },
-      showConfirmLeaveGamePopup: function () {
-        var popupBody = '<div class="confirm-popup">' +
-          '<h3>Увага!</h3>' +
-          '<h4>Ви дійсно бажаєте залишити поточну гру?</h4>' +
-          '<h4>Отримані результати буде втрачено.</h4>' +
-          '</div>',
-          сonfirmLeaveGamePopup = $ionicPopup.confirm({
+      showConfirm: function (confirmBody, callbackFunction) {
+        var сonfirmPopup = $ionicPopup.confirm({
             title: 'УВАГА!',
-            template: popupBody,
+            template: confirmBody,
             buttons: [
-              { text: 'Ні' },
               {
                 text: 'Так',
                 type: 'button-positive',
                 onTap: function (e) {
-                  $ionicHistory.goBack();
+                  if (callbackFunction) callbackFunction();
                 }
-              }
+              },
+              { text: 'Ні' }
             ]
           });
 
-        сonfirmLeaveGamePopup.then(function (res) {
+          сonfirmPopup.then(function (res) {
         });
       },
       shouldFirstStarBeDisplayed: function (score) {

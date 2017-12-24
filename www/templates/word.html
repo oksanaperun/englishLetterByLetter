@@ -4,8 +4,7 @@
                 height: {{viewHeight - topPanelHeigth}}px; 
                 margin-left: {{blockMarginLeft}}px; 
                 margin-top: {{blockMarginTop}}px;">
-    <div class="row word-header"
-         style="height: {{wordHeaderBlockHeight}}px;">
+    <div class="row word-header">
       <div class="col col-20 score">
         <p>
           <img class="score-icon"
@@ -80,7 +79,7 @@
     </div>
 
     <div class="row correct-text-block"
-         ng-if="displayCorrectLogo && modeId != 3">
+         ng-if="displayCorrectLogo">
       <h3>Правильно!</h3>
     </div>
   </ion-content>

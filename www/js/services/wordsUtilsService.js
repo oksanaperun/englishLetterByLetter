@@ -66,6 +66,11 @@ angular.module('englishLetterByLetter')
 
         return alignedName;
       },
+      showConfirmLeavePopup: function() {
+        var popupBody = WordsTmpl.getConfirmLeavePopupBody();
+
+        Utils.showConfirm(popupBody, $ionicHistory.goBack);
+      },
       showEndGamePopup: function(params) {
         var popupBody = WordsTmpl.getEndGamePopupBody(params.score, params.bestScore);
 

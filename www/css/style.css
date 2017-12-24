@@ -36,13 +36,13 @@
 .bar-stable .button.back-button {
   color: #ef944c;
 }
-.bar.bar-header {
-  background-color: transparent;
-}
 
-.tabs, .tabs-striped .tabs {
-  background-color: transparent;
-  border: none;
+.bar-header, .tabs {
+  border: 0px !important;
+  border-bottom-color: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-bottom: none !important;
 }
 
 .pane {
@@ -66,7 +66,7 @@ a {
   color: #5e7b2b;
 }
 
-.tabs-striped .tab-item.tab-item-active {
+.tabs-striped .tab-item.tab-item-active, .tabs-striped .tab-item.activated {
   border: none;
 }
 .tab-item {
@@ -130,7 +130,7 @@ a {
 }
 
 .popup-container .popup {
-  width: 300px;
+  width: 340px;
   text-align: center;
   background-image: url('../img/frames/popup.png');
   background-size: 100% auto;
@@ -142,16 +142,15 @@ a {
   display: none;
 }
 .popup-body {
-  padding-bottom: 10px;
-  padding-bottom: 5px;
+  padding-bottom: 3px;
 }
 .popup-container h3 {
   font-size: 24px;
-  color: #bd1a83;
+  color: #bd1984;
   font-weight: bold;
 }
 .popup-container h4 {
-  font-size: 18px;
+  font-size: 20px;
   color: #440523;
 }
 .popup-buttons {
@@ -171,4 +170,12 @@ a {
 }
 .popup-buttons .button-positive.activated {
   background-color: transparent;
+}
+
+.confirm-popup {
+  height: 145px;
+  margin-bottom: 29px;
+}
+.confirm-popup h4 {
+  font-size: 19px;
 }

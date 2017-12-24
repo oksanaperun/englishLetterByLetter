@@ -12,6 +12,9 @@
   font-weight: bold;
  }
 
+.word-header {
+  height: 70px;
+}
 .word-header-title {
   margin-top: -13px;
 }
@@ -27,7 +30,7 @@
 }
 
 .word-header-title h3 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: #773b30;
   padding-top: 5px;
@@ -38,34 +41,26 @@
   color: #773b30;
   font-size: 26px;
 }
-
-.score-icon {
-  height: 35px;
+.score-icon, .counter-icon {
   vertical-align: text-bottom;
 }
-
 .play-sound-counter {
   text-align: right;
   font-size: 16px;
   color: #773b30;
 }
-
+.score-icon, .play-sound-icon, .counter-icon {
+  height: 35px;
+}
 .play-sound-icon {
-  height: 35px;
   margin-top: 3px;
-}
-
-.counter-icon {
-  height: 35px;
-  vertical-align: text-bottom;
-}
-
-.word-body {
-  min-height: 70px;
 }
 
 .word-body button {
   margin-top: 50%;
+}
+.word-body h1 {
+  margin-top: 15px;
 }
 
 .word-icon-block {
@@ -117,6 +112,10 @@
   text-align: center;
 }
 
+.composed-letter-buttons-block {
+  padding: 0px;
+}
+
 .letter-buttons-block {
   padding-top: 5px !important;
 }
@@ -152,12 +151,14 @@
 }
 
 .correct-text-block h3 {
-  color: #4f7404;
+  color: #bd1984;
+  font-size: 26px;
   font-weight: bold;
 }
 
 .record-popup {
   height: 150px;
+  margin-bottom: 24px;
 }
 
 .record-popup h4 {
@@ -185,13 +186,13 @@
 }
 
 .record-popup span {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
   margin-left: 5px;
 }
 
 .task-done-popup h4.task-done-popup-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   margin-top: -5px;
 }
@@ -201,9 +202,10 @@
 }
 
 h4.task-done-complexity {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: bold;
-  margin-top: 15px;
+  margin-top: 18px;
+  margin-bottom: 26px;
 }
 
 .task-done-complexity-icon {
@@ -211,8 +213,13 @@ h4.task-done-complexity {
   vertical-align: middle;
 }
 
+.achievement-popup {
+  margin-bottom: 33px;
+}
+
 h4.achievement-popup-score {
   color: #ffd9aa;
+  margin-bottom: 15px;
 }
 
 .popup-stars-block {
@@ -230,13 +237,13 @@ h4.achievement-popup-score {
 }
 
 #popupFirstStar {
-  left: 55px;  
+  left: 75px;  
 }
 
 #popupSecondStar {
-  left: 120px;
+  left: 140px;
 }
 
 #popupThirdStar {
-  left: 185px;
+  left: 205px;
 }

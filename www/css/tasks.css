@@ -54,7 +54,7 @@ img.task-help-icon {
   margin: 0px;
   padding-top: 7px;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 13px;
   color: #7b2f15;
   text-align: center;
 }
@@ -85,7 +85,7 @@ img.progress-bar, img.progress-bar-line {
   font-size: 19px;
   font-weight: bold;
   margin-top: 0px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .task-popup h3 {
@@ -93,16 +93,16 @@ img.progress-bar, img.progress-bar-line {
   font-size: 22px;
   font-weight: 500;
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
 }
 
 .task-popup p {
-  height: 60px;
-  width: 280px;
+  height: 70px;
+  width: 320px;
   display: table-cell;
   vertical-align: middle;
   color: #440523;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .task-popup-icon {

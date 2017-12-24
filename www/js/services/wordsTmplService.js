@@ -47,6 +47,9 @@ angular.module('englishLetterByLetter')
       triggerClickOnNextButton: function () {
         angular.element(getNextButton()).triggerHandler('click');
       },
+      getConfirmLeavePopupBody: function () {
+        return getConfirmLeavePopupBody();
+      },
       getEndGamePopupBody: function (score, bestScore) {
         return getEndGamePopupBody(score, bestScore);
       },
@@ -144,6 +147,14 @@ angular.module('englishLetterByLetter')
 
     function getNextButton() {
       return document.getElementsByClassName('next-button')[0];
+    }
+
+    function getConfirmLeavePopupBody() {
+      return '<div class="confirm-popup">' +
+      '<h3>Увага!</h3>' +
+      '<h4>Ви дійсно бажаєте залишити поточну гру?</h4>' +
+      '<h4>Отримані результати буде втрачено.</h4>' +
+      '</div>';
     }
 
     function getEndGamePopupBody(score, bestScore) {
