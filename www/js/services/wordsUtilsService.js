@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-.factory('WordsUtils', function ($rootScope, $ionicHistory, Utils, DB, WordsTmpl, Tasks) {
+.factory('WordsUtils', function ($rootScope, $ionicHistory, $cordovaNativeAudio, Utils, DB, WordsTmpl, Tasks) {
     return {
       getInitialComposedName: function(name) {
         var composedName = [];
@@ -74,6 +74,7 @@ angular.module('englishLetterByLetter')
       showEndGamePopup: function(params) {
         var popupBody = WordsTmpl.getEndGamePopupBody(params.score, params.bestScore);
 
+        if (window.cordova) $cordovaNativeAudio.preloadSimple('end', 'sounds/end.mp3');
         Utils.showAlert(popupBody, params, showNewRecordPopup);
         if (window.cordova) Utils.playSound('end');
       }
@@ -108,6 +109,7 @@ angular.module('englishLetterByLetter')
       if (params.scoreRecord || params.timeRecord) {
         var popupBody = WordsTmpl.getNewRecordPopupBody(params);
 
+        if (window.cordova) $cordovaNativeAudio.preloadSimple('record', 'sounds/record.mp3');
         Utils.showAlert(popupBody, params, manageTasksAndGoBack);
         if (window.cordova) Utils.playSound('record');
       } else manageTasksAndGoBack(params);

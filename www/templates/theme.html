@@ -15,7 +15,8 @@
           <ion-slide-page ng-repeat="theme in themes">
             <div class="theme-block"
                 style="width: {{viewWidth}}px;">
-              <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/word">
+              <a href="#/tab/modes/{{modeId}}/theme/{{theme.id}}/word"
+                 ng-click="setThemeName(theme.name)">
                 <div class="theme-icon-block">
                   <img class="theme-icon" 
                     ng-src="img/themes/{{theme.id}}.jpg">

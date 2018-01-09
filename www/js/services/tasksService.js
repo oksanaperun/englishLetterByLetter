@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-	.factory('Tasks', function ($rootScope, $timeout, App, DB, Utils, Firework) {
+	.factory('Tasks', function ($rootScope, $timeout, $cordovaNativeAudio, App, DB, Utils, Firework) {
 		return {
 			manageTasks: function (params) {
 				getDataAndManageTasks(params);
@@ -34,6 +34,12 @@ angular.module('englishLetterByLetter')
 		}
 
 		function updateTask(id, progress, isDone) {
+			var task = Utils.getTaskById(id);
+
+			task.progress = progress;
+			task.progressPercentage = Math.floor(0.7692 * 100 * task.progress / task.count);
+			task.isDone = isDone ? 1 : 0;
+
 			DB.updateTask(id, progress, isDone ? 1 : 0).then(function (res) {
 			}, function (err) {
 				console.error(err);
@@ -45,10 +51,10 @@ angular.module('englishLetterByLetter')
 				'<h3>' + App.getCheerfulWord() + '!</h3>' +
 				'<h4>Виконано завдання</h4>' +
 				'<h4 class="task-done-popup-title">“' + task.title + '”</h4>' +
-				'<h4 class="task-done-complexity"> +' + task.complexity +
-				'<img class="task-done-complexity-icon" ng-src="img/icons/award_1.png"></h4>' +
+				'<img class="task-done-complexity-icon" ng-src="img/icons/complexity_' + task.complexity + '.png">' +
 				'</div>';
 
+			if (window.cordova) $cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.wav');
 			Utils.showAlert(popupBody);
 
 			$timeout(function () {
@@ -76,7 +82,7 @@ angular.module('englishLetterByLetter')
 			handleGamesCountTask(tasks[0], achievements);
 			handleWordsTasks(tasks, achievements, params);
 			handlePhrasesTasks(tasks, achievements, params);
-			handleQuestiondTasks(tasks, achievements)
+			handleQuestionsTasks(tasks, achievements)
 		}
 
 		function handleWordsTasks(tasks, achievements, params) {
@@ -101,7 +107,7 @@ angular.module('englishLetterByLetter')
 			handleWinsCountTask(keyWord, tasks[12], achievements);
 		}
 
-		function handleQuestiondTasks(tasks, achievements) {
+		function handleQuestionsTasks(tasks, achievements) {
 			var keyWord = $rootScope.gameModes[2].keyWord;
 
 			handleItemsCountTask(keyWord, tasks[13], achievements);

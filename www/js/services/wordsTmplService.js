@@ -122,7 +122,7 @@ angular.module('englishLetterByLetter')
       var clearButton = getClearButton();
 
       clearButton.setAttribute('disabled', 'disabled');
-      clearButton.style.opacity = 0.7;
+      clearButton.style.opacity = 0.5;
     }
 
     function getTabsElement() {
@@ -151,10 +151,10 @@ angular.module('englishLetterByLetter')
 
     function getConfirmLeavePopupBody() {
       return '<div class="confirm-popup">' +
-      '<h3>Увага!</h3>' +
-      '<h4>Ви дійсно бажаєте залишити поточну гру?</h4>' +
-      '<h4>Отримані результати буде втрачено.</h4>' +
-      '</div>';
+        '<h3>Увага!</h3>' +
+        '<h4>Ви дійсно бажаєте залишити поточну гру?</h4>' +
+        '<h4>Отримані результати буде втрачено.</h4>' +
+        '</div>';
     }
 
     function getEndGamePopupBody(score, bestScore) {
@@ -179,7 +179,8 @@ angular.module('englishLetterByLetter')
     function getNewRecordPopupBody(params) {
       var beginHTML = '<div class="record-popup">' +
         '<h3>' + App.getCheerfulWord() + '!</h3>' +
-        '<h4>Ти встановив новий рекорд</h4><div class="record-block">',
+        '<h4>Новий рекорд по темі <span>“' +
+        params.themeName + '”</span></h4><div class="record-block">',
         scoreAchievementHTML = params.scoreRecord ?
           '<h4 class="record"><img class="star-icon" ng-src="img/icons/star.png"><span>' +
           params.scoreRecord + '</span> ' + getEndTextForScoreRecord(params.scoreRecord) + '</h4>' : '',

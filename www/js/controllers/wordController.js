@@ -24,10 +24,6 @@ angular.module('englishLetterByLetter')
         setSize();
         manageGameMode();
         $cordovaNativeAudio.preloadSimple('correct', 'sounds/correct.wav');
-        $cordovaNativeAudio.preloadSimple('end', 'sounds/end.wav');
-        $cordovaNativeAudio.preloadSimple('record', 'sounds/record.mp3');
-        $cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.mp3');
-        $cordovaNativeAudio.preloadSimple('warning', 'sounds/warning.wav');
       });
     } else {
       $ionicPlatform.ready(function () {
@@ -67,7 +63,6 @@ angular.module('englishLetterByLetter')
     $rootScope.$ionicGoBack = function() {
       if ($ionicHistory.backView().stateName === 'tab.theme') {
         WordsUtils.showConfirmLeavePopup();
-        if (window.cordova) Utils.playSound('warning');
       } else $ionicHistory.goBack();
     };
 
@@ -283,6 +278,7 @@ angular.module('englishLetterByLetter')
       });
 
       WordsUtils.showEndGamePopup({
+        themeName: $rootScope.themeName,
         score: $scope.score,
         bestScore: maxScore,
         scoreRecord: isScoreRecord ? $scope.score : null,

@@ -2,17 +2,6 @@
   font-family: Alice;
 }
 
-.award {
-  font-weight: bold;
-  font-size: 18px;
-  color: #bd1884;
-}
-
-.award-icon {
-  height: 25px;
-  vertical-align: middle;
-}
-
 .tasks {
   padding-top: 0px;
 }
@@ -20,6 +9,16 @@
 .tasks .row, .tasks .col {
   padding-top: 0px;
   padding-bottom: 0px;
+}
+
+.tasks-progress {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.task-progress-icon {
+  width: 20px;
 }
 
 .tasks-block {
@@ -31,9 +30,9 @@
 }
 
 .task {
-  width: 310px;
-  height: 63px;
-  margin: 10px;
+  width: 270px;
+  height: 55px;
+  margin: 5px 0px 7px 0px;
   padding: 10px;
   background-image: url('../img/frames/task.png');
   background-size: 100% auto;
@@ -42,7 +41,7 @@
 }
 
 img.task-complexity-icon {
-  padding-top: 13px;
+  padding-top: 6px;
 }
 
 img.task-help-icon {
@@ -54,23 +53,23 @@ img.task-help-icon {
   margin: 0px;
   padding-top: 7px;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 14px;
   color: #7b2f15;
   text-align: center;
 }
 
 .progress-bar-block {
   position: relative;
-  margin-top: 5px;
-  margin-left: 14px;
+  margin-top: 3px;
+  margin-left: 34px;
 }
 
-img.progress-bar, img.progress-bar-line {
-  width: 140px;
+img.progress-bar {
+  width: 120px;
 }
 
 .progress-bar-line-block {
-  height: 14px;
+  height: 12px;
   top: 3px;
   position: absolute;
   background-image: url('../img/icons/progress_bar_line.png');
@@ -84,8 +83,8 @@ img.progress-bar, img.progress-bar-line {
   color: #bd1984;
   font-size: 19px;
   font-weight: bold;
-  margin-top: 0px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .task-popup h3 {
@@ -93,20 +92,19 @@ img.progress-bar, img.progress-bar-line {
   font-size: 22px;
   font-weight: 500;
   margin-top: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .task-popup p {
-  height: 70px;
+  height: 65px;
   width: 320px;
   display: table-cell;
   vertical-align: middle;
   color: #440523;
   font-size: 18px;
+  line-height: 1.5em;
 }
 
 .task-popup-icon {
-  height: 30px;
-  box-shadow: 0px 0px 10px 5px rgb(192, 98, 70);
-  border-radius: 5px;
+  height: 40px;
 }

@@ -17,8 +17,14 @@
   .theme-block h1 {
     font-size: 28px;
   }
+  .word-header {
+    height: 70px;
+  }
   .word-header-title h3 {
     font-size: 20px;
+  }
+  .word-body {
+    margin-bottom: 0px;
   }
   .word-icon-block {
     height: 101px;
@@ -30,11 +36,20 @@
     padding: 5px;
   }
   .task {
-    width: 320px;
-    height: 72px;
+    width: 290px;
+    height: 65px;
   }
   .task h4 {
-    font-size: 14px;
+    font-size: 16px;
+  }
+  .progress-bar-block {
+    margin-left: 38px;
+  }
+  img.progress-bar {
+    width: 130px;
+  }
+  .progress-bar-line-block {
+    height: 13px;
   }
 }
 
@@ -89,15 +104,24 @@
   .correct-text-block h3 {
     font-size: 30px;
   }
-  .task {
-    width: 350px;
-    height: 80px;
+  .task-progress-icon {
+    width: 22px;
   }
-  .progress-bar-block {
-    margin-left: 25px;
+  .task {
+    width: 340px;
+    height: 70px;
   }
   .task h4 {
-    font-size: 16px;
+    font-size: 18px;
+  }
+  .progress-bar-block {
+    margin-left: 48px;
+  }
+  img.progress-bar {
+    width: 150px;
+  }
+  .progress-bar-line-block {
+    height: 15px;
   }
 }
 
@@ -120,6 +144,9 @@
   .word-icon {
     height: 100px;
     margin-top: 14px;
+  }
+  .task-progress-icon {
+    width: 25px;
   }
 }
 
@@ -184,14 +211,11 @@
     margin-top: 20px;
     height: 190px !important;
   }
-  .theme-block h1 {
-    font-size: 38px;
-  }
   .previous-slide-button, .next-slide-button {
     width: 60px;
   }
   .word-header-title h1, .word-body h1, .correct-text-block h3 {
-    font-size: 42px;
+    font-size: 40px;
   }
   .score-icon, .play-sound-icon, .counter-icon {
     height: 50px;
@@ -232,13 +256,17 @@
     font-size: 24px;
   }
   .confirm-popup {
-    margin-bottom: 68px;
+    margin-bottom: 61px;
   }
   .achievement-popup {
-    margin-bottom: 67px;
+    margin-bottom: 59px;
+  }
+  .task-done-complexity-icon {
+    margin-top: 25px;
+    margin-bottom: 25px;
   }
   .record-popup {
-    margin-bottom: 62px;
+    margin-bottom: 56px;
   }
   .record-popup .record-block {
     height: 95px;
@@ -247,48 +275,40 @@
   .record-popup span {
     font-size: 28px;
   }
+  .task-progress-icon {
+    width: 30px;
+  }
   .task {
-    width: 470px;
-    height: 110px;
+    width: 400px;
+    height: 85px;
   }
   .task h4 {
-    font-size: 22px;
-    line-height: 2em;
-  }
-  img.task-help-icon {
-    width: 60px;
-    padding-top: 17px;
+    font-size: 20px;
   }
   .progress-bar-block {
-    margin-left: 45px;
+    margin-left: 50px;
+    margin-top: 5px;
   }
-  img.progress-bar, img.progress-bar-line {
-    width: 170px;
+  img.progress-bar {
+    width: 190px;
   }
   .progress-bar-line-block {
-    height: 17px;
+    height: 19px;
   }
   .task-done-popup h4.task-done-popup-title, h4.task-done-complexity {
     font-size: 26px;
   }
-  h4.task-done-complexity {
-    margin-bottom: 54px;
-  }
   .task-popup h4 {
     font-size: 28px;
   }
-  .task-popup-icon {
-    height: 35px;
-  }
   .task-popup p {
-    height: 85px;
+    height: 90px;
     width: 400px; 
     font-size: 20px;
-    line-height: 1em;
   }
   .task-popup h3 {
     font-size: 26px;
-    margin-bottom: 14px;
+    margin-bottom: 2px;
   }
 }
 

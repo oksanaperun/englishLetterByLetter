@@ -41,7 +41,7 @@ angular.module('englishLetterByLetter')
 
     function setupSliderOptions() {
       $scope.data.sliderOptions = {
-        loop: true,
+        loop: false,
         initialSlide: 0,
         direction: 'horizontal',
         speed: 300
@@ -67,6 +67,10 @@ angular.module('englishLetterByLetter')
     $scope.setPreviousTheme = function () {
       $scope.data.sliderDelegate.slidePrev();
     };
+
+    $scope.setThemeName = function (themeName) {
+      $rootScope.themeName = themeName;
+    }
 
     $scope.$on('$ionicView.enter', function () {
       var currentTheme = $scope.themes[$scope.themeIndex],

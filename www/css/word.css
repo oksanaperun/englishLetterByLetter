@@ -13,7 +13,7 @@
  }
 
 .word-header {
-  height: 70px;
+  height: 65px;
 }
 .word-header-title {
   margin-top: -13px;
@@ -52,10 +52,10 @@
 .score-icon, .play-sound-icon, .counter-icon {
   height: 35px;
 }
-.play-sound-icon {
-  margin-top: 3px;
-}
 
+.word-body {
+  margin-bottom: -8px;
+}
 .word-body button {
   margin-top: 50%;
 }
@@ -152,17 +152,19 @@
 
 .correct-text-block h3 {
   color: #bd1984;
+  text-shadow: -1px 0 #f8d09f, 0 1px #f8d09f, 1px 0 #f8d09f, 0 -1px #f8d09f;
   font-size: 26px;
   font-weight: bold;
 }
 
 .record-popup {
   height: 150px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .record-popup h4 {
   margin-bottom: 0px;
+  line-height: 1.5em;
 }
 
 .record-popup .record-block {
@@ -181,13 +183,17 @@
   width: 30px;
   margin-right: 10px;
   vertical-align: middle;
-  box-shadow: 0px 0px 10px 5px rgb(120, 60, 49);
+  box-shadow: 0px 0px 10px 5px #f5e724;
   border-radius: 15px;
 }
 
 .record-popup span {
   font-size: 24px;
   font-weight: bold;
+}
+
+.record-popup .record span {
+  color: #f5e724;
   margin-left: 5px;
 }
 
@@ -197,24 +203,15 @@
   margin-top: -5px;
 }
 
-.task-done-popup p {
-  font-size: 16px;
-}
-
-h4.task-done-complexity {
-  font-size: 26px;
-  font-weight: bold;
-  margin-top: 18px;
-  margin-bottom: 26px;
-}
-
 .task-done-complexity-icon {
   width: 40px;
   vertical-align: middle;
+  margin-top: 8px;
+  margin-bottom: 13px;
 }
 
 .achievement-popup {
-  margin-bottom: 33px;
+  margin-bottom: 25px;
 }
 
 h4.achievement-popup-score {
@@ -224,6 +221,7 @@ h4.achievement-popup-score {
 
 .popup-stars-block {
   position: relative;
+  margin-top: 7px;
 }
 
 .popup-empty-star {

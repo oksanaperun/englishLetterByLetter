@@ -1,17 +1,12 @@
 <ion-view view-title="ЗАВДАННЯ">
-  <ion-nav-bar class="bar-stable" align-title="center">
-    <ion-nav-back-button class="button-icon ion-arrow-left-c">
-    </ion-nav-back-button>
-    <ion-nav-buttons side="right">
-      <p class="award">
-        {{diamondsCount}}
-        <img class="award-icon"
-          ng-src="img/icons/award_1.png"> 
-      </p>
-    </ion-nav-buttons>
-  </ion-nav-bar>
-
   <ion-content class="padding tasks" scroll="false">
+    <div class="tasks-progress">
+      <img class="task-progress-icon"
+           style="opacity: {{star.isDone == 1 ? 1 : 0.3}};"
+           ng-repeat="star in stars | orderBy : ['complexity', '-isDone']"
+           ng-src="img/icons/complexity_{{star.complexity}}.png">
+    </div>
+
     <div class="row">
       <div class="col col-10">
         <button class="previous-slide-button"
@@ -31,23 +26,16 @@
  
                     <div class="col col-20">
                       <img class="task-complexity-icon"
-                      style="opacity: {{task.isDone ? 0.4: 1}};"
-                      ng-src="img/icons/award_{{task.complexity}}.png">
+                           ng-src="img/icons/complexity_{{task.complexity}}.png">
                     </div>
                     <div class="col">
-                    <h4 style="opacity: {{task.isDone ? 0.4: 1}};">{{task.title}}</h4>
-                    <div class="progress-bar-block" style="opacity: {{task.isDone ? 0.4: 1}};">
+                    <h4>{{task.title}}</h4>
+                    <div class="progress-bar-block">
                       <img class="progress-bar" ng-src="img/icons/progress_bar.png">
                       <div class="progress-bar-line-block" style="width: {{task.progressPercentage}}%;">
                       </div>
                     </div>
                   </div>
-                  <div class="col col-20">
-                      <img class="task-help-icon"
-                      style="opacity: {{task.isDone ? 0.4: 1}};"
-                      ng-src="img/icons/help.png">
-                    </div>
-                  
                 </div>
               </div>
             </div>
