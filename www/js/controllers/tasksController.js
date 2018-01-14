@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-  .controller('TasksCtrl', function ($ionicPlatform, $scope, $rootScope, Utils, DB) {
+  .controller('TasksCtrl', function ($ionicPlatform, $scope, $rootScope, $timeout, Utils, DB) {
     $scope.data = {};
     $scope.data.currentPage = 0;
     $scope.data.sliderDelegate = null;
@@ -8,14 +8,26 @@ angular.module('englishLetterByLetter')
 
     if (window.cordova) {
       document.addEventListener('deviceready', function () {
-        setProgress();
-        setupSliderOptions();
+        loadAndSetupData();
       });
     } else {
       $ionicPlatform.ready(function () {
+        loadAndSetupData();
+      });
+    }
+
+    function loadAndSetupData() {
+      if (!$rootScope.chunkedTasks) {
+        Utils.setTasks();
+
+        $timeout(function () {
+          setProgress();
+          setupSliderOptions();
+        }, 500);
+      } else {
         setProgress();
         setupSliderOptions();
-      });
+      }
     }
 
     function setProgress() {
@@ -75,6 +87,7 @@ angular.module('englishLetterByLetter')
     }
 
     $scope.$on('$ionicView.enter', function () {
-      setProgress();
+      if ($rootScope.chunkedTasks && $rootScope.chunkedTasks.length > 0)
+        setProgress();
     });
   })

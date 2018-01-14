@@ -10,12 +10,19 @@ angular.module('englishLetterByLetter')
 
     if (window.cordova) {
       document.addEventListener('deviceready', function () {
-        getThemes();
+        loadData();
       });
     } else {
       $ionicPlatform.ready(function () {
-        getThemes();
+        loadData();
       });
+    }
+
+    function loadData() {
+      getThemes();
+
+      if (!$rootScope.chunkedTasks)
+        Utils.setTasks();
     }
 
     function getThemes() {
