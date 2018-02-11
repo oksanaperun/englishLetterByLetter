@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionicframework.englishletterbyletter" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Англійська по літерах. Їжа</name>
+    <name>Вчимо англійську - Їжа</name>
     <description>
-        Гра для складання слів і фраз англійської мови на тему "Їжа".
+        Гра для вивчення та складання слів і словосполучень англійської мови на тему "Їжа".
     </description>
     <author email="words.in.a.word@gmail.com">
       Oksana Perun
