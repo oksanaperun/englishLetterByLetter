@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-	.factory('Tasks', function ($rootScope, $timeout, $cordovaNativeAudio, App, DB, Utils, Firework) {
+	.factory('Tasks', function ($rootScope, $timeout, $cordovaNativeAudio, App, DB, Utils) {
 		return {
 			manageTasks: function (params) {
 				getDataAndManageTasks(params);
@@ -54,28 +54,11 @@ angular.module('englishLetterByLetter')
 				'<img class="task-done-complexity-icon" ng-src="img/icons/complexity_' + task.complexity + '.png">' +
 				'</div>';
 
-			if (window.cordova) $cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.wav');
+			if (window.cordova) {
+				$cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.mp3');
+				Utils.playSound('complete');
+			}
 			Utils.showAlert(popupBody);
-
-			$timeout(function () {
-				addCanvasElement();
-				Firework.init();
-			}, 200);
-
-			if (window.cordova) Utils.playSound('complete');
-		}
-
-		function addCanvasElement() {
-			var popupBody = document.getElementsByClassName('task-done-popup')[0].parentElement,
-				popupElement = popupBody.parentElement,
-				popupContainer = popupElement.parentElement,
-				canvasElement = document.createElement('canvas', { id: 'canvas' });
-
-			canvasElement.setAttribute('id', 'canvas');
-			canvasElement.style.position = 'absolute';
-			canvasElement.style.width = '100%';
-			canvasElement.style['z-index'] = 15;
-			popupContainer.insertBefore(canvasElement, popupElement);
 		}
 
 		function manageTasks(tasks, achievements, params) {
