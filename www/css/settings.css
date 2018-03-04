@@ -28,7 +28,7 @@
 
 .toggle .track {
   border-color: #9f4d34;
-  background-color: #7b2f154d;
+  background-color: rgba(123,47,21,0.5);
 }
 
 .toggle.toggle-calm input:checked + .track {

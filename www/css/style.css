@@ -164,7 +164,7 @@ a {
   height: 55px;
   font-size: 20px;
   font-weight: bold;
-  color: #530802;
+  color: #530802 !important;
   background-image: url('../img/buttons/ellipse.png');
   background-size: auto 100%;
   background-color: transparent;
@@ -174,7 +174,6 @@ a {
 }
 .popup-buttons .button-positive.activated {
   background-color: transparent;
-  color: #530802;
 }
 
 .confirm-popup {

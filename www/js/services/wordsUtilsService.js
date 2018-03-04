@@ -75,7 +75,7 @@ angular.module('englishLetterByLetter')
         var popupBody = WordsTmpl.getEndGamePopupBody(params.score, params.bestScore);
 
         Utils.showAlert(popupBody, params, showNewRecordPopup);
-        Utils.playSound('end');
+        if ($rootScope.userSettings.isSoundsOn) Utils.playSound('end');
       }
     }
 
@@ -109,7 +109,7 @@ angular.module('englishLetterByLetter')
         var popupBody = WordsTmpl.getNewRecordPopupBody(params);
 
         Utils.showAlert(popupBody, params, manageTasksAndGoBack);
-        Utils.playSound('record');
+        if ($rootScope.userSettings.isSoundsOn) Utils.playSound('record');
       } else manageTasksAndGoBack(params);
     }
 

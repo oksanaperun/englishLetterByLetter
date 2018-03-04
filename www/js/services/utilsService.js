@@ -110,7 +110,7 @@ angular.module('englishLetterByLetter')
         return score >= 15;
       },
       playSound: function (sound) {
-        if (window.cordova && $rootScope.userSettings.isSoundsOn)
+        if (window.cordova)
           $cordovaNativeAudio.play(sound);
       }
     }

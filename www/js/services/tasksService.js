@@ -55,7 +55,7 @@ angular.module('englishLetterByLetter')
 				'</div>';
 
 			Utils.showAlert(popupBody);
-			Utils.playSound('complete');
+			if ($rootScope.userSettings.isSoundsOn) Utils.playSound('complete');
 		}
 
 		function manageTasks(tasks, achievements, params) {

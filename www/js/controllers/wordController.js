@@ -244,7 +244,7 @@ angular.module('englishLetterByLetter')
       $scope.isComposed = $scope.displayCorrectLogo = true;
       WordsTmpl.setCorrectComposedWordStyle();
       hideCorrectComposedWordLogo();
-      Utils.playSound('correct');
+      if ($rootScope.userSettings.isSoundsOn) Utils.playSound('correct');
       if ($scope.modeId == 1) manageMode1Achievements();
       if ($scope.modeId == 2) manageMode2Achievements();
       if ($rootScope.userSettings.isAutoGoNext) setNextWordAutomatically($scope.currentIndex);
