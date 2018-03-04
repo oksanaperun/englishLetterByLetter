@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-	.factory('Tasks', function ($rootScope, $timeout, $cordovaNativeAudio, App, DB, Utils) {
+	.factory('Tasks', function ($rootScope, $timeout, App, DB, Utils) {
 		return {
 			manageTasks: function (params) {
 				getDataAndManageTasks(params);
@@ -54,11 +54,8 @@ angular.module('englishLetterByLetter')
 				'<img class="task-done-complexity-icon" ng-src="img/icons/complexity_' + task.complexity + '.png">' +
 				'</div>';
 
-			if (window.cordova) {
-				$cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.mp3');
-				Utils.playSound('complete');
-			}
 			Utils.showAlert(popupBody);
+			Utils.playSound('complete');
 		}
 
 		function manageTasks(tasks, achievements, params) {
@@ -98,7 +95,7 @@ angular.module('englishLetterByLetter')
 			handleWinPerThemeTask(keyWord, tasks[15], achievements);
 			handleWinsCountTask(keyWord, tasks[16], achievements);
 			handleWinsCountTask(keyWord + 'Time', tasks[17], achievements);
-			handleWinsCountTask(keyWord + 'Time', tasks[18], achievements);
+			handleWinPerThemeTask(keyWord + 'Time', tasks[18], achievements);
 			handleWinsCountTask(keyWord + 'Time', tasks[19], achievements);
 		}
 
@@ -178,4 +175,4 @@ angular.module('englishLetterByLetter')
 			}
 		}
 	})
-
+	

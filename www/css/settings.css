@@ -1,0 +1,43 @@
+.settings {
+  position: absolute;
+  top: 27%;
+}
+
+.setting-toggle {
+  margin: 0 auto;
+  width: 300px;
+  height: 65px;
+  line-height: 1.5em;
+  background-image: url('../img/frames/task.png');
+  background-size: 100% auto;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+}
+
+.setting-toggle span {
+  font-family: Alice;
+  font-size: 14px;
+  font-weight: bold;
+  color: #7b2f15;
+}
+
+.item-toggle .toggle {
+  top: 15px;
+}
+
+.toggle .track {
+  border-color: #9f4d34;
+  background-color: #7b2f154d;
+}
+
+.toggle.toggle-calm input:checked + .track {
+  border-color: #9f4d34;
+  background-color: #7b2f15;
+}
+
+.toggle .handle, .toggle input:checked + .track .handle,
+.toggle-small input:checked + .track .handle,
+.toggle-small .toggle-calm input:checked + .track .handle {
+  background-color: #fde3c8;
+}

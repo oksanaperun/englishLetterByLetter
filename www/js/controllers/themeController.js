@@ -21,6 +21,8 @@ angular.module('englishLetterByLetter')
     function loadData() {
       getThemes();
 
+      if (!$rootScope.userSettings)
+        Utils.setUserSettings();
       if (!$rootScope.chunkedTasks)
         Utils.setTasks();
     }

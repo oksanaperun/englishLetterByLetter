@@ -1,0 +1,16 @@
+<ion-view view-title="НАЛАШТУВАННЯ">
+  <ion-content class="settings">
+    <ion-toggle class="setting-toggle"
+                ng-model="autoGoNext"
+                ng-change="updateAutoGoNext(autoGoNext)"
+                toggle-class="toggle-calm">
+      Автоматично переходити далі
+    </ion-toggle>
+    <ion-toggle class="setting-toggle"
+                ng-model="soundsMode"
+                ng-change="updateSounds(soundsMode)"
+                toggle-class="toggle-calm">
+      Відтворювати звуки
+    </ion-toggle>
+  </ion-content>
+</ion-view>

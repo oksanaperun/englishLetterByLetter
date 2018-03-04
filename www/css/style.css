@@ -34,7 +34,7 @@
   display: none;
 }
 .bar-stable .button.back-button {
-  color: #ef944c;
+  color: #af662c;
 }
 
 .bar-header, .tabs {
@@ -97,7 +97,7 @@ a {
 .game-mode-icon {
   height: 100px;
 }
-.play-icon, .tasks-icon, .info-icon {
+.play-icon, .tasks-icon, .settings-icon {
   background-position: center;
   background-size: auto 100%;
   background-repeat: no-repeat;
@@ -108,8 +108,8 @@ a {
 .tasks-icon {
   background-image: url('../img/buttons/list.png');
 }
-.info-icon {
-  background-image: url('../img/buttons/info.png');
+.settings-icon {
+  background-image: url('../img/buttons/settings.png');
 }
 
 .swiper-pagination {
@@ -124,10 +124,12 @@ a {
   border: none;
 }
 .previous-slide-button {
-  background-image: url('../img/buttons/left.png'); 
+  background-image: url('../img/buttons/left.png');
+  float: left;
 }
 .next-slide-button {
   background-image: url('../img/buttons/right.png');
+  float: right;
 }
 
 .popup-container .popup {

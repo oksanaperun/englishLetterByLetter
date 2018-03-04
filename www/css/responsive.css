@@ -33,13 +33,13 @@
     height: 80px;
   }
   .composed-letter-buttons-block {
-    padding: 5px;
+    padding: 5px 5px 10px 5px;
   }
   .task {
     width: 290px;
     height: 65px;
   }
-  .task h4 {
+  .task h4, .setting-toggle span {
     font-size: 16px;
   }
   .progress-bar-block {
@@ -50,6 +50,14 @@
   }
   .progress-bar-line-block {
     height: 13px;
+  }
+  .setting-toggle {
+    width: 320px;
+    height: 70px;
+    line-height: 1.7em;
+  }
+  .item-toggle .toggle {
+    top: 17px;
   }
 }
 
@@ -111,7 +119,7 @@
     width: 340px;
     height: 70px;
   }
-  .task h4 {
+  .task h4, .setting-toggle span {
     font-size: 18px;
   }
   .progress-bar-block {
@@ -122,6 +130,14 @@
   }
   .progress-bar-line-block {
     height: 15px;
+  }
+  .setting-toggle {
+    width: 350px;
+    height: 75px;
+    line-height: 2.2em;
+  }
+  .item-toggle .toggle {
+    top: 20px;
   }
 }
 
@@ -282,7 +298,7 @@
     width: 400px;
     height: 85px;
   }
-  .task h4 {
+  .task h4, .setting-toggle span {
     font-size: 20px;
   }
   .progress-bar-block {
@@ -309,6 +325,14 @@
   .task-popup h3 {
     font-size: 26px;
     margin-bottom: 2px;
+  }
+  .setting-toggle {
+    width: 400px;
+    height: 90px;
+    line-height: 2.8em;
+  }
+  .item-toggle .toggle {
+    top: 25px;
   }
 }
 

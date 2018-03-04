@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-  .controller('WordCtrl', function($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform, 
+  .controller('WordCtrl', function ($scope, $rootScope, $stateParams, $state, $timeout, $ionicPlatform,
     $ionicPopup, $ionicHistory, $cordovaNativeAudio, Utils, DB, WordsTmpl, WordsUtils, App) {
     var maxWordsNumberInAGame = 15,
       maxLettersCountInARow = 13,
@@ -22,8 +22,8 @@ angular.module('englishLetterByLetter')
     if (window.cordova) {
       document.addEventListener('deviceready', function () {
         setSize();
+        preloadSounds();
         manageGameMode();
-        $cordovaNativeAudio.preloadSimple('correct', 'sounds/correct.wav');
       });
     } else {
       $ionicPlatform.ready(function () {
@@ -33,13 +33,13 @@ angular.module('englishLetterByLetter')
     }
 
     function setSize() {
-      var marginRight = 2;
+      var marginRight = $rootScope.viewHeight >= 360 ? 4 : 2;
 
       $scope.blockWidth = 750 > $rootScope.viewWidth ? $rootScope.viewWidth : 750;
       $scope.blockMarginLeft = $scope.blockWidth == 750 ? -Math.floor($scope.blockWidth / 2) : 0;
-      $scope.blockMarginTop =  $rootScope.viewHeight >= 500 ? -Math.floor($rootScope.viewHeight / 3) : 0;
+      $scope.blockMarginTop = $rootScope.viewHeight >= 500 ? -Math.floor($rootScope.viewHeight / 3) : 0;
       $scope.wordBodyButtonMarginTop = $stateParams.modeId == 1 ? '55%' : ($stateParams.modeId == 3 ? '25%' : '0px');
-      $scope.letterWidth = Math.floor($scope.blockWidth / maxLettersCountInARow) - marginRight;
+      $scope.letterWidth = Math.floor(($scope.blockWidth - 10) / maxLettersCountInARow) - marginRight;
       $scope.letterHeight = Math.floor($scope.letterWidth / 1.07);
     }
 
@@ -50,7 +50,7 @@ angular.module('englishLetterByLetter')
         getWordsByThemeId();
       if ($stateParams.modeId == 2) {
         $scope.hasSound = 0;
-        getPhrasesByThemeId(); 
+        getPhrasesByThemeId();
       }
       if ($stateParams.modeId == 3) {
         $scope.hasSound = 0;
@@ -60,22 +60,29 @@ angular.module('englishLetterByLetter')
       getAchievements();
     }
 
-    $rootScope.$ionicGoBack = function() {
+    function preloadSounds() {
+      $cordovaNativeAudio.preloadSimple('correct', 'sounds/correct.mp3');
+      $cordovaNativeAudio.preloadSimple('end', 'sounds/end.mp3');
+      $cordovaNativeAudio.preloadSimple('record', 'sounds/record.mp3');
+      $cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.mp3');
+    }
+
+    $rootScope.$ionicGoBack = function () {
       if ($ionicHistory.backView().stateName === 'tab.theme') {
         WordsUtils.showConfirmLeavePopup();
       } else $ionicHistory.goBack();
     };
 
-    $scope.$on('$destroy', function() {
+    $scope.$on('$destroy', function () {
       stopTimer();
       WordsTmpl.displayTabs();
     });
 
-    $scope.playSound = function() {
+    $scope.playSound = function () {
       Utils.playSound($scope.word.name);
     }
 
-    $scope.moveLetter = function(letter, letterIndex) {
+    $scope.moveLetter = function (letter, letterIndex) {
       var firstSpaceIndex = WordsUtils.getFirstUnknownLetter($scope.composedNameLetters);
 
       if (firstSpaceIndex > -1) {
@@ -85,7 +92,7 @@ angular.module('englishLetterByLetter')
       }
     };
 
-    $scope.moveLetterBack = function(letterIndex) {
+    $scope.moveLetterBack = function (letterIndex) {
       var originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
 
       if (originalLetterIndex > -1) {
@@ -95,7 +102,7 @@ angular.module('englishLetterByLetter')
       }
     };
 
-    $scope.checkComposedWord = function() {
+    $scope.checkComposedWord = function () {
       $scope.composedName = '';
       var nameToCompare = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name;
 
@@ -107,18 +114,18 @@ angular.module('englishLetterByLetter')
         handleCorrectComposedWord();
     };
 
-    $scope.clearComposedWord = function() {
+    $scope.clearComposedWord = function () {
       WordsTmpl.clearComposedWord();
 
       for (var i = 0; i < $scope.composedNameLetters.length; i++) {
         var isLetterUnknown = !$scope.composedNameLetters[i].isDefault && $scope.composedNameLetters[i].symbol != '_';
 
         if (isLetterUnknown)
-          $scope.composedNameLetters[i].symbol = '?'; 
+          $scope.composedNameLetters[i].symbol = '?';
       }
     }
 
-    $scope.setNextWord = function() {
+    $scope.setNextWord = function () {
       $scope.currentIndex++;
 
       if ($scope.currentIndex == $scope.words.length || $scope.currentIndex == $scope.phrases.length)
@@ -138,7 +145,7 @@ angular.module('englishLetterByLetter')
       $timeout(function () {
         if ($scope.currentIndex == composedWordIndex)
           WordsTmpl.triggerClickOnNextButton();
-      }, 1000);
+      }, 600);
     }
 
     function getWordsByThemeId() {
@@ -191,6 +198,7 @@ angular.module('englishLetterByLetter')
       $scope.word = $scope.words[$scope.currentIndex];
       $scope.shuffledName = WordsUtils.getShuffledName($scope.modeId, maxLettersCountInARow, $scope.word.name);
       $scope.composedNameLetters = WordsUtils.getInitialComposedName($scope.word.name);
+      var previousWord = $scope.words[$scope.currentIndex - 1];
 
       if ($stateParams.modeId == 1) {
         $scope.hasSound = $scope.word.hasSound;
@@ -199,6 +207,9 @@ angular.module('englishLetterByLetter')
           var soundFileLocation = 'sounds/' + $scope.word.themeId + '/' + $scope.word.name + '.mp3';
 
           $cordovaNativeAudio.preloadSimple($scope.word.name, soundFileLocation);
+        }
+        if (window.cordova && previousWord && previousWord.hasSound) {
+          $cordovaNativeAudio.unload(previousWord.name);
         }
       }
     }
@@ -233,10 +244,10 @@ angular.module('englishLetterByLetter')
       $scope.isComposed = $scope.displayCorrectLogo = true;
       WordsTmpl.setCorrectComposedWordStyle();
       hideCorrectComposedWordLogo();
-      if (window.cordova) Utils.playSound('correct');
+      Utils.playSound('correct');
       if ($scope.modeId == 1) manageMode1Achievements();
       if ($scope.modeId == 2) manageMode2Achievements();
-      if ($scope.modeId == 3) setNextWordAutomatically($scope.currentIndex);
+      if ($rootScope.userSettings.isAutoGoNext) setNextWordAutomatically($scope.currentIndex);
     }
 
     function manageMode1Achievements() {
@@ -261,7 +272,7 @@ angular.module('englishLetterByLetter')
         isWin = $scope.modeId != 2 ? $scope.score == $scope.words.length : $scope.score == $scope.phrases.length,
         isTimeWin = isWin ? (gameTime <= 120 && gameTime > 0 ? true : false) : false,
         isScoreRecord = $scope.achievements[keyWord + 'MaxScore'] < $scope.score,
-        isTimeRecord = isTimeWin  ? $scope.achievements.questionsMinTime > gameTime : false,
+        isTimeRecord = isTimeWin ? $scope.achievements.questionsMinTime > gameTime : false,
         maxScore = isScoreRecord ? $scope.score : $scope.achievements[keyWord + 'MaxScore'],
         minTime = isTimeRecord ? gameTime : $scope.achievements.questionsMinTime;
 
@@ -295,7 +306,7 @@ angular.module('englishLetterByLetter')
       $scope.counterInMinutes = Math.floor($scope.counter / 60);
       currentTimeout = $timeout(setTimer, 1000);
     };
- 
+
     function stopTimer() {
       $scope.$broadcast('timer-stopped', $scope.counter);
       $scope.counter = 0;

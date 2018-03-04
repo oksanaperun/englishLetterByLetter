@@ -82,12 +82,12 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
         }
       })
 
-  .state('tab.help', {
-    url: '/help',
+  .state('tab.settings', {
+    url: '/settings',
     views: {
-      'tab-help': {
-        templateUrl: 'templates/tab-help.html',
-        controller: 'HelpCtrl'
+      'tab-settings': {
+        templateUrl: 'templates/tab-settings.html',
+        controller: 'SettingsCtrl'
       }
     }
   });

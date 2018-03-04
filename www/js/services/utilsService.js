@@ -15,6 +15,13 @@ angular.module('englishLetterByLetter')
         $rootScope.viewWidth = $window.innerWidth;
         $rootScope.viewHeight = $window.innerHeight;
       },
+      setUserSettings: function () {
+        DB.selectUserSettings().then(function (res) {
+          $rootScope.userSettings = res.rows.item(0);
+        }, function (err) {
+          console.error(err);
+        });
+      },
       setTasks: function () {
         $rootScope.chunkedTasks = [];
         var tasks = [];
@@ -103,9 +110,8 @@ angular.module('englishLetterByLetter')
         return score >= 15;
       },
       playSound: function (sound) {
-        if (window.cordova) {
+        if (window.cordova && $rootScope.userSettings.isSoundsOn)
           $cordovaNativeAudio.play(sound);
-        }
       }
     }
 

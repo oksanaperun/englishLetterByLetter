@@ -127,7 +127,7 @@
   background-color: transparent;
   background-repeat: no-repeat;
   border: none;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 .decorated-button {
@@ -162,13 +162,18 @@
   margin-bottom: 18px;
 }
 
+.record-popup h3 {
+  margin-bottom: 5px;
+}
+
 .record-popup h4 {
+  margin-top: 5px;
   margin-bottom: 0px;
-  line-height: 1.5em;
+  line-height: 1.4em;
 }
 
 .record-popup .record-block {
-  height: 73px;
+  height: 75px;
   width: 280px;
   display: table-cell;
   vertical-align: middle;
@@ -176,7 +181,8 @@
 
 .record-popup h4.record {
   text-align: left;
-  margin-left: 30%;
+  margin-left: 35%;
+  line-height: 1em;
 }
 
 .record-popup .star-icon, .record-popup .clock-icon {
