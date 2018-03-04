@@ -182,10 +182,10 @@ angular.module('englishLetterByLetter')
         '<h4>Новий рекорд по темі <span>“' +
         params.themeName + '”</span></h4><div class="record-block">',
         scoreAchievementHTML = params.scoreRecord ?
-          '<h4 class="record"><img class="star-icon" ng-src="img/icons/star.png"><span>' +
+          '<h4 class="record"><img class="star-icon" ng-src="img/icons/record_star.png"><span>' +
           params.scoreRecord + '</span> ' + getEndTextForScoreRecord(params.scoreRecord) + '</h4>' : '',
         timeAchievementHTML = params.timeRecord ?
-          '<h4 class="record"><img class="clock-icon" ng-src="img/icons/clock.png">' +
+          '<h4 class="record"><img class="clock-icon" ng-src="img/icons/record_clock.png">' +
           '<span>' + Math.floor(params.timeRecord / 60) + '</span> хв' +
           '<span>' + params.timeRecord % 60 + '</span> с</h4>' : '',
         endHTML = '</div></div>';
