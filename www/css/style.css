@@ -76,6 +76,12 @@ a {
 .tab-item .icon {
   height: 45px;
 }
+.tab-item.tab-item-active {
+  opacity: 0.5;
+}
+.tab-item:not(.tab-item-active) {
+  opacity: 1;
+}
 
 .game-modes, .word, .achievement-popup {
   text-align: center;

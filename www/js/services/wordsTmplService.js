@@ -179,7 +179,7 @@ angular.module('englishLetterByLetter')
     function getNewRecordPopupBody(params) {
       var beginHTML = '<div class="record-popup">' +
         '<h3>' + App.getCheerfulWord() + '!</h3>' +
-        '<h4>Новий рекорд по темі <span>“' +
+        '<h4>Новий рекорд по темі<br><span>“' +
         params.themeName + '”</span></h4><div class="record-block">',
         scoreAchievementHTML = params.scoreRecord ?
           '<h4 class="record"><img class="star-icon" ng-src="img/icons/record_star.png"><span>' +

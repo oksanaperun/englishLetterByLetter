@@ -222,7 +222,7 @@ angular.module('englishLetterByLetter')
     }
 
     function openDefaultLettersInComposedName(name) {
-      var letterCountToDisplay = Math.floor(name.replace('_', '').length / 2);
+      var letterCountToDisplay = Math.floor(name.replace(/_/g, '').length / 2);
 
       for (var i = 0; i < letterCountToDisplay; i++) {
         var randomIndex, symbol;
@@ -230,7 +230,7 @@ angular.module('englishLetterByLetter')
         do {
           randomIndex = WordsUtils.getRandomIndex(name);
           symbol = $scope.composedNameLetters[randomIndex].symbol;
-        } while (symbol != '?' && symbol != '_')
+        } while (symbol != '?')
 
         $scope.composedNameLetters[randomIndex].symbol = name[randomIndex];
         $scope.composedNameLetters[randomIndex].isDefault = true;

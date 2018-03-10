@@ -19,7 +19,8 @@
       </div>
       <div class="col col-20 play-sound-counter">
         <img class="play-sound-icon"
-             ng-if="hasSound"
+             style="opacity: {{hasSound ? 1 : 0.5}};"
+             ng-if="modeId==1"
              ng-disabled="hasSound" 
              ng-click="playSound()"
              ng-src="img/icons/sound.png">
