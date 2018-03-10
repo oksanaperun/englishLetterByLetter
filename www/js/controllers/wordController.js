@@ -181,7 +181,6 @@ angular.module('englishLetterByLetter')
     function getAchievements() {
       DB.selectAchievementsByThemeId($stateParams.themeId).then(function (res) {
         $scope.achievements = res.rows.item(0);
-        console.log($scope.achievements);
       }, function (err) {
         console.error(err);
       });

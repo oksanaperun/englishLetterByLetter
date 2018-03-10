@@ -59,44 +59,30 @@ angular.module('englishLetterByLetter')
 		}
 
 		function manageTasks(tasks, achievements, params) {
-			handleGamesCountTask(tasks[0], achievements);
-			handleWordsTasks(tasks, achievements, params);
-			handlePhrasesTasks(tasks, achievements, params);
-			handleQuestionsTasks(tasks, achievements)
+			for (var i = 0; i < tasks.length; i++)
+				taskMappingPerType(tasks[i], achievements, params)
 		}
 
-		function handleWordsTasks(tasks, achievements, params) {
-			var keyWord = $rootScope.gameModes[0].keyWord;
-
-			handleItemsCountTask(keyWord, tasks[1], achievements);
-			handleItemsWithConditionCountTask(keyWord, tasks[2], params.wordsCountWithLength7);
-			handleItemsWithConditionCountTask(keyWord, tasks[3], params.wordsCountStartingWithLetter);
-			handleWinsCountTask(keyWord, tasks[4], achievements);
-			handleWinPerThemeTask(keyWord, tasks[5], achievements);
-			handleWinsCountTask(keyWord, tasks[6], achievements);
-		}
-
-		function handlePhrasesTasks(tasks, achievements, params) {
-			var keyWord = $rootScope.gameModes[1].keyWord;
-
-			handleItemsCountTask(keyWord, tasks[7], achievements);
-			handleItemsWithConditionCountTask(keyWord, tasks[8], params.phrasesCountWithThreeWords);
-			handleItemsWithConditionCountTask(keyWord, tasks[9], params.phrasesCountStartingWithLetter);
-			handleWinsCountTask(keyWord, tasks[10], achievements);
-			handleWinPerThemeTask(keyWord, tasks[11], achievements);
-			handleWinsCountTask(keyWord, tasks[12], achievements);
-		}
-
-		function handleQuestionsTasks(tasks, achievements) {
-			var keyWord = $rootScope.gameModes[2].keyWord;
-
-			handleItemsCountTask(keyWord, tasks[13], achievements);
-			handleWinsCountTask(keyWord, tasks[14], achievements);
-			handleWinPerThemeTask(keyWord, tasks[15], achievements);
-			handleWinsCountTask(keyWord, tasks[16], achievements);
-			handleWinsCountTask(keyWord + 'Time', tasks[17], achievements);
-			handleWinPerThemeTask(keyWord + 'Time', tasks[18], achievements);
-			handleWinsCountTask(keyWord + 'Time', tasks[19], achievements);
+		function taskMappingPerType(task, achievements, params) {
+			switch (task.taskType) {
+				case 1:
+					handleGamesCountTask(task, achievements);
+					break;
+				case 2:
+					handleItemsCountTask(task, achievements);
+					break;
+				case 3:
+					handleItemsWithConditionCountTask(task, params);
+					break;
+				case 4:
+					handleWinsCountTask(task, achievements);
+					break;
+				case 5:
+					handleWinPerThemeTask(task, achievements);
+					break;
+				default:
+					throw new Error('Task type [' + task.type + '] is not supported');
+			}
 		}
 
 		function handleGamesCountTask(task, achievements) {
@@ -122,12 +108,12 @@ angular.module('englishLetterByLetter')
 			}
 		}
 
-		function handleItemsCountTask(keyWord, task, achievements) {
+		function handleItemsCountTask(task, achievements) {
 			if (!task.isDone) {
 				var itemsCount = 0;
 
 				for (var i = 0; i < achievements.length; i++)
-					itemsCount += achievements[i][keyWord + 'Count'];
+					itemsCount += achievements[i][task.keyWord + 'Count'];
 
 				var progress = itemsCount > task.count ? task.count : itemsCount,
 					isDone = progress === task.count;
@@ -137,9 +123,9 @@ angular.module('englishLetterByLetter')
 			}
 		}
 
-		function handleItemsWithConditionCountTask(keyWord, task, currentGameCount) {
+		function handleItemsWithConditionCountTask(task, params) {
 			if (!task.isDone) {
-				var itemsCount = task.progress + currentGameCount,
+				var itemsCount = task.progress + params[conditionTypeMapping(task.conditionType)],
 					progress = itemsCount > task.count ? task.count : itemsCount,
 					isDone = progress === task.count;
 
@@ -148,12 +134,27 @@ angular.module('englishLetterByLetter')
 			}
 		}
 
-		function handleWinsCountTask(keyWord, task, achievements) {
+		function conditionTypeMapping(conditionType) {
+			switch (conditionType) {
+				case 1:
+					return 'wordsCountWithLength7';
+				case 2:
+					return 'wordsCountStartingWithLetter';
+				case 3:
+					return 'phrasesCountWithThreeWords';
+				case 4:
+					return 'phrasesCountStartingWithLetter';
+				default:
+					throw new Error('Task condition type [' + conditionType + '] is not supported');
+			}
+		}
+
+		function handleWinsCountTask(task, achievements) {
 			if (!task.isDone) {
 				var winsCount = 0;
 
 				for (var i = 0; i < achievements.length; i++)
-					winsCount += achievements[i][keyWord + 'WinCount'];
+					winsCount += achievements[i][task.keyWord + 'WinCount'];
 
 				var progress = winsCount > task.count ? task.count : winsCount,
 					isDone = progress === task.count;
@@ -163,12 +164,12 @@ angular.module('englishLetterByLetter')
 			}
 		}
 
-		function handleWinPerThemeTask(keyWord, task, achievements) {
+		function handleWinPerThemeTask(task, achievements) {
 			if (!task.isDone) {
 				var winPerTheme = 0;
 
 				for (var i = 0; i < achievements.length; i++)
-					if (achievements[i][keyWord + 'WinCount'] > 0) winPerTheme++;
+					if (achievements[i][task.keyWord + 'WinCount'] > 0) winPerTheme++;
 
 				updateTask(task.id, winPerTheme, winPerTheme === task.count);
 				if (winPerTheme === task.count) showTaskIsDonePopup(task);
