@@ -3,7 +3,7 @@
     <div class="tasks-progress">
       <img class="task-progress-icon"
            style="opacity: {{star.isDone == 1 ? 1 : 0.3}};"
-           ng-repeat="star in stars | orderBy : ['-isDone']"
+           ng-repeat="star in stars"
            ng-src="img/icons/complexity_{{star.complexity}}.png">
     </div>
 
