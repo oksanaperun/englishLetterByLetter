@@ -87,6 +87,7 @@ angular.module('englishLetterByLetter')
 
       if (firstSpaceIndex > -1) {
         WordsTmpl.moveLetter(letterIndex, firstSpaceIndex);
+        hideHint();
         $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
         $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
       }
@@ -97,6 +98,7 @@ angular.module('englishLetterByLetter')
 
       if (originalLetterIndex > -1) {
         WordsTmpl.moveLetterBack(letterIndex, originalLetterIndex);
+        hideHint();
         $scope.composedNameLetters[letterIndex].symbol = '?';
         $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
       }
@@ -134,6 +136,7 @@ angular.module('englishLetterByLetter')
     }
 
     function handleNextWord() {
+      hideHint();
       if ($scope.modeId == 1 || $scope.modeId == 3) setWordData();
       else setPhraseData();
 
@@ -312,4 +315,88 @@ angular.module('englishLetterByLetter')
       $scope.counterInMinutes = 0;
       $timeout.cancel(currentTimeout);
     };
+
+    $scope.showHint = function () {
+      $scope.hintParams = {};
+      var originalName = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name,
+        firstWrongLetterIndex = getFirstWrongLetterIndex(originalName),
+        firstUnknowLetterIndex = WordsUtils.getFirstUnknownLetter($scope.composedNameLetters);
+
+      console.log('firstWrongLetterIndex=' + firstWrongLetterIndex);
+      console.log('firstUnknowLetterIndex=' + firstUnknowLetterIndex);
+
+      if (firstUnknowLetterIndex > -1 && (firstWrongLetterIndex == -1 || firstUnknowLetterIndex < firstWrongLetterIndex))
+        $scope.hintParams = getHintParams(originalName, firstUnknowLetterIndex);
+      if (firstWrongLetterIndex > -1 && (firstUnknowLetterIndex == -1 || firstWrongLetterIndex < firstUnknowLetterIndex))
+        $scope.hintParams = getHintParams(originalName, firstWrongLetterIndex);
+
+      WordsTmpl.addHighlightForLetters($scope.hintParams);
+    }
+
+    function getFirstWrongLetterIndex(originalName) {
+      var firstIndexWithWrongLetter = -1;
+
+      for (var i = 0; i < $scope.composedNameLetters.length; i++)
+        if ($scope.composedNameLetters[i].symbol != '?' && $scope.composedNameLetters[i].symbol != originalName[i]) {
+          firstIndexWithWrongLetter = i;
+          break;
+        }
+
+      return firstIndexWithWrongLetter;
+    }
+
+    function getHintParams(originalName, indexToPutLetter) {
+      var correctLetter = originalName[indexToPutLetter],
+        letterIndexInLetterButtonsBlock = getLetterIndexInLetterButtonsBlock(correctLetter),
+        params = {};
+      console.log('correctLetter=' + correctLetter);
+      params.indexToPutLetter = indexToPutLetter;
+
+      if (letterIndexInLetterButtonsBlock > -1)
+        params.indexToTakeLetterInLettersBlock = letterIndexInLetterButtonsBlock;
+      else {
+        var letterIndexInComposedLetterButtonsBlock = getLetterIndexInComposedLetterButtonsBlock(correctLetter, indexToPutLetter + 1);
+
+        params.indexToTakeLetterInComposedLettersBlock = letterIndexInComposedLetterButtonsBlock;
+      }
+
+      console.log(params);
+      return params;
+    }
+
+    function getLetterIndexInLetterButtonsBlock(letter) {
+      var letterIndex = -1,
+        usedLetterIndexesInShuffledName = [];
+
+      for (var i = 0; i < $scope.composedNameLetters.length; i++)
+        if ($scope.composedNameLetters[i].originalLetterIndex > -1)
+          usedLetterIndexesInShuffledName.push($scope.composedNameLetters[i].originalLetterIndex);
+
+      for (var i = 0; i < $scope.shuffledName.length; i++)
+        if ($scope.shuffledName[i] == letter && usedLetterIndexesInShuffledName.indexOf(i) == -1) {
+          letterIndex = i;
+          break;
+        }
+
+      return letterIndex;
+    }
+
+    function getLetterIndexInComposedLetterButtonsBlock(letter, indexToStartSearch) {
+      var letterIndex = -1;
+
+      for (var i = indexToStartSearch; i < $scope.composedNameLetters.length; i++)
+        if ($scope.composedNameLetters[i].symbol == letter) {
+          letterIndex = i;
+          break;
+        }
+
+      return letterIndex;
+    }
+
+    function hideHint() {
+      if ($scope.hintParams) {
+        WordsTmpl.removeHighlightForLetters($scope.hintParams);
+        $scope.hintParams = null;
+      }
+    }
   });

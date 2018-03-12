@@ -55,6 +55,20 @@ angular.module('englishLetterByLetter')
       },
       getNewRecordPopupBody: function (params) {
         return getNewRecordPopupBody(params);
+      },
+      addHighlightForLetters: function (params) {
+        var placeToPutLetter = getComposedLetterButtonByIndex(params.indexToPutLetter),
+          placeToTakeLetter = getPlaceToTakeLetter(params);
+
+        placeToPutLetter.classList.add('place-to-put-letter');
+        placeToTakeLetter.classList.add('place-to-take-letter');
+      },
+      removeHighlightForLetters: function (params) {
+        var placeToPutLetter = getComposedLetterButtonByIndex(params.indexToPutLetter),
+          placeToTakeLetter = getPlaceToTakeLetter(params);
+
+        placeToPutLetter.classList.remove('place-to-put-letter');
+        placeToTakeLetter.classList.remove('place-to-take-letter');
       }
     }
 
@@ -137,8 +151,16 @@ angular.module('englishLetterByLetter')
       return document.getElementsByClassName('letter-button');
     }
 
+    function getLetterButtonByIndex(index) {
+      return document.getElementsByClassName('letter-button')[index];
+    }
+
     function getComposedLetterButtons() {
       return document.getElementsByClassName('composed-letter-button');
+    }
+
+    function getComposedLetterButtonByIndex(index) {
+      return document.getElementsByClassName('composed-letter-button')[index];
     }
 
     function getClearButton() {
@@ -207,5 +229,11 @@ angular.module('englishLetterByLetter')
         default:
           return 'очок';
       }
+    }
+
+    function getPlaceToTakeLetter(params) {
+      if (params.indexToTakeLetterInLettersBlock != undefined)
+        return getLetterButtonByIndex(params.indexToTakeLetterInLettersBlock);
+      else return getComposedLetterButtonByIndex(params.indexToTakeLetterInComposedLettersBlock);
     }
   })
