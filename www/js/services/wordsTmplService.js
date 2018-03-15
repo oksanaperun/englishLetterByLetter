@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-  .factory('WordsTmpl', function (App, Utils) {
+  .factory('WordsTmpl', function ($rootScope, App, Utils) {
     return {
       hideTabs: function () {
         var tabs = getTabsElement();
@@ -69,6 +69,20 @@ angular.module('englishLetterByLetter')
 
         placeToPutLetter.classList.remove('place-to-put-letter');
         placeToTakeLetter.classList.remove('place-to-take-letter');
+      },
+      getHintBlockBackgroundImage: function () {
+        var backgroundImage = 'none;';
+
+        if ($rootScope.hintCounter > 1 && $rootScope.hintCounter < 30)
+          backgroundImage = 'linear-gradient(' + ($rootScope.hintCounter * 6 + 90) +
+            'deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%)';
+        if ($rootScope.hintCounter == 30)
+          backgroundImage = 'linear-gradient(90deg, white 50%, transparent 50%)';
+        if ($rootScope.hintCounter > 30 && $rootScope.hintCounter < 60)
+          backgroundImage = 'linear-gradient(' + ($rootScope.hintCounter * 6 - 90) +
+            'deg, transparent 50%, #cf7631 50%), linear-gradient(90deg, white 50%, transparent 50%)';
+  
+        return backgroundImage;
       }
     }
 

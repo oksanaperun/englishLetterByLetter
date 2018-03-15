@@ -7,6 +7,7 @@ angular.module('englishLetterByLetter.controllers', [])
 		$scope.modesHeight = getModesBlockHeight();
 		$scope.modesMarginTop = Math.floor(($rootScope.viewHeight - $rootScope.topPanelHeigth -
 			$rootScope.bottomPanelHeight - $scope.modesHeight) / 2);
+		$rootScope.hintCounter = null;
 
 		function getModesBlockHeight() {
 			if ($rootScope.viewHeight < 360) {

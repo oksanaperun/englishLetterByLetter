@@ -78,6 +78,13 @@ angular.module('englishLetterByLetter')
       WordsTmpl.displayTabs();
     });
 
+    $scope.$watch('$root.hintCounter', function() {
+      console.log('$root.hintCounter changed');
+      $scope.hintBlockStyle = {
+        "background-image" : WordsTmpl.getHintBlockBackgroundImage()
+      };
+    });
+
     $scope.playSound = function () {
       Utils.playSound($scope.word.name);
     }
@@ -317,6 +324,8 @@ angular.module('englishLetterByLetter')
     };
 
     $scope.showHint = function () {
+      Utils.setHintTimer();
+
       $scope.hintParams = {};
       var originalName = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name,
         firstWrongLetterIndex = getFirstWrongLetterIndex(originalName),
@@ -326,11 +335,11 @@ angular.module('englishLetterByLetter')
       console.log('firstUnknowLetterIndex=' + firstUnknowLetterIndex);
 
       if (firstUnknowLetterIndex > -1 && (firstWrongLetterIndex == -1 || firstUnknowLetterIndex < firstWrongLetterIndex))
-        $scope.hintParams = getHintParams(originalName, firstUnknowLetterIndex);
+          $scope.hintParams = getHintParams(originalName, firstUnknowLetterIndex);
       if (firstWrongLetterIndex > -1 && (firstUnknowLetterIndex == -1 || firstWrongLetterIndex < firstUnknowLetterIndex))
-        $scope.hintParams = getHintParams(originalName, firstWrongLetterIndex);
-
-      WordsTmpl.addHighlightForLetters($scope.hintParams);
+          $scope.hintParams = getHintParams(originalName, firstWrongLetterIndex);
+      if ($scope.hintParams.indexToPutLetter != undefined)
+        WordsTmpl.addHighlightForLetters($scope.hintParams);
     }
 
     function getFirstWrongLetterIndex(originalName) {

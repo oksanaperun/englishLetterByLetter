@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter')
 
-  .factory('Utils', function ($rootScope, $ionicPopup, $ionicHistory, $window, $cordovaNativeAudio, DB) {
+  .factory('Utils', function ($rootScope, $ionicPopup, $ionicHistory, $window, $cordovaNativeAudio, $timeout, DB) {
     return {
       setGameModes: function () {
         $rootScope.gameModes = [
@@ -112,6 +112,9 @@ angular.module('englishLetterByLetter')
       playSound: function (sound) {
         if (window.cordova)
           $cordovaNativeAudio.play(sound);
+      },
+      setHintTimer: function () {
+        setHintTimer();
       }
     }
 
@@ -124,4 +127,17 @@ angular.module('englishLetterByLetter')
 
       return newArr;
     }
+
+    function setHintTimer() {
+      $rootScope.hintCounter++;
+      console.log('hint counter = ' + $rootScope.hintCounter);
+      if ($rootScope.hintCounter == 61) stopHintTimer();
+      else $rootScope.hintTimeout = $timeout(setHintTimer, 1000);
+    };
+
+    function stopHintTimer() {
+      $rootScope.$broadcast('timer-stopped', $rootScope.hintCounter);
+      $rootScope.hintCounter = 0;
+      $timeout.cancel($rootScope.hintTimeout);
+    };
   })

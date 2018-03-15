@@ -3,9 +3,11 @@
     <ion-nav-back-button class="button back-button">
     </ion-nav-back-button>
     <ion-nav-buttons side="right">
-      <button class="hint-icon" ng-click="showHint()">
-        Hint
-      </button>
+      <div class="hint-block" ng-style="hintBlockStyle">
+        <img class="hint-icon" 
+             ng-src="img/icons/magic_wand.png"
+             ng-click="showHint()">
+      </div>
     </ion-nav-buttons>
   </ion-nav-bar>
 
