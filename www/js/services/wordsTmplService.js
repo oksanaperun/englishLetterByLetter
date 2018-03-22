@@ -12,21 +12,22 @@ angular.module('englishLetterByLetter')
 
         tabs.style.display = '';
       },
-      moveLetter: function (letterIndex, firstSpaceIndex) {
-        var letterButtons = getLetterButtons(),
-          composedLetterButtons = getComposedLetterButtons();
+      moveLetter: function (letterIndex, firstSpaceIndex, isHint) {
+        var letterButton = getLetterButtonByIndex(letterIndex),
+          composedLetterButton = getComposedLetterButtonByIndex(firstSpaceIndex);
 
-        letterButtons[letterIndex].setAttribute('disabled', 'disabled');
-        letterButtons[letterIndex].style.opacity = 0;
-        composedLetterButtons[firstSpaceIndex].classList.add('decorated-button');
+        letterButton.setAttribute('disabled', 'disabled');
+        letterButton.style.opacity = 0;
+        if (isHint) composedLetterButton.classList.add('decorated-button', 'hint-letter-button');
+        else composedLetterButton.classList.add('decorated-button');
       },
       moveLetterBack: function (letterIndex, originalLetterIndex) {
-        var letterButtons = getLetterButtons(),
-          composedLetterButtons = getComposedLetterButtons();
+        var letterButton = getLetterButtonByIndex(originalLetterIndex),
+          composedLetterButton = getComposedLetterButtonByIndex(letterIndex);
 
-        letterButtons[originalLetterIndex].removeAttribute('disabled');
-        letterButtons[originalLetterIndex].style.opacity = 1;
-        composedLetterButtons[letterIndex].classList.remove('decorated-button');
+        letterButton.removeAttribute('disabled');
+        letterButton.style.opacity = 1;
+        composedLetterButton.classList.remove('decorated-button');
       },
       clearComposedWord: function () {
         removeComposedLetterButtonsDecoration();
@@ -56,19 +57,9 @@ angular.module('englishLetterByLetter')
       getNewRecordPopupBody: function (params) {
         return getNewRecordPopupBody(params);
       },
-      addHighlightForLetters: function (params) {
-        var placeToPutLetter = getComposedLetterButtonByIndex(params.indexToPutLetter),
-          placeToTakeLetter = getPlaceToTakeLetter(params);
-
-        placeToPutLetter.classList.add('place-to-put-letter');
-        placeToTakeLetter.classList.add('place-to-take-letter');
-      },
-      removeHighlightForLetters: function (params) {
-        var placeToPutLetter = getComposedLetterButtonByIndex(params.indexToPutLetter),
-          placeToTakeLetter = getPlaceToTakeLetter(params);
-
-        placeToPutLetter.classList.remove('place-to-put-letter');
-        placeToTakeLetter.classList.remove('place-to-take-letter');
+      disableAllLetterButtons: function () {
+        disableComposedLetterButtons();
+        disableLetterButtons();
       },
       getHintBlockBackgroundImage: function () {
         var backgroundImage = 'none;';
@@ -81,7 +72,7 @@ angular.module('englishLetterByLetter')
         if ($rootScope.hintCounter > 30 && $rootScope.hintCounter < 60)
           backgroundImage = 'linear-gradient(' + ($rootScope.hintCounter * 6 - 90) +
             'deg, transparent 50%, #cf7631 50%), linear-gradient(90deg, white 50%, transparent 50%)';
-  
+
         return backgroundImage;
       }
     }
@@ -89,31 +80,29 @@ angular.module('englishLetterByLetter')
     function enableComposedLetterButtons() {
       var composedLetterButtons = getComposedLetterButtons();
 
-      for (var i = 0; i < composedLetterButtons.length; i++) {
-        var composedLetterButton = composedLetterButtons[i];
-
-        composedLetterButton.removeAttribute('disabled');
-      }
+      for (var i = 0; i < composedLetterButtons.length; i++)
+        composedLetterButtons[i].removeAttribute('disabled');
     }
 
     function disableComposedLetterButtons() {
       var composedLetterButtons = getComposedLetterButtons();
 
-      for (var i = 0; i < composedLetterButtons.length; i++) {
-        var composedLetterButton = composedLetterButtons[i];
-
-        composedLetterButton.setAttribute('disabled', 'disabled');
-      }
+      for (var i = 0; i < composedLetterButtons.length; i++)
+        composedLetterButtons[i].setAttribute('disabled', 'disabled');
     }
 
     function removeComposedLetterButtonsDecoration() {
       var composedLetterButtons = getComposedLetterButtons();
 
-      for (var i = 0; i < composedLetterButtons.length; i++) {
-        var composedLetterButton = composedLetterButtons[i];
+      for (var i = 0; i < composedLetterButtons.length; i++)
+        composedLetterButtons[i].classList.remove('decorated-button', 'hint-letter-button');
+    }
 
-        composedLetterButton.classList.remove('decorated-button');
-      }
+    function disableLetterButtons() {
+      var letterButtons = getLetterButtons();
+
+      for (var i = 0; i < letterButtons.length; i++)
+        letterButtons[i].setAttribute('disabled', 'disabled');
     }
 
     function enableLetterButtons() {
@@ -243,11 +232,5 @@ angular.module('englishLetterByLetter')
         default:
           return 'очок';
       }
-    }
-
-    function getPlaceToTakeLetter(params) {
-      if (params.indexToTakeLetterInLettersBlock != undefined)
-        return getLetterButtonByIndex(params.indexToTakeLetterInLettersBlock);
-      else return getComposedLetterButtonByIndex(params.indexToTakeLetterInComposedLettersBlock);
     }
   })

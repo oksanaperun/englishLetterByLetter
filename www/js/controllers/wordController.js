@@ -78,10 +78,9 @@ angular.module('englishLetterByLetter')
       WordsTmpl.displayTabs();
     });
 
-    $scope.$watch('$root.hintCounter', function() {
-      console.log('$root.hintCounter changed');
+    $scope.$watch('$root.hintCounter', function () {
       $scope.hintBlockStyle = {
-        "background-image" : WordsTmpl.getHintBlockBackgroundImage()
+        "background-image": WordsTmpl.getHintBlockBackgroundImage()
       };
     });
 
@@ -90,26 +89,33 @@ angular.module('englishLetterByLetter')
     }
 
     $scope.moveLetter = function (letter, letterIndex) {
+      moveLetter(letter, letterIndex, false);
+    };
+
+    function moveLetter(letter, letterIndex, isHint) {
       var firstSpaceIndex = WordsUtils.getFirstUnknownLetter($scope.composedNameLetters);
 
       if (firstSpaceIndex > -1) {
-        WordsTmpl.moveLetter(letterIndex, firstSpaceIndex);
-        hideHint();
+        WordsTmpl.moveLetter(letterIndex, firstSpaceIndex, isHint);
+
         $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
         $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
       }
-    };
+    }
 
     $scope.moveLetterBack = function (letterIndex) {
+      moveLetterBack(letterIndex);
+    };
+
+    function moveLetterBack(letterIndex) {
       var originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
 
       if (originalLetterIndex > -1) {
         WordsTmpl.moveLetterBack(letterIndex, originalLetterIndex);
-        hideHint();
         $scope.composedNameLetters[letterIndex].symbol = '?';
         $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
       }
-    };
+    }
 
     $scope.checkComposedWord = function () {
       $scope.composedName = '';
@@ -143,7 +149,6 @@ angular.module('englishLetterByLetter')
     }
 
     function handleNextWord() {
-      hideHint();
       if ($scope.modeId == 1 || $scope.modeId == 3) setWordData();
       else setPhraseData();
 
@@ -323,54 +328,47 @@ angular.module('englishLetterByLetter')
       $timeout.cancel(currentTimeout);
     };
 
-    $scope.showHint = function () {
-      Utils.setHintTimer();
+    var delayOnLetterMove = 300;
 
-      $scope.hintParams = {};
-      var originalName = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name,
-        firstWrongLetterIndex = getFirstWrongLetterIndex(originalName),
-        firstUnknowLetterIndex = WordsUtils.getFirstUnknownLetter($scope.composedNameLetters);
+    $scope.fixAndCompose = function () {
+      if ($rootScope.hintCounter == 0 && !$scope.isComposed) {
+        Utils.setHintTimer();
+        WordsTmpl.disableAllLetterButtons();
 
-      console.log('firstWrongLetterIndex=' + firstWrongLetterIndex);
-      console.log('firstUnknowLetterIndex=' + firstUnknowLetterIndex);
+        var originalName = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name,
+          issuesCount = WordsUtils.getUnknownAndWrongComposedLettersCount($scope.composedNameLetters, originalName),
+          wrongComposedLetterIndexes = WordsUtils.getAllWrongComposedLetterIndexes($scope.composedNameLetters, originalName),
+          wrongComposedLettersCount = wrongComposedLetterIndexes.length,
+          issuesFixCount = issuesCount + wrongComposedLettersCount + 0.5;
 
-      if (firstUnknowLetterIndex > -1 && (firstWrongLetterIndex == -1 || firstUnknowLetterIndex < firstWrongLetterIndex))
-          $scope.hintParams = getHintParams(originalName, firstUnknowLetterIndex);
-      if (firstWrongLetterIndex > -1 && (firstUnknowLetterIndex == -1 || firstWrongLetterIndex < firstUnknowLetterIndex))
-          $scope.hintParams = getHintParams(originalName, firstWrongLetterIndex);
-      if ($scope.hintParams.indexToPutLetter != undefined)
-        WordsTmpl.addHighlightForLetters($scope.hintParams);
-    }
+        for (var i = 0; i < wrongComposedLettersCount; i++)
+          moveWrongComposedLetterBack(i, wrongComposedLetterIndexes[i]);
 
-    function getFirstWrongLetterIndex(originalName) {
-      var firstIndexWithWrongLetter = -1;
+        $timeout(function () {
+          var unknownLetters = WordsUtils.getAllUnknownLetters($scope.composedNameLetters, originalName);
 
-      for (var i = 0; i < $scope.composedNameLetters.length; i++)
-        if ($scope.composedNameLetters[i].symbol != '?' && $scope.composedNameLetters[i].symbol != originalName[i]) {
-          firstIndexWithWrongLetter = i;
-          break;
-        }
+          for (var i = 0; i < unknownLetters.length; i++)
+            moveLetterToComposedLettersBlock(i, unknownLetters[i]);
+        }, delayOnLetterMove * wrongComposedLettersCount);
 
-      return firstIndexWithWrongLetter;
-    }
-
-    function getHintParams(originalName, indexToPutLetter) {
-      var correctLetter = originalName[indexToPutLetter],
-        letterIndexInLetterButtonsBlock = getLetterIndexInLetterButtonsBlock(correctLetter),
-        params = {};
-      console.log('correctLetter=' + correctLetter);
-      params.indexToPutLetter = indexToPutLetter;
-
-      if (letterIndexInLetterButtonsBlock > -1)
-        params.indexToTakeLetterInLettersBlock = letterIndexInLetterButtonsBlock;
-      else {
-        var letterIndexInComposedLetterButtonsBlock = getLetterIndexInComposedLetterButtonsBlock(correctLetter, indexToPutLetter + 1);
-
-        params.indexToTakeLetterInComposedLettersBlock = letterIndexInComposedLetterButtonsBlock;
+        $timeout(function () {
+          handleCorrectComposedWord();
+        }, delayOnLetterMove * issuesFixCount);
       }
+    }
 
-      console.log(params);
-      return params;
+    function moveWrongComposedLetterBack(index, wrongComposedLetterIndex) {
+      $timeout(function () {
+        moveLetterBack(wrongComposedLetterIndex);
+      }, delayOnLetterMove * index);
+    }
+
+    function moveLetterToComposedLettersBlock(index, unknownLetter) {
+      $timeout(function () {
+        var letterToMoveIndex = getLetterIndexInLetterButtonsBlock(unknownLetter);
+
+        moveLetter(unknownLetter, letterToMoveIndex, true);
+      }, delayOnLetterMove * index);
     }
 
     function getLetterIndexInLetterButtonsBlock(letter) {
@@ -388,24 +386,5 @@ angular.module('englishLetterByLetter')
         }
 
       return letterIndex;
-    }
-
-    function getLetterIndexInComposedLetterButtonsBlock(letter, indexToStartSearch) {
-      var letterIndex = -1;
-
-      for (var i = indexToStartSearch; i < $scope.composedNameLetters.length; i++)
-        if ($scope.composedNameLetters[i].symbol == letter) {
-          letterIndex = i;
-          break;
-        }
-
-      return letterIndex;
-    }
-
-    function hideHint() {
-      if ($scope.hintParams) {
-        WordsTmpl.removeHighlightForLetters($scope.hintParams);
-        $scope.hintParams = null;
-      }
     }
   });
