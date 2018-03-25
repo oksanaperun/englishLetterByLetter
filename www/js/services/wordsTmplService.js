@@ -18,8 +18,8 @@ angular.module('englishLetterByLetter')
 
         letterButton.setAttribute('disabled', 'disabled');
         letterButton.style.opacity = 0;
-        if (isHint) composedLetterButton.classList.add('decorated-button', 'hint-letter-button');
-        else composedLetterButton.classList.add('decorated-button');
+        composedLetterButton.classList.add('decorated-button');
+        if (isHint) composedLetterButton.classList.add('hint-letter-button');
       },
       moveLetterBack: function (letterIndex, originalLetterIndex) {
         var letterButton = getLetterButtonByIndex(originalLetterIndex),
@@ -62,16 +62,19 @@ angular.module('englishLetterByLetter')
         disableLetterButtons();
       },
       getHintBlockBackgroundImage: function () {
-        var backgroundImage = 'none;';
+        var backgroundImage = 'none;',
+          halfCircleDegree = $rootScope.webkitPrefix ? 0 : 90,
+          halfCircle = $rootScope.webkitPrefix + 'linear-gradient(' + halfCircleDegree + 'deg, #fde2c5 50%, transparent 50%)',
+          degree;
 
-        if ($rootScope.hintCounter > 1 && $rootScope.hintCounter < 30)
-          backgroundImage = 'linear-gradient(' + ($rootScope.hintCounter * 6 + 90) +
-            'deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%)';
-        if ($rootScope.hintCounter == 30)
-          backgroundImage = 'linear-gradient(90deg, white 50%, transparent 50%)';
-        if ($rootScope.hintCounter > 30 && $rootScope.hintCounter < 60)
-          backgroundImage = 'linear-gradient(' + ($rootScope.hintCounter * 6 - 90) +
-            'deg, transparent 50%, #cf7631 50%), linear-gradient(90deg, white 50%, transparent 50%)';
+        if ($rootScope.hintCounter > 1 && $rootScope.hintCounter <= 30) {
+          degree = $rootScope.webkitPrefix ? (360 - $rootScope.hintCounter * 6) : ($rootScope.hintCounter * 6 + 90);
+          backgroundImage = $rootScope.webkitPrefix + 'linear-gradient(' + degree + 'deg, transparent 50%, #fde2c5 50%), ' + halfCircle;
+        }
+        if ($rootScope.hintCounter > 30 && $rootScope.hintCounter < 60) {
+          degree = $rootScope.webkitPrefix ? (540 - $rootScope.hintCounter * 6) : ($rootScope.hintCounter * 6 - 90);
+          backgroundImage = $rootScope.webkitPrefix + 'linear-gradient(' + degree + 'deg, transparent 50%, #bb6e39 50%), ' + halfCircle;
+        }
 
         return backgroundImage;
       }
@@ -94,8 +97,10 @@ angular.module('englishLetterByLetter')
     function removeComposedLetterButtonsDecoration() {
       var composedLetterButtons = getComposedLetterButtons();
 
-      for (var i = 0; i < composedLetterButtons.length; i++)
-        composedLetterButtons[i].classList.remove('decorated-button', 'hint-letter-button');
+      for (var i = 0; i < composedLetterButtons.length; i++) {
+        composedLetterButtons[i].classList.remove('decorated-button');
+        composedLetterButtons[i].classList.remove('hint-letter-button');
+      }
     }
 
     function disableLetterButtons() {

@@ -1,13 +1,23 @@
 angular.module('englishLetterByLetter.controllers', [])
 
-	.controller('ModesCtrl', function ($scope, $rootScope, Utils) {
+	.controller('ModesCtrl', function ($scope, $rootScope, $ionicPlatform, $cordovaDevice, Utils) {
 		Utils.setGameModes();
 		Utils.setHeightAndWidth();
-
+		$rootScope.hintCounter = 0;
 		$scope.modesHeight = getModesBlockHeight();
 		$scope.modesMarginTop = Math.floor(($rootScope.viewHeight - $rootScope.topPanelHeigth -
 			$rootScope.bottomPanelHeight - $scope.modesHeight) / 2);
-		$rootScope.hintCounter = 0;
+
+		$ionicPlatform.ready(function () {
+			$rootScope.webkitPrefix = '';
+
+			if (window.cordova) {
+				var osVersion = $cordovaDevice.getVersion();
+
+				if (osVersion.charAt(0) < 5 && osVersion.charAt(2) < 4) // for android less 4.4+ 
+					$rootScope.webkitPrefix = '-webkit-';
+			}
+    });
 
 		function getModesBlockHeight() {
 			if ($rootScope.viewHeight < 360) {

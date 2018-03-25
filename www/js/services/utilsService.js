@@ -130,7 +130,6 @@ angular.module('englishLetterByLetter')
 
     function setHintTimer() {
       $rootScope.hintCounter++;
-      console.log('hint counter = ' + $rootScope.hintCounter);
       if ($rootScope.hintCounter == 61) stopHintTimer();
       else $rootScope.hintTimeout = $timeout(setHintTimer, 1000);
     };

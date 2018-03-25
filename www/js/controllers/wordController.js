@@ -65,6 +65,7 @@ angular.module('englishLetterByLetter')
       $cordovaNativeAudio.preloadSimple('end', 'sounds/end.mp3');
       $cordovaNativeAudio.preloadSimple('record', 'sounds/record.mp3');
       $cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.mp3');
+      $cordovaNativeAudio.preloadComplex('hint', 'sounds/hint.mp3', 1, 1, 0);
     }
 
     $rootScope.$ionicGoBack = function () {
@@ -80,7 +81,8 @@ angular.module('englishLetterByLetter')
 
     $scope.$watch('$root.hintCounter', function () {
       $scope.hintBlockStyle = {
-        "background-image": WordsTmpl.getHintBlockBackgroundImage()
+        "background-image": WordsTmpl.getHintBlockBackgroundImage(),
+        "opacity": $rootScope.hintCounter == 0 ? 1 : 0.5
       };
     });
 
@@ -100,6 +102,9 @@ angular.module('englishLetterByLetter')
 
         $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
         $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
+
+        if (isHint && $rootScope.userSettings.isSoundsOn)
+          Utils.playSound('hint');
       }
     }
 
@@ -332,6 +337,7 @@ angular.module('englishLetterByLetter')
 
     $scope.fixAndCompose = function () {
       if ($rootScope.hintCounter == 0 && !$scope.isComposed) {
+        $rootScope.hintCounter++;
         Utils.setHintTimer();
         WordsTmpl.disableAllLetterButtons();
 
@@ -339,7 +345,7 @@ angular.module('englishLetterByLetter')
           issuesCount = WordsUtils.getUnknownAndWrongComposedLettersCount($scope.composedNameLetters, originalName),
           wrongComposedLetterIndexes = WordsUtils.getAllWrongComposedLetterIndexes($scope.composedNameLetters, originalName),
           wrongComposedLettersCount = wrongComposedLetterIndexes.length,
-          issuesFixCount = issuesCount + wrongComposedLettersCount + 0.5;
+          issuesFixCount = issuesCount + wrongComposedLettersCount + 1.5;
 
         for (var i = 0; i < wrongComposedLettersCount; i++)
           moveWrongComposedLetterBack(i, wrongComposedLetterIndexes[i]);
