@@ -25,6 +25,36 @@ angular.module('englishLetterByLetter')
 
         return -1;
       },
+      getAllUnknownLetters: function (letters, originalName) {
+        var unknownLetters = [];
+
+        for (var i = 0; i < letters.length; i++) {
+          if (letters[i].symbol == '?')
+            unknownLetters.push(originalName[i]);
+        }
+
+        return unknownLetters;
+      },
+      getAllWrongComposedLetterIndexes: function(letters, originalName) {
+        var wrongComposedLetterIndexes = [];
+
+        for (var i = 0; i < letters.length; i++)
+          if (letters[i].symbol != '?' && letters[i].symbol != originalName[i]) {
+            wrongComposedLetterIndexes.push(i);
+          }
+  
+        return wrongComposedLetterIndexes;
+      },
+      getUnknownAndWrongComposedLettersCount: function(letters, originalName) {
+        var count = 0;
+
+        for (var i = 0; i < letters.length; i++)
+          if (letters[i].symbol == '?' || letters[i].symbol != originalName[i]) {
+            count++;
+          }
+
+        return count;
+      },
       sortWordsRandomly: function (arr, sortByLength) {
         arr.sort(function (a, b) {
           if (sortByLength)

@@ -65,6 +65,7 @@ angular.module('englishLetterByLetter')
       $cordovaNativeAudio.preloadSimple('end', 'sounds/end.mp3');
       $cordovaNativeAudio.preloadSimple('record', 'sounds/record.mp3');
       $cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.mp3');
+      $cordovaNativeAudio.preloadComplex('hint', 'sounds/hint.mp3', 1, 1, 0);
     }
 
     $rootScope.$ionicGoBack = function () {
@@ -78,21 +79,40 @@ angular.module('englishLetterByLetter')
       WordsTmpl.displayTabs();
     });
 
+    $scope.$watch('$root.hintCounter', function () {
+      $scope.hintBlockStyle = {
+        'background-image': WordsTmpl.getHintBlockBackgroundImage(),
+        'opacity': $rootScope.hintCounter == 0 ? 1 : 0.5
+      };
+    });
+
     $scope.playSound = function () {
       Utils.playSound($scope.word.name);
     }
 
     $scope.moveLetter = function (letter, letterIndex) {
+      moveLetter(letter, letterIndex, false);
+    };
+
+    function moveLetter(letter, letterIndex, isHint) {
       var firstSpaceIndex = WordsUtils.getFirstUnknownLetter($scope.composedNameLetters);
 
       if (firstSpaceIndex > -1) {
-        WordsTmpl.moveLetter(letterIndex, firstSpaceIndex);
+        WordsTmpl.moveLetter(letterIndex, firstSpaceIndex, isHint);
+
         $scope.composedNameLetters[firstSpaceIndex].symbol = letter;
         $scope.composedNameLetters[firstSpaceIndex].originalLetterIndex = letterIndex;
+
+        if (isHint && $rootScope.userSettings.isSoundsOn)
+          Utils.playSound('hint');
       }
-    };
+    }
 
     $scope.moveLetterBack = function (letterIndex) {
+      moveLetterBack(letterIndex);
+    };
+
+    function moveLetterBack(letterIndex) {
       var originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
 
       if (originalLetterIndex > -1) {
@@ -100,7 +120,7 @@ angular.module('englishLetterByLetter')
         $scope.composedNameLetters[letterIndex].symbol = '?';
         $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
       }
-    };
+    }
 
     $scope.checkComposedWord = function () {
       $scope.composedName = '';
@@ -312,4 +332,65 @@ angular.module('englishLetterByLetter')
       $scope.counterInMinutes = 0;
       $timeout.cancel(currentTimeout);
     };
+
+    var delayOnLetterMove = 300;
+
+    $scope.fixAndCompose = function () {
+      if ($rootScope.hintCounter == 0 && !$scope.isComposed) {
+        $rootScope.hintCounter++;
+        Utils.setHintTimer();
+        WordsTmpl.disableAllLetterButtons();
+
+        var originalName = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name,
+          issuesCount = WordsUtils.getUnknownAndWrongComposedLettersCount($scope.composedNameLetters, originalName),
+          wrongComposedLetterIndexes = WordsUtils.getAllWrongComposedLetterIndexes($scope.composedNameLetters, originalName),
+          wrongComposedLettersCount = wrongComposedLetterIndexes.length,
+          issuesFixCount = issuesCount + wrongComposedLettersCount + 1.5;
+
+        for (var i = 0; i < wrongComposedLettersCount; i++)
+          moveWrongComposedLetterBack(i, wrongComposedLetterIndexes[i]);
+
+        $timeout(function () {
+          var unknownLetters = WordsUtils.getAllUnknownLetters($scope.composedNameLetters, originalName);
+
+          for (var i = 0; i < unknownLetters.length; i++)
+            moveLetterToComposedLettersBlock(i, unknownLetters[i]);
+        }, delayOnLetterMove * wrongComposedLettersCount);
+
+        $timeout(function () {
+          handleCorrectComposedWord();
+        }, delayOnLetterMove * issuesFixCount);
+      }
+    }
+
+    function moveWrongComposedLetterBack(index, wrongComposedLetterIndex) {
+      $timeout(function () {
+        moveLetterBack(wrongComposedLetterIndex);
+      }, delayOnLetterMove * index);
+    }
+
+    function moveLetterToComposedLettersBlock(index, unknownLetter) {
+      $timeout(function () {
+        var letterToMoveIndex = getLetterIndexInLetterButtonsBlock(unknownLetter);
+
+        moveLetter(unknownLetter, letterToMoveIndex, true);
+      }, delayOnLetterMove * index);
+    }
+
+    function getLetterIndexInLetterButtonsBlock(letter) {
+      var letterIndex = -1,
+        usedLetterIndexesInShuffledName = [];
+
+      for (var i = 0; i < $scope.composedNameLetters.length; i++)
+        if ($scope.composedNameLetters[i].originalLetterIndex > -1)
+          usedLetterIndexesInShuffledName.push($scope.composedNameLetters[i].originalLetterIndex);
+
+      for (var i = 0; i < $scope.shuffledName.length; i++)
+        if ($scope.shuffledName[i] == letter && usedLetterIndexesInShuffledName.indexOf(i) == -1) {
+          letterIndex = i;
+          break;
+        }
+
+      return letterIndex;
+    }
   });
