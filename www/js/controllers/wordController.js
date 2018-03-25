@@ -81,8 +81,8 @@ angular.module('englishLetterByLetter')
 
     $scope.$watch('$root.hintCounter', function () {
       $scope.hintBlockStyle = {
-        "background-image": WordsTmpl.getHintBlockBackgroundImage(),
-        "opacity": $rootScope.hintCounter == 0 ? 1 : 0.5
+        'background-image': WordsTmpl.getHintBlockBackgroundImage(),
+        'opacity': $rootScope.hintCounter == 0 ? 1 : 0.5
       };
     });
 
