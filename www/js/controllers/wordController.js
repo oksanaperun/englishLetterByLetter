@@ -65,7 +65,7 @@ angular.module('englishLetterByLetter')
       $cordovaNativeAudio.preloadSimple('end', 'sounds/end.mp3');
       $cordovaNativeAudio.preloadSimple('record', 'sounds/record.mp3');
       $cordovaNativeAudio.preloadSimple('complete', 'sounds/complete.mp3');
-      $cordovaNativeAudio.preloadComplex('hint', 'sounds/hint.mp3', 1, 1, 0);
+      $cordovaNativeAudio.preloadSimple('hint', 'sounds/hint.mp3');
     }
 
     $rootScope.$ionicGoBack = function () {
@@ -82,7 +82,8 @@ angular.module('englishLetterByLetter')
     $scope.$watch('$root.hintCounter', function () {
       $scope.hintBlockStyle = {
         'background-image': WordsTmpl.getHintBlockBackgroundImage(),
-        'opacity': $rootScope.hintCounter == 0 ? 1 : 0.5
+        'opacity': $rootScope.hintCounter == 0 ? 1 : 0.5,
+        'box-shadow': $rootScope.hintCounter == 0 ? '0px 0px 10px 5px #faf087' : 'none;'
       };
     });
 
@@ -124,7 +125,7 @@ angular.module('englishLetterByLetter')
 
     $scope.checkComposedWord = function () {
       $scope.composedName = '';
-      var nameToCompare = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name;
+      var nameToCompare = $scope.modeId == 2 ? $scope.alignedPhaseName : $scope.word.name;
 
       for (var i = 0; i < $scope.composedNameLetters.length; i++)
         if ($scope.composedNameLetters[i].symbol != '?')
@@ -236,9 +237,9 @@ angular.module('englishLetterByLetter')
     function setPhraseData() {
       $scope.phrase = $scope.phrases[$scope.currentIndex];
       $scope.shuffledName = WordsUtils.getShuffledName($scope.modeId, maxLettersCountInARow, $scope.phrase.name);
-      $scope.phrase.name = WordsUtils.getAlignedPhraseName($scope.phrase.name, maxLettersCountInARow);
-      $scope.composedNameLetters = WordsUtils.getInitialComposedName($scope.phrase.name);
-      openDefaultLettersInComposedName($scope.phrase.name);
+      $scope.alignedPhaseName = WordsUtils.getAlignedPhraseName($scope.phrase.name, maxLettersCountInARow);
+      $scope.composedNameLetters = WordsUtils.getInitialComposedName($scope.alignedPhaseName);
+      openDefaultLettersInComposedName($scope.alignedPhaseName);
     }
 
     function openDefaultLettersInComposedName(name) {
@@ -341,7 +342,7 @@ angular.module('englishLetterByLetter')
         Utils.setHintTimer();
         WordsTmpl.disableAllLetterButtons();
 
-        var originalName = $scope.modeId == 2 ? $scope.phrase.name : $scope.word.name,
+        var originalName = $scope.modeId == 2 ? $scope.alignedPhaseName : $scope.word.name,
           issuesCount = WordsUtils.getUnknownAndWrongComposedLettersCount($scope.composedNameLetters, originalName),
           wrongComposedLetterIndexes = WordsUtils.getAllWrongComposedLetterIndexes($scope.composedNameLetters, originalName),
           wrongComposedLettersCount = wrongComposedLetterIndexes.length,

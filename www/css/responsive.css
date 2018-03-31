@@ -33,7 +33,7 @@
     height: 80px;
   }
   .composed-letter-buttons-block {
-    padding: 5px 5px 10px 5px;
+    padding: 5px 5px;
   }
   .task {
     width: 290px;
@@ -67,7 +67,7 @@
   }
   .game-modes h1 {
     font-size: 19px;
-    height: 45px;
+    height: 47px;
     padding-top: 6px;
   }
   .theme-icon-block {
@@ -96,6 +96,15 @@
   .word-icon {
     height: 90px;
     margin-top: 12px;
+  }
+  .composed-letter-buttons-block {
+    padding-top: 10px !important;
+  }
+  .score {
+    font-size: 22px; 
+  }
+  .play-sound-counter {
+    font-size: 19px;
   }
   .score-icon, .play-sound-icon, .counter-icon {
     height: 40px;
@@ -144,7 +153,7 @@
 @media (min-height: 400px) {
   .game-modes h1 {
     font-size: 20px;
-    height: 50px;
+    height: 52px;
     padding-top: 7px;
   }
   .theme-icon-block {
@@ -172,7 +181,7 @@
   }
   .game-modes h1 {
     font-size: 23px;
-    height: 55px;
+    height: 58px;
     padding-top: 8px;
   }
   .theme-block h1 {
@@ -189,13 +198,22 @@
     width: 50px;
   }
   .word-header {
-    height: 80px;
+    height: 100px;
   }
   .word-header-title h1, .word-body h1, .correct-text-block h3 {
     font-size: 32px;
   }
   .word-header-title h3 {
     font-size: 24px;
+  }
+  .composed-letter-buttons-block {
+    padding-top: 15px !important;
+  }
+  .score {
+    font-size: 24px; 
+  }
+  .play-sound-counter {
+    font-size: 21px;
   }
   .score-icon, .play-sound-icon, .counter-icon {
     height: 45px;
@@ -216,7 +234,7 @@
 @media (min-height: 600px) {
   .game-modes h1 {
     font-size: 28px;
-    height: 70px;
+    height: 72px;
     width: 310px;
     display: table-cell;
   }
@@ -232,6 +250,12 @@
   }
   .word-header-title h1, .word-body h1, .correct-text-block h3 {
     font-size: 40px;
+  }
+  .score {
+    font-size: 26px; 
+  }
+  .play-sound-counter {
+    font-size: 23px;
   }
   .score-icon, .play-sound-icon, .counter-icon {
     height: 50px;
@@ -338,13 +362,12 @@
 
 @media (min-height: 500px) {
   .word {
-    top: 50%;
+    top: 55%;
   }
 }
 
 @media (min-width: 750px) {
   .word {
-    position: absolute;
     left: 50%;
   }
 }

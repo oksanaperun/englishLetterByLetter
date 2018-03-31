@@ -67,10 +67,12 @@ angular.module('englishLetterByLetter')
           halfCircle = $rootScope.webkitPrefix + 'linear-gradient(' + halfCircleDegree + 'deg, #fde2c5 50%, transparent 50%)',
           degree;
 
-        if ($rootScope.hintCounter > 1 && $rootScope.hintCounter <= 30) {
+        if ($rootScope.hintCounter > 1 && $rootScope.hintCounter < 30) {
           degree = $rootScope.webkitPrefix ? (360 - $rootScope.hintCounter * 6) : ($rootScope.hintCounter * 6 + 90);
           backgroundImage = $rootScope.webkitPrefix + 'linear-gradient(' + degree + 'deg, transparent 50%, #fde2c5 50%), ' + halfCircle;
         }
+        if ($rootScope.hintCounter == 30)
+          backgroundImage = halfCircle;
         if ($rootScope.hintCounter > 30 && $rootScope.hintCounter < 60) {
           degree = $rootScope.webkitPrefix ? (540 - $rootScope.hintCounter * 6) : ($rootScope.hintCounter * 6 - 90);
           backgroundImage = $rootScope.webkitPrefix + 'linear-gradient(' + degree + 'deg, transparent 50%, #bb6e39 50%), ' + halfCircle;

@@ -109,7 +109,7 @@
 }
 
 .clear-button {
-  background-image: url('../img/buttons/remove.png');
+  background-image: url('../img/buttons/reload.png');
   float: left;
 }
 
@@ -174,15 +174,14 @@
   padding: 0px;
 }
 
-.correct-text-block.ng-hide {
-  opacity: 0;
-}
-
-.correct-text-block h3 {
+.correct-text {
   color: #bd1984;
   text-shadow: -1px 0 #f8d09f, 0 1px #f8d09f, 1px 0 #f8d09f, 0 -1px #f8d09f;
   font-size: 26px;
   font-weight: bold;
+}
+.correct-text.ng-hide {
+  opacity: 0;
 }
 
 .record-popup {

@@ -1,25 +1,29 @@
-.correct-text-block {
-  -webkit-animation: moveDown linear 0.5;
+.correct-text {
+  -webkit-animation: moveDown linear;
   -webkit-animation-duration: 1s;
-  animation: moveDown linear 0.5;
+  animation: moveDown linear;
   animation-duration: 1s;
 }
 
 @keyframes moveDown {
   0% {
     -webkit-transform: translateY(10%);
+    transform: translateY(10%);
     opacity: 1;
   }
   50% {
     -webkit-transform: translateY(20%);
+    transform: translateY(20%);
     opacity: 0.8;
   }
   80% {
     -webkit-transform: translateY(40%);
+    transform: translateY(40%);
     opacity: 0.5;
   }
   100% {
     -webkit-transform: translateY(70%);
+    transform: translateY(70%);
     opacity: 0.2;
   }
 }

@@ -1,6 +1,6 @@
 angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByLetter.controllers', 'englishLetterByLetter.services'])
 
-.run(function($ionicPlatform, $ionicHistory, DB, Utils) {
+.run(function($ionicPlatform, $ionicHistory, DB, WordsUtils) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,7 +20,7 @@ angular.module('englishLetterByLetter', ['ionic', 'ngCordova', 'englishLetterByL
   $ionicPlatform.registerBackButtonAction(function(e) {
     if ($ionicHistory.backView().stateName === 'tab.theme') {
       e.preventDefault();
-      Utils.showConfirmLeaveGamePopup();
+      WordsUtils.showConfirmLeavePopup();
     } else {
       $ionicHistory.goBack();
     }
