@@ -81,10 +81,10 @@ img.progress-bar {
 
 .task-popup h4 {
   color: #bd1984;
-  font-size: 19px;
+  font-size: 22px;
   font-weight: bold;
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 .task-popup h3 {
@@ -92,19 +92,20 @@ img.progress-bar {
   font-size: 22px;
   font-weight: 500;
   margin-top: 0px;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
+  min-height: 27px;
 }
 
 .task-popup p {
-  height: 65px;
+  height: 68px;
   width: 320px;
   display: table-cell;
   vertical-align: middle;
   color: #440523;
-  font-size: 18px;
-  line-height: 1.5em;
+  font-size: 19px;
+  line-height: 1.2;
 }
 
 .task-popup-icon {
-  height: 40px;
+  height: 37px;
 }

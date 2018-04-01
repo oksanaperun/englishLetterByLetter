@@ -26,6 +26,10 @@
   top: 15px;
 }
 
+.toggle-small.item-toggle .toggle {
+  top: 23px;
+}
+
 .toggle .track {
   border-color: #9f4d34;
   background-color: rgba(123,47,21,0.5);

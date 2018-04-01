@@ -21,11 +21,11 @@ angular.module('englishLetterByLetter')
         composedLetterButton.classList.add('decorated-button');
         if (isHint) composedLetterButton.classList.add('hint-letter-button');
       },
-      moveLetterBack: function (letterIndex, originalLetterIndex) {
+      moveLetterBack: function (letterIndex, originalLetterIndex, isHint) {
         var letterButton = getLetterButtonByIndex(originalLetterIndex),
           composedLetterButton = getComposedLetterButtonByIndex(letterIndex);
 
-        letterButton.removeAttribute('disabled');
+        if (!isHint) letterButton.removeAttribute('disabled');
         letterButton.style.opacity = 1;
         composedLetterButton.classList.remove('decorated-button');
       },

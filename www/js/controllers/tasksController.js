@@ -76,11 +76,12 @@ angular.module('englishLetterByLetter')
 
     $scope.showTaskInfo = function (id) {
       var taskInfo = Utils.getTaskById(id),
+        taskProgress = taskInfo.count > 1 ? taskInfo.progress + '/' + taskInfo.count : '',
         taskBody = '<div class="task-popup">' +
           '<h4>' + taskInfo.title + '</h4>' +
           '<img class="task-popup-icon" ng-src="img/icons/complexity_' + taskInfo.complexity + '.png">' +
-          '<p>' + taskInfo.description + '</p>' +
-          '<h3>' + taskInfo.progress + '/' + taskInfo.count + '</h3>' +
+          '<p>' + taskInfo.description + '</p>' + 
+          '<h3>' + taskProgress + '</h3>' +
           '</div>';
 
       Utils.showAlert(taskBody);

@@ -110,14 +110,14 @@ angular.module('englishLetterByLetter')
     }
 
     $scope.moveLetterBack = function (letterIndex) {
-      moveLetterBack(letterIndex);
+      moveLetterBack(letterIndex, false);
     };
 
-    function moveLetterBack(letterIndex) {
+    function moveLetterBack(letterIndex, isHint) {
       var originalLetterIndex = $scope.composedNameLetters[letterIndex].originalLetterIndex;
 
       if (originalLetterIndex > -1) {
-        WordsTmpl.moveLetterBack(letterIndex, originalLetterIndex);
+        WordsTmpl.moveLetterBack(letterIndex, originalLetterIndex, isHint);
         $scope.composedNameLetters[letterIndex].symbol = '?';
         $scope.composedNameLetters[letterIndex].originalLetterIndex = -1;
       }
@@ -366,7 +366,7 @@ angular.module('englishLetterByLetter')
 
     function moveWrongComposedLetterBack(index, wrongComposedLetterIndex) {
       $timeout(function () {
-        moveLetterBack(wrongComposedLetterIndex);
+        moveLetterBack(wrongComposedLetterIndex, true);
       }, delayOnLetterMove * index);
     }
 

@@ -8,6 +8,10 @@
 }
 
 @media (min-height: 320px) {
+  .game-modes h1 {
+    height: 50px;
+    padding-top: 10px;
+  }
   .theme-icon-block {
     height: 126px;
   }
@@ -59,6 +63,9 @@
   .item-toggle .toggle {
     top: 17px;
   }
+  .toggle-small.item-toggle .toggle {
+    top: 25px;
+  }
 }
 
 @media (min-height: 360px) {
@@ -67,7 +74,7 @@
   }
   .game-modes h1 {
     font-size: 19px;
-    height: 47px;
+    height: 48px;
     padding-top: 6px;
   }
   .theme-icon-block {
@@ -147,6 +154,9 @@
   }
   .item-toggle .toggle {
     top: 20px;
+  }
+  .toggle-small.item-toggle .toggle {
+    top: 28px;
   }
 }
 
@@ -289,7 +299,7 @@
     font-size: 28px;
   }
   .popup-container h4 {
-    font-size: 22px;
+    font-size: 24px;
   }
   .popup-buttons .button {
     height: 55px;
@@ -299,7 +309,7 @@
     margin-bottom: 61px;
   }
   .achievement-popup {
-    margin-bottom: 59px;
+    margin-bottom: 54px;
   }
   .task-done-complexity-icon {
     margin-top: 25px;
@@ -342,13 +352,14 @@
     font-size: 28px;
   }
   .task-popup p {
-    height: 90px;
+    height: 93px;
     width: 400px; 
-    font-size: 20px;
+    font-size: 24px;
   }
   .task-popup h3 {
-    font-size: 26px;
-    margin-bottom: 2px;
+    font-size: 28px;
+    margin-bottom: 0px;
+    height: 34px;
   }
   .setting-toggle {
     width: 400px;
@@ -357,6 +368,9 @@
   }
   .item-toggle .toggle {
     top: 25px;
+  }
+  .toggle-small.item-toggle .toggle {
+    top: 33px;
   }
 }
 
